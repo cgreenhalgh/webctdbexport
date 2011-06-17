@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtAttemptExtendedEvent" table="ASSMT_ATTEMPT_EXTENDED_EVENT">
+        <composite-id name="id" class="webctdbexport.db.AssmtAttemptExtendedEventId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="attemptId" type="big_decimal">
+                <column name="ATTEMPT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="attemptItemId" type="big_decimal">
+                <column name="ATTEMPT_ITEM_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="eventKey" type="string">
+                <column name="EVENT_KEY" length="128" />
+            </key-property>
+            <key-property name="eventDate" type="big_decimal">
+                <column name="EVENT_DATE" precision="20" scale="0" />
+            </key-property>
+            <key-property name="position" type="big_decimal">
+                <column name="POSITION" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

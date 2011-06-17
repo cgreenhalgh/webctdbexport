@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ArchiveResourceColumn" table="ARCHIVE_RESOURCE_COLUMN">
+        <composite-id name="id" class="webctdbexport.db.ArchiveResourceColumnId">
+            <key-property name="tableName" type="string">
+                <column name="TABLE_NAME" length="30" />
+            </key-property>
+            <key-property name="columnName" type="string">
+                <column name="COLUMN_NAME" length="30" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archivePolicy" class="webctdbexport.db.ArchivePolicy" update="false" insert="false" fetch="select">
+            <column name="TABLE_NAME" length="30" not-null="true" />
+        </many-to-one>
+        <property name="resourceType" type="string">
+            <column name="RESOURCE_TYPE" length="10" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="resourceMandatory" type="boolean">
+            <column name="RESOURCE_MANDATORY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="marshalInline" type="boolean">
+            <column name="MARSHAL_INLINE" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

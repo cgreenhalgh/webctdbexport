@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CwbChatroom" table="CWB_CHATROOM">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="tooloption" type="boolean">
+            <column name="TOOLOPTION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowToggle" type="boolean">
+            <column name="ALLOW_TOGGLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowPrivateMessage" type="boolean">
+            <column name="ALLOW_PRIVATE_MESSAGE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowAlias" type="boolean">
+            <column name="ALLOW_ALIAS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowLogging" type="boolean">
+            <column name="ALLOW_LOGGING" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="descHtmlEnable" type="boolean">
+            <column name="DESC_HTML_ENABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="maxUsers" type="java.lang.Integer">
+            <column name="MAX_USERS" precision="5" scale="0" />
+        </property>
+        <property name="creationDate" type="big_decimal">
+            <column name="CREATION_DATE" precision="20" scale="0" />
+        </property>
+        <property name="modificationDate" type="big_decimal">
+            <column name="MODIFICATION_DATE" precision="20" scale="0" />
+        </property>
+        <property name="createdbyuser" type="string">
+            <column name="CREATEDBYUSER" length="256" />
+        </property>
+        <set name="cwbActivechatusers" table="CWB_ACTIVECHATUSER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROOM_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CwbActivechatuser" />
+        </set>
+        <set name="cwbChatroomlogs" table="CWB_CHATROOMLOG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CHATROOMID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CwbChatroomlog" />
+        </set>
+        <set name="cwbGraphiccommands" table="CWB_GRAPHICCOMMAND" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROOM_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CwbGraphiccommand" />
+        </set>
+    </class>
+</hibernate-mapping>

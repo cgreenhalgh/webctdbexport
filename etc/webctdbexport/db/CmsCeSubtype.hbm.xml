@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CmsCeSubtype" table="CMS_CE_SUBTYPE">
+        <composite-id name="id" class="webctdbexport.db.CmsCeSubtypeId">
+            <key-property name="ceTypeName" type="string">
+                <column name="CE_TYPE_NAME" length="100" />
+            </key-property>
+            <key-property name="name" type="string">
+                <column name="NAME" length="100" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="cmsCeType" class="webctdbexport.db.CmsCeType" update="false" insert="false" fetch="select">
+            <column name="CE_TYPE_NAME" length="100" not-null="true" />
+        </many-to-one>
+        <property name="id_1" type="big_decimal">
+            <column name="ID" precision="20" scale="0" not-null="true" unique="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="cmsMimetypes" table="CMS_MIMETYPE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CE_TYPE_NAME" length="100" not-null="true" />
+                <column name="CE_SUBTYPE_NAME" length="100" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsMimetype" />
+        </set>
+        <set name="cmsContentEntries" table="CMS_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CE_TYPE_NAME" length="100" not-null="true" />
+                <column name="CE_SUBTYPE_NAME" length="100" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsContentEntry" />
+        </set>
+    </class>
+</hibernate-mapping>

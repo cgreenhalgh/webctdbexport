@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtSummaryGrade" table="ASSMT_SUMMARY_GRADE">
+        <composite-id name="id" class="webctdbexport.db.AssmtSummaryGradeId">
+            <key-property name="deliveryContextId" type="big_decimal">
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assessmentId" type="big_decimal">
+                <column name="ASSESSMENT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assessmentIdent" type="string">
+                <column name="ASSESSMENT_IDENT" length="768" />
+            </key-property>
+            <key-property name="maxscore" type="big_decimal">
+                <column name="MAXSCORE" precision="12" scale="4" />
+            </key-property>
+            <key-property name="numassmtitems" type="short">
+                <column name="NUMASSMTITEMS" precision="4" scale="0" />
+            </key-property>
+            <key-property name="settingId" type="big_decimal">
+                <column name="SETTING_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="numberofattempts" type="short">
+                <column name="NUMBEROFATTEMPTS" precision="3" scale="0" />
+            </key-property>
+            <key-property name="timebetweenattempts" type="java.lang.Integer">
+                <column name="TIMEBETWEENATTEMPTS" precision="6" scale="0" />
+            </key-property>
+            <key-property name="timebetweenattemptsunits" type="string">
+                <column name="TIMEBETWEENATTEMPTSUNITS" length="60" />
+            </key-property>
+            <key-property name="questiondelivery" type="string">
+                <column name="QUESTIONDELIVERY" length="20" />
+            </key-property>
+            <key-property name="displayNewWindow" type="boolean">
+                <column name="DISPLAY_NEW_WINDOW" precision="1" scale="0" />
+            </key-property>
+            <key-property name="duration" type="int">
+                <column name="DURATION" precision="6" scale="0" />
+            </key-property>
+            <key-property name="durationunits" type="string">
+                <column name="DURATIONUNITS" length="60" />
+            </key-property>
+            <key-property name="durationunlimited" type="boolean">
+                <column name="DURATIONUNLIMITED" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsemail" type="string">
+                <column name="RESULTSEMAIL" length="320" />
+            </key-property>
+            <key-property name="resultsreleasetype" type="string">
+                <column name="RESULTSRELEASETYPE" length="30" />
+            </key-property>
+            <key-property name="resultsscoretype" type="string">
+                <column name="RESULTSSCORETYPE" length="20" />
+            </key-property>
+            <key-property name="resultscorrectanswer" type="java.lang.Boolean">
+                <column name="RESULTSCORRECTANSWER" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsevaluation" type="java.lang.Boolean">
+                <column name="RESULTSEVALUATION" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsfeedback" type="java.lang.Boolean">
+                <column name="RESULTSFEEDBACK" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsfullevaluation" type="java.lang.Boolean">
+                <column name="RESULTSFULLEVALUATION" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsgradercomments" type="java.lang.Boolean">
+                <column name="RESULTSGRADERCOMMENTS" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsresponse" type="java.lang.Boolean">
+                <column name="RESULTSRESPONSE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultsscore" type="java.lang.Boolean">
+                <column name="RESULTSSCORE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultstext" type="java.lang.Boolean">
+                <column name="RESULTSTEXT" precision="1" scale="0" />
+            </key-property>
+            <key-property name="resultstotalscore" type="java.lang.Boolean">
+                <column name="RESULTSTOTALSCORE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="securitypassword" type="string">
+                <column name="SECURITYPASSWORD" length="300" />
+            </key-property>
+            <key-property name="securityaddressmask" type="string">
+                <column name="SECURITYADDRESSMASK" length="15" />
+            </key-property>
+            <key-property name="submitmessage" type="string">
+                <column name="SUBMITMESSAGE" length="4000" />
+            </key-property>
+            <key-property name="submitemailaddress" type="string">
+                <column name="SUBMITEMAILADDRESS" length="320" />
+            </key-property>
+            <key-property name="showtitle" type="boolean">
+                <column name="SHOWTITLE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="allowsubmissionafter" type="boolean">
+                <column name="ALLOWSUBMISSIONAFTER" precision="1" scale="0" />
+            </key-property>
+            <key-property name="securityaddress" type="string">
+                <column name="SECURITYADDRESS" length="15" />
+            </key-property>
+            <key-property name="starttime" type="big_decimal">
+                <column name="STARTTIME" precision="20" scale="0" />
+            </key-property>
+            <key-property name="endtime" type="big_decimal">
+                <column name="ENDTIME" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="sectionBookId" type="big_decimal">
+                <column name="SECTION_BOOK_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningActivityId" type="big_decimal">
+                <column name="LEARNING_ACTIVITY_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="cobaltType" type="string">
+                <column name="COBALT_TYPE" length="40" />
+            </key-property>
+            <key-property name="alignment" type="java.lang.Boolean">
+                <column name="ALIGNMENT" precision="1" scale="0" />
+            </key-property>
+            <key-property name="label" type="string">
+                <column name="LABEL" length="1000" />
+            </key-property>
+            <key-property name="decimalScale" type="java.lang.Boolean">
+                <column name="DECIMAL_SCALE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="mandatoryFl" type="java.lang.Boolean">
+                <column name="MANDATORY_FL" precision="1" scale="0" />
+            </key-property>
+            <key-property name="editableFl" type="java.lang.Boolean">
+                <column name="EDITABLE_FL" precision="1" scale="0" />
+            </key-property>
+            <key-property name="releasedFl" type="java.lang.Boolean">
+                <column name="RELEASED_FL" precision="1" scale="0" />
+            </key-property>
+            <key-property name="overridableFl" type="java.lang.Boolean">
+                <column name="OVERRIDABLE_FL" precision="1" scale="0" />
+            </key-property>
+            <key-property name="gradeFl" type="java.lang.Boolean">
+                <column name="GRADE_FL" precision="1" scale="0" />
+            </key-property>
+            <key-property name="selectionList" type="string">
+                <column name="SELECTION_LIST" length="3000" />
+            </key-property>
+            <key-property name="letterGradeScheme" type="string">
+                <column name="LETTER_GRADE_SCHEME" length="1000" />
+            </key-property>
+            <key-property name="gradeFormula" type="string">
+                <column name="GRADE_FORMULA" length="4000" />
+            </key-property>
+            <key-property name="inheritedFl" type="java.lang.Boolean">
+                <column name="INHERITED_FL" precision="1" scale="0" />
+            </key-property>
+            <key-property name="maxValue" type="big_decimal">
+                <column name="MAX_VALUE" precision="7" />
+            </key-property>
+            <key-property name="schemeUpdateDate" type="big_decimal">
+                <column name="SCHEME_UPDATE_DATE" precision="20" scale="0" />
+            </key-property>
+            <key-property name="randomizeattempt" type="boolean">
+                <column name="RANDOMIZEATTEMPT" precision="1" scale="0" />
+            </key-property>
+            <key-property name="requiresecurebrowser" type="java.lang.Boolean">
+                <column name="REQUIRESECUREBROWSER" precision="1" scale="0" />
+            </key-property>
+            <key-property name="allowartifactcreation" type="java.lang.Boolean">
+                <column name="ALLOWARTIFACTCREATION" precision="1" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

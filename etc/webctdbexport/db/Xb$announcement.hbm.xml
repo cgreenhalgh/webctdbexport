@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$announcement" table="XB$ANNOUNCEMENT">
+        <composite-id name="id" class="webctdbexport.db.Xb$announcementId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="startTimestamp" type="big_decimal">
+            <column name="START_TIMESTAMP" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="endTimestamp" type="big_decimal">
+            <column name="END_TIMESTAMP" precision="20" scale="0" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="1000" not-null="true" />
+        </property>
+        <property name="deliverAsPopup" type="boolean">
+            <column name="DELIVER_AS_POPUP" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="htmlContent" type="boolean">
+            <column name="HTML_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="personId" type="big_decimal">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deliverToLcid" type="big_decimal">
+            <column name="DELIVER_TO_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="createdInLcid" type="big_decimal">
+            <column name="CREATED_IN_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="content" type="clob">
+            <column name="CONTENT" />
+        </property>
+    </class>
+</hibernate-mapping>

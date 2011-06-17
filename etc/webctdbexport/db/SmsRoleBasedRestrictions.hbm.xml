@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SmsRoleBasedRestrictions" table="SMS_ROLE_BASED_RESTRICTIONS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="settingsGroup" class="webctdbexport.db.SettingsGroup" fetch="select">
+            <column name="GROUP_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="settingsDescription" class="webctdbexport.db.SettingsDescription" fetch="select">
+            <column name="SETTINGS_DESC_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="roleDefinition" class="webctdbexport.db.RoleDefinition" fetch="select">
+            <column name="ROLE_DEFINITION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="restrictionTypeCode" type="byte">
+            <column name="RESTRICTION_TYPE_CODE" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ProxyToolInstanceSettingBa" table="PROXY_TOOL_INSTANCE_SETTING_BA">
+        <composite-id name="id" class="webctdbexport.db.ProxyToolInstanceSettingBaId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="toolInstanceId" type="big_decimal">
+                <column name="TOOL_INSTANCE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="name" type="string">
+                <column name="NAME" length="800" />
+            </key-property>
+            <key-property name="value" type="string">
+                <column name="VALUE" length="800" />
+            </key-property>
+            <key-property name="createTs" type="big_decimal">
+                <column name="CREATE_TS" precision="20" scale="0" />
+            </key-property>
+            <key-property name="lastmodifyTs" type="big_decimal">
+                <column name="LASTMODIFY_TS" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

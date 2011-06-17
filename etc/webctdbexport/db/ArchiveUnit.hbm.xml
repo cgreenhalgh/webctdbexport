@@ -1,0 +1,999 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ArchiveUnit" table="ARCHIVE_UNIT">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="archiveRepository" class="webctdbexport.db.ArchiveRepository" fetch="select">
+            <column name="REPOSITORY_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deleted" type="boolean">
+            <column name="DELETED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="status" type="boolean">
+            <column name="STATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="learningContextId" type="big_decimal">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+        </property>
+        <property name="courseId" type="big_decimal">
+            <column name="COURSE_ID" precision="20" scale="0" />
+        </property>
+        <property name="groupId" type="big_decimal">
+            <column name="GROUP_ID" precision="20" scale="0" />
+        </property>
+        <property name="divisionId" type="big_decimal">
+            <column name="DIVISION_ID" precision="20" scale="0" />
+        </property>
+        <property name="instId" type="big_decimal">
+            <column name="INST_ID" precision="20" scale="0" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="2000" />
+        </property>
+        <property name="sectionName" type="string">
+            <column name="SECTION_NAME" length="1000" />
+        </property>
+        <property name="courseName" type="string">
+            <column name="COURSE_NAME" length="1000" />
+        </property>
+        <set name="xb$assmtQdbs" table="XB$ASSMT_QDB" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtQdb" />
+        </set>
+        <set name="xb$assmtResultSettngs" table="XB$ASSMT_RESULT_SETTNG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtResultSettng" />
+        </set>
+        <set name="xb$colMetaLcPersons" table="XB$COL_META_LC_PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colMetaLcPerson" />
+        </set>
+        <set name="xb$assmtQuestionLinks" table="XB$ASSMT_QUESTION_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtQuestionLink" />
+        </set>
+        <set name="xb$syllsubitems" table="XB$SYLLSUBITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$syllsubitem" />
+        </set>
+        <set name="xb$cmsLinkOrders" table="XB$CMS_LINK_ORDER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmsLinkOrder" />
+        </set>
+        <set name="xb$agnAssignees" table="XB$AGN_ASSIGNEE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnAssignee" />
+        </set>
+        <set name="xb$thumbnails" table="XB$THUMBNAIL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$thumbnail" />
+        </set>
+        <set name="xb$coTemplRtOrgnizrs" table="XB$CO_TEMPL_RT_ORGNIZR" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coTemplRtOrgnizr" />
+        </set>
+        <set name="xb$cmCoursemenus" table="XB$CM_COURSEMENU" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmCoursemenu" />
+        </set>
+        <set name="xb$scormPackages" table="XB$SCORM_PACKAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$scormPackage" />
+        </set>
+        <set name="xb$persons" table="XB$PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$person" />
+        </set>
+        <set name="xb$assmtAttemptEvents" table="XB$ASSMT_ATTEMPT_EVENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtAttemptEvent" />
+        </set>
+        <set name="xb$gradeBookAudtLogs" table="XB$GRADE_BOOK_AUDT_LOG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$gradeBookAudtLog" />
+        </set>
+        <set name="xb$simpleFileGroups" table="XB$SIMPLE_FILE_GROUP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$simpleFileGroup" />
+        </set>
+        <set name="xb$cpmLcGroupRels" table="XB$CPM_LC_GROUP_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cpmLcGroupRel" />
+        </set>
+        <set name="xb$assmtSecuritySetgs" table="XB$ASSMT_SECURITY_SETG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtSecuritySetg" />
+        </set>
+        <set name="xb$coReadStatuses" table="XB$CO_READ_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coReadStatus" />
+        </set>
+        <set name="xb$coActionmenus" table="XB$CO_ACTIONMENU" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coActionmenu" />
+        </set>
+        <set name="xb$colMetaLcModules" table="XB$COL_META_LC_MODULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colMetaLcModule" />
+        </set>
+        <set name="xb$disRatingDefinitions" table="XB$DIS_RATING_DEFINITION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disRatingDefinition" />
+        </set>
+        <set name="xb$coUrls" table="XB$CO_URL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coUrl" />
+        </set>
+        <set name="xb$viewColumns" table="XB$VIEW_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$viewColumn" />
+        </set>
+        <set name="xb$rubricLinks" table="XB$RUBRIC_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricLink" />
+        </set>
+        <set name="xb$localContentEntries" table="XB$LOCAL_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$localContentEntry" />
+        </set>
+        <set name="xb$mlCollections" table="XB$ML_COLLECTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mlCollection" />
+        </set>
+        <set name="xb$agnSbmsnVwStates" table="XB$AGN_SBMSN_VW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnSbmsnVwState" />
+        </set>
+        <set name="xb$coContentpages" table="XB$CO_CONTENTPAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coContentpage" />
+        </set>
+        <set name="xb$proxyToolDefs" table="XB$PROXY_TOOL_DEF" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$proxyToolDef" />
+        </set>
+        <set name="xb$rubricRows" table="XB$RUBRIC_ROW" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricRow" />
+        </set>
+        <set name="xb$cmToolUseds" table="XB$CM_TOOL_USED" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmToolUsed" />
+        </set>
+        <set name="xb$pstSettingBundles" table="XB$PST_SETTING_BUNDLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$pstSettingBundle" />
+        </set>
+        <set name="xb$coSingleinstancetls" table="XB$CO_SINGLEINSTANCETL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coSingleinstancetl" />
+        </set>
+        <set name="xb$notesItems" table="XB$NOTES_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$notesItem" />
+        </set>
+        <set name="xb$mailTargets" table="XB$MAIL_TARGET" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mailTarget" />
+        </set>
+        <set name="xb$settingses" table="XB$SETTINGS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$settings" />
+        </set>
+        <set name="xb$rubrics" table="XB$RUBRIC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubric" />
+        </set>
+        <set name="xb$coTemplateSettings" table="XB$CO_TEMPLATE_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coTemplateSetting" />
+        </set>
+        <set name="xb$rubricCells" table="XB$RUBRIC_CELL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricCell" />
+        </set>
+        <set name="xb$xlistLcMappings" table="XB$XLIST_LC_MAPPING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$xlistLcMapping" />
+        </set>
+        <set name="xb$cmTools" table="XB$CM_TOOL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmTool" />
+        </set>
+        <set name="xb$coInventoryOrders" table="XB$CO_INVENTORY_ORDER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coInventoryOrder" />
+        </set>
+        <set name="xb$selfEnrollmentLcs" table="XB$SELF_ENROLLMENT_LC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$selfEnrollmentLc" />
+        </set>
+        <set name="xb$assmtAssessments" table="XB$ASSMT_ASSESSMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtAssessment" />
+        </set>
+        <set name="xb$cpmLcEditorRels" table="XB$CPM_LC_EDITOR_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cpmLcEditorRel" />
+        </set>
+        <set name="xb$srCriterias" table="XB$SR_CRITERIA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$srCriteria" />
+        </set>
+        <set name="xb$pinAuths" table="XB$PIN_AUTH" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$pinAuth" />
+        </set>
+        <set name="xb$colMetas" table="XB$COL_META" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colMeta" />
+        </set>
+        <set name="xb$calendarEntries" table="XB$CALENDAR_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$calendarEntry" />
+        </set>
+        <set name="xb$assmtQuestionSets" table="XB$ASSMT_QUESTION_SET" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtQuestionSet" />
+        </set>
+        <set name="xb$disTopics" table="XB$DIS_TOPIC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disTopic" />
+        </set>
+        <set name="xb$cwbChatroomlogs" table="XB$CWB_CHATROOMLOG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cwbChatroomlog" />
+        </set>
+        <set name="xb$localContentTools" table="XB$LOCAL_CONTENT_TOOL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$localContentTool" />
+        </set>
+        <set name="xb$coResourcelinks" table="XB$CO_RESOURCELINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coResourcelink" />
+        </set>
+        <set name="xb$sectionViews" table="XB$SECTION_VIEW" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$sectionView" />
+        </set>
+        <set name="xb$assmtSectionElemts" table="XB$ASSMT_SECTION_ELEMT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtSectionElemt" />
+        </set>
+        <set name="xb$coHeaderfooters" table="XB$CO_HEADERFOOTER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coHeaderfooter" />
+        </set>
+        <set name="xb$members" table="XB$MEMBER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$member" />
+        </set>
+        <set name="xb$disPersonMessages" table="XB$DIS_PERSON_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disPersonMessage" />
+        </set>
+        <set name="xb$simpleFiles" table="XB$SIMPLE_FILE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$simpleFile" />
+        </set>
+        <set name="xb$disTopicPersnSums" table="XB$DIS_TOPIC_PERSN_SUM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disTopicPersnSum" />
+        </set>
+        <set name="xb$coOrganizerlinks" table="XB$CO_ORGANIZERLINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coOrganizerlink" />
+        </set>
+        <set name="xb$directoryGroups" table="XB$DIRECTORY_GROUP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$directoryGroup" />
+        </set>
+        <set name="xb$agnSbmsnPubHises" table="XB$AGN_SBMSN_PUB_HIS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnSbmsnPubHis" />
+        </set>
+        <set name="xb$coResources" table="XB$CO_RESOURCE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coResource" />
+        </set>
+        <set name="xb$agnToolViewStates" table="XB$AGN_TOOL_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnToolViewState" />
+        </set>
+        <set name="xb$agnAssignments" table="XB$AGN_ASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnAssignment" />
+        </set>
+        <set name="xb$colMetaSelections" table="XB$COL_META_SELECTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colMetaSelection" />
+        </set>
+        <set name="xb$genericGroups" table="XB$GENERIC_GROUP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$genericGroup" />
+        </set>
+        <set name="xb$colMetaLcVises" table="XB$COL_META_LC_VIS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colMetaLcVis" />
+        </set>
+        <set name="xb$disMessages" table="XB$DIS_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disMessage" />
+        </set>
+        <set name="xb$localCntDsktpCfgs" table="XB$LOCAL_CNT_DSKTP_CFG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$localCntDsktpCfg" />
+        </set>
+        <set name="xb$announcements" table="XB$ANNOUNCEMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$announcement" />
+        </set>
+        <set name="xb$coNewStatuses" table="XB$CO_NEW_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coNewStatus" />
+        </set>
+        <set name="xb$simpleFileUploaders" table="XB$SIMPLE_FILE_UPLOADER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$simpleFileUploader" />
+        </set>
+        <set name="xb$srUsages" table="XB$SR_USAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$srUsage" />
+        </set>
+        <set name="xb$mlDefCollections" table="XB$ML_DEF_COLLECTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mlDefCollection" />
+        </set>
+        <set name="xb$sylLearningobjLinks" table="XB$SYL_LEARNINGOBJ_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$sylLearningobjLink" />
+        </set>
+        <set name="xb$cwbGraphiccmds" table="XB$CWB_GRAPHICCMD" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cwbGraphiccmd" />
+        </set>
+        <set name="xb$pstReplacementIcos" table="XB$PST_REPLACEMENT_ICO" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$pstReplacementIco" />
+        </set>
+        <set name="xb$colValues" table="XB$COL_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colValue" />
+        </set>
+        <set name="xb$learningContexts" table="XB$LEARNING_CONTEXT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$learningContext" />
+        </set>
+        <set name="xb$assmtResponses" table="XB$ASSMT_RESPONSE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtResponse" />
+        </set>
+        <set name="xb$syllitems" table="XB$SYLLITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$syllitem" />
+        </set>
+        <set name="xb$rubricColumns" table="XB$RUBRIC_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricColumn" />
+        </set>
+        <set name="xb$phones" table="XB$PHONE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$phone" />
+        </set>
+        <set name="xb$cmsContentEntries" table="XB$CMS_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmsContentEntry" />
+        </set>
+        <set name="xb$coTocs" table="XB$CO_TOC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coToc" />
+        </set>
+        <set name="xb$roles" table="XB$ROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$role" />
+        </set>
+        <set name="xb$sectionBooks" table="XB$SECTION_BOOK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$sectionBook" />
+        </set>
+        <set name="xb$coActionmenulinks" table="XB$CO_ACTIONMENULINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coActionmenulink" />
+        </set>
+        <set name="xb$agnSubmissionCmnts" table="XB$AGN_SUBMISSION_CMNT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnSubmissionCmnt" />
+        </set>
+        <set name="xb$directoryObjects" table="XB$DIRECTORY_OBJECT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$directoryObject" />
+        </set>
+        <set name="xb$scormScoMdatas" table="XB$SCORM_SCO_MDATA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$scormScoMdata" />
+        </set>
+        <set name="xb$cmsLinks" table="XB$CMS_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmsLink" />
+        </set>
+        <set name="xb$settingsGroups" table="XB$SETTINGS_GROUP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$settingsGroup" />
+        </set>
+        <set name="xb$sectionColumns" table="XB$SECTION_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$sectionColumn" />
+        </set>
+        <set name="xb$syllitemDetails" table="XB$SYLLITEM_DETAIL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$syllitemDetail" />
+        </set>
+        <set name="xb$publisherLicenses" table="XB$PUBLISHER_LICENSE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$publisherLicense" />
+        </set>
+        <set name="xb$syllabuses" table="XB$SYLLABUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$syllabus" />
+        </set>
+        <set name="xb$assmtAttemptItems" table="XB$ASSMT_ATTEMPT_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtAttemptItem" />
+        </set>
+        <set name="xb$agnSubmissions" table="XB$AGN_SUBMISSION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnSubmission" />
+        </set>
+        <set name="xb$fmsAttributeses" table="XB$FMS_ATTRIBUTES" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$fmsAttributes" />
+        </set>
+        <set name="xb$gradeBookAuditLogVs" table="XB$GRADE_BOOK_AUDIT_LOG_V" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$gradeBookAuditLogV" />
+        </set>
+        <set name="xb$rubricLinkCellResults" table="XB$RUBRIC_LINK_CELL_RESULT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricLinkCellResult" />
+        </set>
+        <set name="xb$proxyToolInstStgs" table="XB$PROXY_TOOL_INST_STG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$proxyToolInstStg" />
+        </set>
+        <set name="xb$cmsUniqueNames" table="XB$CMS_UNIQUE_NAME" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmsUniqueName" />
+        </set>
+        <set name="xb$addresses" table="XB$ADDRESS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$address" />
+        </set>
+        <set name="xb$rubricLinkResults" table="XB$RUBRIC_LINK_RESULT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricLinkResult" />
+        </set>
+        <set name="xb$assmtAttempts" table="XB$ASSMT_ATTEMPT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtAttempt" />
+        </set>
+        <set name="xb$cmSettings" table="XB$CM_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmSetting" />
+        </set>
+        <set name="xb$lcTermMappings" table="XB$LC_TERM_MAPPING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$lcTermMapping" />
+        </set>
+        <set name="xb$tocBookmarks" table="XB$TOC_BOOKMARK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$tocBookmark" />
+        </set>
+        <set name="xb$assmtQuestions" table="XB$ASSMT_QUESTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtQuestion" />
+        </set>
+        <set name="xb$srCriteriaDetails" table="XB$SR_CRITERIA_DETAIL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$srCriteriaDetail" />
+        </set>
+        <set name="xb$assmtSubmissions" table="XB$ASSMT_SUBMISSION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtSubmission" />
+        </set>
+        <set name="xb$pstDefaulticons" table="XB$PST_DEFAULTICON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$pstDefaulticon" />
+        </set>
+        <set name="xb$settingsDescs" table="XB$SETTINGS_DESC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$settingsDesc" />
+        </set>
+        <set name="xb$announcementRoles" table="XB$ANNOUNCEMENT_ROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$announcementRole" />
+        </set>
+        <set name="xb$assmtQdbColumns" table="XB$ASSMT_QDB_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtQdbColumn" />
+        </set>
+        <set name="xb$rubricUsages" table="XB$RUBRIC_USAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$rubricUsage" />
+        </set>
+        <set name="xb$disTemplateSumries" table="XB$DIS_TEMPLATE_SUMRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disTemplateSumry" />
+        </set>
+        <set name="xb$lcOperations" table="XB$LC_OPERATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$lcOperation" />
+        </set>
+        <set name="xb$cwbChatrooms" table="XB$CWB_CHATROOM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cwbChatroom" />
+        </set>
+        <set name="xb$cmPalettes" table="XB$CM_PALETTE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmPalette" />
+        </set>
+        <set name="xb$mailReceipts" table="XB$MAIL_RECEIPT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mailReceipt" />
+        </set>
+        <set name="xb$assmtSettings" table="XB$ASSMT_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtSetting" />
+        </set>
+        <set name="xb$coTemplates" table="XB$CO_TEMPLATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coTemplate" />
+        </set>
+        <set name="xb$mlEntries" table="XB$ML_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mlEntry" />
+        </set>
+        <set name="xb$announcmtPersonRds" table="XB$ANNOUNCMT_PERSON_RD" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$announcmtPersonRd" />
+        </set>
+        <set name="xb$coTocLinks" table="XB$CO_TOC_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coTocLink" />
+        </set>
+        <set name="xb$srHeads" table="XB$SR_HEAD" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$srHead" />
+        </set>
+        <set name="xb$scormItems" table="XB$SCORM_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$scormItem" />
+        </set>
+        <set name="xb$proxyToolInstances" table="XB$PROXY_TOOL_INSTANCE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$proxyToolInstance" />
+        </set>
+        <set name="xb$cmMenuitems" table="XB$CM_MENUITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmMenuitem" />
+        </set>
+        <set name="xb$memberAttrValues" table="XB$MEMBER_ATTR_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$memberAttrValue" />
+        </set>
+        <set name="xb$disCategories" table="XB$DIS_CATEGORY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disCategory" />
+        </set>
+        <set name="xb$cmsFileContents" table="XB$CMS_FILE_CONTENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cmsFileContent" />
+        </set>
+        <set name="xb$coLcAssociations" table="XB$CO_LC_ASSOCIATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coLcAssociation" />
+        </set>
+        <set name="xb$mailFolders" table="XB$MAIL_FOLDER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mailFolder" />
+        </set>
+        <set name="xb$assmtQdbColumnVls" table="XB$ASSMT_QDB_COLUMN_VL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtQdbColumnVl" />
+        </set>
+        <set name="xb$colMetaAttrValues" table="XB$COL_META_ATTR_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$colMetaAttrValue" />
+        </set>
+        <set name="xb$accessControlLists" table="XB$ACCESS_CONTROL_LIST" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$accessControlList" />
+        </set>
+        <set name="xb$mailBoxes" table="XB$MAIL_BOX" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mailBox" />
+        </set>
+        <set name="xb$deliveryCtxIconsets" table="XB$DELIVERY_CTX_ICONSET" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$deliveryCtxIconset" />
+        </set>
+        <set name="xb$coOrganizerpages" table="XB$CO_ORGANIZERPAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coOrganizerpage" />
+        </set>
+        <set name="xb$lcTerms" table="XB$LC_TERM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$lcTerm" />
+        </set>
+        <set name="xb$cpmLcAclRels" table="XB$CPM_LC_ACL_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$cpmLcAclRel" />
+        </set>
+        <set name="xb$personContentQuots" table="XB$PERSON_CONTENT_QUOT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$personContentQuot" />
+        </set>
+        <set name="xb$calendarEntryDets" table="XB$CALENDAR_ENTRY_DET" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$calendarEntryDet" />
+        </set>
+        <set name="xb$mailMessages" table="XB$MAIL_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$mailMessage" />
+        </set>
+        <set name="xb$accessControlEntrs" table="XB$ACCESS_CONTROL_ENTR" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$accessControlEntr" />
+        </set>
+        <set name="xb$coLcAssignments" table="XB$CO_LC_ASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$coLcAssignment" />
+        </set>
+        <set name="xb$directoryGroupUsrs" table="XB$DIRECTORY_GROUP_USR" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$directoryGroupUsr" />
+        </set>
+        <set name="xb$assmtSubmSettings" table="XB$ASSMT_SUBM_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$assmtSubmSetting" />
+        </set>
+        <set name="xb$disRatings" table="XB$DIS_RATING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$disRating" />
+        </set>
+        <set name="xb$photos" table="XB$PHOTO" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$photo" />
+        </set>
+        <set name="xb$agnGroupassignments" table="XB$AGN_GROUPASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Xb$agnGroupassignment" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkSessionContextActivity" table="TRK_SESSION_CONTEXT_ACTIVITY">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="trkSession" class="webctdbexport.db.TrkSession" fetch="select">
+            <column name="TRK_SESSION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkLearningContext" class="webctdbexport.db.TrkLearningContext" fetch="select">
+            <column name="TRK_LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="firstEventTime" type="date">
+            <column name="FIRST_EVENT_TIME" length="7" not-null="true" />
+        </property>
+        <property name="dwellTime" type="java.lang.Long">
+            <column name="DWELL_TIME" precision="10" scale="0" />
+        </property>
+        <property name="entryPageName" type="string">
+            <column name="ENTRY_PAGE_NAME" length="4000" />
+        </property>
+        <property name="entryToolName" type="string">
+            <column name="ENTRY_TOOL_NAME" length="40" />
+        </property>
+        <property name="exitPageName" type="string">
+            <column name="EXIT_PAGE_NAME" length="4000" />
+        </property>
+        <property name="exitToolName" type="string">
+            <column name="EXIT_TOOL_NAME" length="40" />
+        </property>
+        <property name="hasLearnerEvent" type="java.lang.Integer">
+            <column name="HAS_LEARNER_EVENT" precision="5" scale="0" />
+        </property>
+        <property name="existNonDemoUserEvent" type="java.lang.Integer">
+            <column name="EXIST_NON_DEMO_USER_EVENT" precision="5" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

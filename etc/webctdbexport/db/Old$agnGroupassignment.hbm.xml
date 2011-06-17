@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Old$agnGroupassignment" table="OLD$AGN_GROUPASSIGNMENT">
+        <composite-id name="id" class="webctdbexport.db.Old$agnGroupassignmentId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assignmentId" type="big_decimal">
+                <column name="ASSIGNMENT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="createTs" type="big_decimal">
+                <column name="CREATE_TS" precision="20" scale="0" />
+            </key-property>
+            <key-property name="lastmodifyTs" type="big_decimal">
+                <column name="LASTMODIFY_TS" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="genericGroupId" type="big_decimal">
+                <column name="GENERIC_GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="lcGroupId" type="big_decimal">
+                <column name="LC_GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="simpleFileGroupId" type="big_decimal">
+                <column name="SIMPLE_FILE_GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="title" type="string">
+                <column name="TITLE" length="1000" />
+            </key-property>
+            <key-property name="instruction" type="clob">
+                <column name="INSTRUCTION" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

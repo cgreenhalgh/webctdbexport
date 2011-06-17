@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtAssessment" table="ASSMT_ASSESSMENT">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="ident" type="string">
+            <column name="IDENT" length="768" not-null="true" />
+        </property>
+        <property name="maxscore" type="big_decimal">
+            <column name="MAXSCORE" precision="12" scale="4" not-null="true" />
+        </property>
+        <property name="numassmtitems" type="short">
+            <column name="NUMASSMTITEMS" precision="4" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="assmtSubmissions" table="ASSMT_SUBMISSION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSESSMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AssmtSubmission" />
+        </set>
+        <set name="assmtSectionElements" table="ASSMT_SECTION_ELEMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSESSMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AssmtSectionElement" />
+        </set>
+        <set name="assmtSettings" table="ASSMT_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSESSMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AssmtSetting" />
+        </set>
+    </class>
+</hibernate-mapping>

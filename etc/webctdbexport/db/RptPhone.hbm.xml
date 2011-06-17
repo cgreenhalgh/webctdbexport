@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptPhone" table="RPT_PHONE">
+        <composite-id name="id" class="webctdbexport.db.RptPhoneId">
+            <key-property name="phoneId" type="big_decimal">
+                <column name="PHONE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="phoneType" type="string">
+                <column name="PHONE_TYPE" length="90" />
+            </key-property>
+            <key-property name="phoneNumber" type="string">
+                <column name="PHONE_NUMBER" length="128" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

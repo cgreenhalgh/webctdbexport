@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ArchivePolicy" table="ARCHIVE_POLICY">
+        <id name="tableName" type="string">
+            <column name="TABLE_NAME" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="archiveTableName" type="string">
+            <column name="ARCHIVE_TABLE_NAME" length="30" not-null="true" />
+        </property>
+        <property name="primaryColumn" type="string">
+            <column name="PRIMARY_COLUMN" length="100" not-null="true" />
+        </property>
+        <property name="backupOrder" type="int">
+            <column name="BACKUP_ORDER" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="restoreOrder" type="int">
+            <column name="RESTORE_ORDER" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="buildIdList" type="boolean">
+            <column name="BUILD_ID_LIST" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="archiveColumns" type="string">
+            <column name="ARCHIVE_COLUMNS" length="2000" />
+        </property>
+        <property name="foreignColumns" type="string">
+            <column name="FOREIGN_COLUMNS" length="400" />
+        </property>
+        <property name="backupPredicate" type="string">
+            <column name="BACKUP_PREDICATE" length="2000" />
+        </property>
+        <property name="backupRoutine" type="string">
+            <column name="BACKUP_ROUTINE" length="200" />
+        </property>
+        <property name="restorePredicate" type="string">
+            <column name="RESTORE_PREDICATE" length="2000" />
+        </property>
+        <property name="restoreRoutine" type="string">
+            <column name="RESTORE_ROUTINE" length="200" />
+        </property>
+        <property name="marshalRoutine" type="string">
+            <column name="MARSHAL_ROUTINE" length="200" />
+        </property>
+        <property name="unmarshalRoutine" type="string">
+            <column name="UNMARSHAL_ROUTINE" length="200" />
+        </property>
+        <set name="archiveResourceColumns" table="ARCHIVE_RESOURCE_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TABLE_NAME" length="30" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ArchiveResourceColumn" />
+        </set>
+    </class>
+</hibernate-mapping>

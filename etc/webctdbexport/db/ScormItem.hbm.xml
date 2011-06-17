@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ScormItem" table="SCORM_ITEM">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="scormPackage" class="webctdbexport.db.ScormPackage" fetch="select">
+            <column name="PACKAGE_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="sectionColumn" class="webctdbexport.db.SectionColumn" fetch="select">
+            <column name="SECTION_COLUMN_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="sequencePosition" type="short">
+            <column name="SEQUENCE_POSITION" precision="4" scale="0" not-null="true" />
+        </property>
+        <property name="indentation" type="short">
+            <column name="INDENTATION" precision="4" scale="0" not-null="true" />
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="10" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="location" type="string">
+            <column name="LOCATION" length="256" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="256" />
+        </property>
+        <property name="prerequisites" type="string">
+            <column name="PREREQUISITES" length="256" />
+        </property>
+        <property name="parameterString" type="string">
+            <column name="PARAMETER_STRING" length="256" />
+        </property>
+        <property name="dataFromLms" type="string">
+            <column name="DATA_FROM_LMS" length="256" />
+        </property>
+        <set name="scormScoMemberDatas" table="SCORM_SCO_MEMBER_DATA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ITEM_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ScormScoMemberData" />
+        </set>
+    </class>
+</hibernate-mapping>

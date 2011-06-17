@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ColMetaAuxV" table="COL_META_AUX_V">
+        <composite-id name="id" class="webctdbexport.db.ColMetaAuxVId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="colMetaId" type="big_decimal">
+                <column name="COL_META_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="colName" type="string">
+                <column name="COL_NAME" length="256" />
+            </key-property>
+            <key-property name="colDatatype" type="java.lang.Short">
+                <column name="COL_DATATYPE" precision="4" scale="0" />
+            </key-property>
+            <key-property name="colMetaGroupId" type="big_decimal">
+                <column name="COL_META_GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="attrId" type="big_decimal">
+                <column name="ATTR_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="attrName" type="string">
+                <column name="ATTR_NAME" length="100" />
+            </key-property>
+            <key-property name="value" type="string">
+                <column name="VALUE" length="256" />
+            </key-property>
+            <key-property name="valueLcId" type="big_decimal">
+                <column name="VALUE_LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="ownerLcId" type="big_decimal">
+                <column name="OWNER_LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="visibility" type="big_decimal">
+                <column name="VISIBILITY" precision="22" scale="0" />
+            </key-property>
+            <key-property name="typeCode" type="string">
+                <column name="TYPE_CODE" length="128" />
+            </key-property>
+            <key-property name="currentLcId" type="big_decimal">
+                <column name="CURRENT_LC_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

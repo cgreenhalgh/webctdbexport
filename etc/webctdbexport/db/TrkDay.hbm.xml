@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkDay" table="TRK_DAY">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="year" type="long">
+            <column name="YEAR" precision="15" scale="0" not-null="true" />
+        </property>
+        <property name="month" type="long">
+            <column name="MONTH" precision="15" scale="0" not-null="true" />
+        </property>
+        <property name="dayOfMonth" type="byte">
+            <column name="DAY_OF_MONTH" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="dayOfWeek" type="boolean">
+            <column name="DAY_OF_WEEK" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="inClass" type="boolean">
+            <column name="IN_CLASS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="holiday" type="boolean">
+            <column name="HOLIDAY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="weekend" type="boolean">
+            <column name="WEEKEND" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="trkUserActions" table="TRK_USER_ACTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_DAY_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkUserAction" />
+        </set>
+    </class>
+</hibernate-mapping>

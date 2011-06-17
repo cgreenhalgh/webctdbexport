@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CmsCeType" table="CMS_CE_TYPE">
+        <id name="name" type="string">
+            <column name="NAME" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" not-null="true" unique="true" />
+        </property>
+        <property name="compositeFlag" type="char">
+            <column name="COMPOSITE_FLAG" length="1" not-null="true" />
+        </property>
+        <property name="uniqueNameFlag" type="boolean">
+            <column name="UNIQUE_NAME_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="uniquenessGroup" type="string">
+            <column name="UNIQUENESS_GROUP" length="100" not-null="true" />
+        </property>
+        <property name="pathReachableFlag" type="char">
+            <column name="PATH_REACHABLE_FLAG" length="1" not-null="true" />
+        </property>
+        <property name="ringOrder" type="byte">
+            <column name="RING_ORDER" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="boolean">
+            <column name="DELETED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="shareableContentFlag" type="boolean">
+            <column name="SHAREABLE_CONTENT_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="requiresCopyFlag" type="boolean">
+            <column name="REQUIRES_COPY_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="localPresenceFlag" type="boolean">
+            <column name="LOCAL_PRESENCE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="cmsCeSubtypes" table="CMS_CE_SUBTYPE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CE_TYPE_NAME" length="100" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsCeSubtype" />
+        </set>
+        <set name="cmsEntryImplInfs" table="CMS_ENTRY_IMPL_INF" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CE_TYPE_NAME" length="100" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsEntryImplInf" />
+        </set>
+        <set name="calendarEntries" table="CALENDAR_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_TYPE" length="100" />
+            </key>
+            <one-to-many class="webctdbexport.db.CalendarEntry" />
+        </set>
+    </class>
+</hibernate-mapping>

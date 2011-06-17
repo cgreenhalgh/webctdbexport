@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptPerson" table="RPT_PERSON">
+        <composite-id name="id" class="webctdbexport.db.RptPersonId">
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="userId" type="string">
+                <column name="USER_ID" length="768" />
+            </key-property>
+            <key-property name="loginLearningContextId" type="big_decimal">
+                <column name="LOGIN_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="givenName" type="string">
+                <column name="GIVEN_NAME" length="768" />
+            </key-property>
+            <key-property name="familyName" type="string">
+                <column name="FAMILY_NAME" length="768" />
+            </key-property>
+            <key-property name="otherName" type="string">
+                <column name="OTHER_NAME" length="768" />
+            </key-property>
+            <key-property name="namePrefix" type="string">
+                <column name="NAME_PREFIX" length="96" />
+            </key-property>
+            <key-property name="nameSuffix" type="string">
+                <column name="NAME_SUFFIX" length="96" />
+            </key-property>
+            <key-property name="nameFn" type="string">
+                <column name="NAME_FN" length="768" />
+            </key-property>
+            <key-property name="nameNickname" type="string">
+                <column name="NAME_NICKNAME" length="768" />
+            </key-property>
+            <key-property name="nameSort" type="string">
+                <column name="NAME_SORT" length="768" />
+            </key-property>
+            <key-property name="authSource" type="string">
+                <column name="AUTH_SOURCE" length="1000" />
+            </key-property>
+            <key-property name="sourceId" type="string">
+                <column name="SOURCE_ID" length="768" />
+            </key-property>
+            <key-property name="sourceName" type="string">
+                <column name="SOURCE_NAME" length="510" />
+            </key-property>
+            <key-property name="accessStatus" type="boolean">
+                <column name="ACCESS_STATUS" precision="1" scale="0" />
+            </key-property>
+            <key-property name="active" type="boolean">
+                <column name="ACTIVE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="demoUser" type="boolean">
+                <column name="DEMO_USER" precision="1" scale="0" />
+            </key-property>
+            <key-property name="email" type="string">
+                <column name="EMAIL" length="320" />
+            </key-property>
+            <key-property name="demographicsBday" type="big_decimal">
+                <column name="DEMOGRAPHICS_BDAY" precision="20" scale="0" />
+            </key-property>
+            <key-property name="demographicsGender" type="string">
+                <column name="DEMOGRAPHICS_GENDER" length="64" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

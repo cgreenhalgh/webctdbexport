@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Dr$simpleSearchIndex$i" table="DR$SIMPLE_SEARCH_INDEX$I">
+        <composite-id name="id" class="webctdbexport.db.Dr$simpleSearchIndex$iId">
+            <key-property name="tokenText" type="string">
+                <column name="TOKEN_TEXT" length="64" />
+            </key-property>
+            <key-property name="tokenType" type="short">
+                <column name="TOKEN_TYPE" precision="3" scale="0" />
+            </key-property>
+            <key-property name="tokenFirst" type="long">
+                <column name="TOKEN_FIRST" precision="10" scale="0" />
+            </key-property>
+            <key-property name="tokenLast" type="long">
+                <column name="TOKEN_LAST" precision="10" scale="0" />
+            </key-property>
+            <key-property name="tokenCount" type="long">
+                <column name="TOKEN_COUNT" precision="10" scale="0" />
+            </key-property>
+            <key-property name="tokenInfo" type="blob">
+                <column name="TOKEN_INFO" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

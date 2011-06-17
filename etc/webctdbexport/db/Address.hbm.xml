@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Address" table="ADDRESS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="person" class="webctdbexport.db.Person" fetch="select">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="addressType" class="webctdbexport.db.AddressType" fetch="select">
+            <column name="ADDRESS_TYPE_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="deletestatus" type="boolean">
+            <column name="DELETESTATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="adrPobox" type="string">
+            <column name="ADR_POBOX" length="96" />
+        </property>
+        <property name="adrExtadd" type="string">
+            <column name="ADR_EXTADD" length="384" />
+        </property>
+        <property name="adrStreet" type="string">
+            <column name="ADR_STREET" length="384" />
+        </property>
+        <property name="adrLocality" type="string">
+            <column name="ADR_LOCALITY" length="192" />
+        </property>
+        <property name="adrRegion" type="string">
+            <column name="ADR_REGION" length="192" />
+        </property>
+        <property name="adrPcode" type="string">
+            <column name="ADR_PCODE" length="96" />
+        </property>
+        <property name="adrCountry" type="string">
+            <column name="ADR_COUNTRY" length="192" />
+        </property>
+    </class>
+</hibernate-mapping>

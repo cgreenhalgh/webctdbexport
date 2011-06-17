@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.MyPortalPreference" table="MY_PORTAL_PREFERENCE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="person" class="webctdbexport.db.Person" fetch="select">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" unique="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="colorBg" type="string">
+            <column name="COLOR_BG" length="6" />
+        </property>
+        <property name="colorSideHeaderBg" type="string">
+            <column name="COLOR_SIDE_HEADER_BG" length="6" />
+        </property>
+        <property name="colorSideBg" type="string">
+            <column name="COLOR_SIDE_BG" length="6" />
+        </property>
+        <property name="colorSideText" type="string">
+            <column name="COLOR_SIDE_TEXT" length="6" />
+        </property>
+        <property name="colorSideLink" type="string">
+            <column name="COLOR_SIDE_LINK" length="6" />
+        </property>
+        <property name="colorCenterHeaderBg" type="string">
+            <column name="COLOR_CENTER_HEADER_BG" length="6" />
+        </property>
+        <property name="colorCenterBorder" type="string">
+            <column name="COLOR_CENTER_BORDER" length="6" />
+        </property>
+        <set name="myChannelPreferences" table="MY_CHANNEL_PREFERENCE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PORTAL_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MyChannelPreference" />
+        </set>
+    </class>
+</hibernate-mapping>

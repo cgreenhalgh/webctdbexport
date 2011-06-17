@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ColMetaVisV" table="COL_META_VIS_V">
+        <composite-id name="id" class="webctdbexport.db.ColMetaVisVId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="name" type="string">
+                <column name="NAME" length="256" />
+            </key-property>
+            <key-property name="datatype" type="java.lang.Short">
+                <column name="DATATYPE" precision="4" scale="0" />
+            </key-property>
+            <key-property name="description" type="string">
+                <column name="DESCRIPTION" length="4000" />
+            </key-property>
+            <key-property name="immutable" type="java.lang.Boolean">
+                <column name="IMMUTABLE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="notDeleteable" type="java.lang.Boolean">
+                <column name="NOT_DELETEABLE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="notHideable" type="java.lang.Boolean">
+                <column name="NOT_HIDEABLE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="mandatory" type="java.lang.Boolean">
+                <column name="MANDATORY" precision="1" scale="0" />
+            </key-property>
+            <key-property name="gradeable" type="java.lang.Boolean">
+                <column name="GRADEABLE" precision="1" scale="0" />
+            </key-property>
+            <key-property name="colMetaGroupId" type="big_decimal">
+                <column name="COL_META_GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="useSelectedVals" type="java.lang.Boolean">
+                <column name="USE_SELECTED_VALS" precision="1" scale="0" />
+            </key-property>
+            <key-property name="specSource" type="string">
+                <column name="SPEC_SOURCE" length="40" />
+            </key-property>
+            <key-property name="ownerLcId" type="big_decimal">
+                <column name="OWNER_LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="ownerModuleId" type="big_decimal">
+                <column name="OWNER_MODULE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deletestatus" type="big_decimal">
+                <column name="DELETESTATUS" precision="22" scale="0" />
+            </key-property>
+            <key-property name="visibility" type="big_decimal">
+                <column name="VISIBILITY" precision="22" scale="0" />
+            </key-property>
+            <key-property name="currentLcId" type="big_decimal">
+                <column name="CURRENT_LC_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

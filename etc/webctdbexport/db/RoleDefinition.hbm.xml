@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RoleDefinition" table="ROLE_DEFINITION">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="lcType" class="webctdbexport.db.LcType" fetch="select">
+            <column name="LC_TYPE_CODE" length="128" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="30" not-null="true" />
+        </property>
+        <property name="deleteStatus" type="boolean">
+            <column name="DELETE_STATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="contentSharing" type="boolean">
+            <column name="CONTENT_SHARING" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="displayOrder" type="short">
+            <column name="DISPLAY_ORDER" precision="3" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" length="100" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="100" />
+        </property>
+        <set name="smsRoleBasedRestrictionses" table="SMS_ROLE_BASED_RESTRICTIONS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_DEFINITION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SmsRoleBasedRestrictions" />
+        </set>
+        <set name="announcementRoles" table="ANNOUNCEMENT_ROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_DEFINITION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AnnouncementRole" />
+        </set>
+        <set name="cpmApplicableRoleIds" table="CPM_APPLICABLE_ROLE_ID" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_DEF_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmApplicableRoleId" />
+        </set>
+        <set name="roles" table="ROLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ROLE_DEFINITION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Role" />
+        </set>
+    </class>
+</hibernate-mapping>

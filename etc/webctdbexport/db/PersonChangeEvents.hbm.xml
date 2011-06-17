@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.PersonChangeEvents" table="PERSON_CHANGE_EVENTS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="learningContext" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="webctId" type="string">
+            <column name="WEBCT_ID" length="768" not-null="true" />
+        </property>
+        <property name="personId" type="big_decimal">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="processingStatus" type="boolean">
+            <column name="PROCESSING_STATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="processingTs" type="big_decimal">
+            <column name="PROCESSING_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="boolean">
+            <column name="DELETED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="sourcedidId" type="string">
+            <column name="SOURCEDID_ID" length="768" />
+        </property>
+        <property name="sourcedidSource" type="string">
+            <column name="SOURCEDID_SOURCE" length="510" />
+        </property>
+        <property name="nameFn" type="string">
+            <column name="NAME_FN" length="768" />
+        </property>
+        <property name="mark" type="big_decimal">
+            <column name="MARK" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

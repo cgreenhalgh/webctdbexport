@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AgnSubmission" table="AGN_SUBMISSION">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="simpleFileGroupByInstructorFileGroupId" class="webctdbexport.db.SimpleFileGroup" fetch="select">
+            <column name="INSTRUCTOR_FILE_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="simpleFileGroupByStudentFileGroupId" class="webctdbexport.db.SimpleFileGroup" fetch="select">
+            <column name="STUDENT_FILE_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="simpleFileGroupByWebsiteFileGroupId" class="webctdbexport.db.SimpleFileGroup" fetch="select">
+            <column name="WEBSITE_FILE_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="member" class="webctdbexport.db.Member" fetch="select">
+            <column name="MEMBER_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="agnAssignment" class="webctdbexport.db.AgnAssignment" fetch="select">
+            <column name="ASSIGNMENT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="simpleFile" class="webctdbexport.db.SimpleFile" fetch="select">
+            <column name="STARTING_PAGE_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="agnGroupassignment" class="webctdbexport.db.AgnGroupassignment" fetch="select">
+            <column name="GROUPASSIGNMENT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="status" type="string">
+            <column name="STATUS" length="40" not-null="true" />
+        </property>
+        <property name="publishedFlag" type="boolean">
+            <column name="PUBLISHED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="attempts" type="short">
+            <column name="ATTEMPTS" precision="4" scale="0" not-null="true" />
+        </property>
+        <property name="ishtmlSubmission" type="boolean">
+            <column name="ISHTML_SUBMISSION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastsubmitteddate" type="big_decimal">
+            <column name="LASTSUBMITTEDDATE" precision="20" scale="0" />
+        </property>
+        <property name="grade" type="string">
+            <column name="GRADE" length="4000" />
+        </property>
+        <property name="graderNameGiven" type="string">
+            <column name="GRADER_NAME_GIVEN" length="768" />
+        </property>
+        <property name="graderNameFamily" type="string">
+            <column name="GRADER_NAME_FAMILY" length="768" />
+        </property>
+        <property name="completiondate" type="big_decimal">
+            <column name="COMPLETIONDATE" precision="20" scale="0" />
+        </property>
+        <property name="submission" type="clob">
+            <column name="SUBMISSION" />
+        </property>
+        <property name="latestComment" type="string">
+            <column name="LATEST_COMMENT" length="4000" />
+        </property>
+        <one-to-one name="agnSubmissionUnique" class="webctdbexport.db.AgnSubmissionUnique"></one-to-one>
+        <set name="agnSubmissionComments" table="AGN_SUBMISSION_COMMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SUBMISSION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnSubmissionComment" />
+        </set>
+        <set name="agnSubmissionViewStates" table="AGN_SUBMISSION_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SUBMISSION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnSubmissionViewState" />
+        </set>
+        <set name="agnSubmissionPublishHistories" table="AGN_SUBMISSION_PUBLISH_HISTORY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SUBMISSION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnSubmissionPublishHistory" />
+        </set>
+    </class>
+</hibernate-mapping>

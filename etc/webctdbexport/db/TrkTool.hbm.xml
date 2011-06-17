@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkTool" table="TRK_TOOL">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="40" not-null="true" unique="true" />
+        </property>
+        <property name="excluded" type="boolean">
+            <column name="EXCLUDED" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="trkSessionToolActivities" table="TRK_SESSION_TOOL_ACTIVITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_TOOL_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSessionToolActivity" />
+        </set>
+        <set name="trkUserActions" table="TRK_USER_ACTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_TOOL_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkUserAction" />
+        </set>
+    </class>
+</hibernate-mapping>

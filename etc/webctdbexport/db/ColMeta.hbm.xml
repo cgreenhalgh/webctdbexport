@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ColMeta" table="COL_META">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="learningContext" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="OWNER_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="colMetaGroup" class="webctdbexport.db.ColMetaGroup" fetch="select">
+            <column name="COL_META_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="colModule" class="webctdbexport.db.ColModule" fetch="select">
+            <column name="OWNER_MODULE_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="256" not-null="true" />
+        </property>
+        <property name="datatype" type="short">
+            <column name="DATATYPE" precision="4" scale="0" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="4000" />
+        </property>
+        <property name="immutable" type="boolean">
+            <column name="IMMUTABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="notDeleteable" type="boolean">
+            <column name="NOT_DELETEABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="notHideable" type="boolean">
+            <column name="NOT_HIDEABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="mandatory" type="boolean">
+            <column name="MANDATORY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="gradeable" type="boolean">
+            <column name="GRADEABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="builtin" type="boolean">
+            <column name="BUILTIN" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="useSelectedVals" type="boolean">
+            <column name="USE_SELECTED_VALS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="specSource" type="string">
+            <column name="SPEC_SOURCE" length="40" not-null="true" />
+        </property>
+        <property name="deletestatus" type="big_decimal">
+            <column name="DELETESTATUS" precision="22" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="personQuerySelects" table="PERSON_QUERY_SELECT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PersonQuerySelect" />
+        </set>
+        <set name="colMetaLcVises" table="COL_META_LC_VIS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcVis" />
+        </set>
+        <set name="colMetaLcPersons" table="COL_META_LC_PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcPerson" />
+        </set>
+        <set name="colMetaAttrValues" table="COL_META_ATTR_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaAttrValue" />
+        </set>
+        <set name="colValues" table="COL_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColValue" />
+        </set>
+        <set name="colMetaSelections" table="COL_META_SELECTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaSelection" />
+        </set>
+        <set name="personQueryCriterias" table="PERSON_QUERY_CRITERIA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PersonQueryCriteria" />
+        </set>
+        <set name="colMetaLcModules" table="COL_META_LC_MODULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="COL_META_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcModule" />
+        </set>
+    </class>
+</hibernate-mapping>

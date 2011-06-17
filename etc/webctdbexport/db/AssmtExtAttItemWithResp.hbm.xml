@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtExtAttItemWithResp" table="ASSMT_EXT_ATT_ITEM_WITH_RESP">
+        <composite-id name="id" class="webctdbexport.db.AssmtExtAttItemWithRespId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="score" type="big_decimal">
+                <column name="SCORE" precision="9" scale="4" />
+            </key-property>
+            <key-property name="initialScore" type="big_decimal">
+                <column name="INITIAL_SCORE" precision="9" scale="4" />
+            </key-property>
+            <key-property name="attemptId" type="big_decimal">
+                <column name="ATTEMPT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="comments" type="clob">
+                <column name="COMMENTS" />
+            </key-property>
+            <key-property name="position" type="int">
+                <column name="POSITION" precision="8" scale="0" />
+            </key-property>
+            <key-property name="questionLinkId" type="big_decimal">
+                <column name="QUESTION_LINK_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="randomSeed" type="big_decimal">
+                <column name="RANDOM_SEED" precision="20" scale="0" />
+            </key-property>
+            <key-property name="visitedFlag" type="boolean">
+                <column name="VISITED_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="modifiedFlag" type="boolean">
+                <column name="MODIFIED_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="maxScore" type="big_decimal">
+                <column name="MAX_SCORE" precision="8" scale="4" />
+            </key-property>
+            <key-property name="responseId" type="big_decimal">
+                <column name="RESPONSE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="attemptItemId" type="big_decimal">
+                <column name="ATTEMPT_ITEM_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="ident" type="string">
+                <column name="IDENT" length="768" />
+            </key-property>
+            <key-property name="responsePosition" type="java.lang.Integer">
+                <column name="RESPONSE_POSITION" precision="8" scale="0" />
+            </key-property>
+            <key-property name="smallValue" type="string">
+                <column name="SMALL_VALUE" length="4000" />
+            </key-property>
+            <key-property name="largeValue" type="clob">
+                <column name="LARGE_VALUE" />
+            </key-property>
+            <key-property name="resType" type="string">
+                <column name="RES_TYPE" length="10" />
+            </key-property>
+            <key-property name="numValue" type="big_decimal">
+                <column name="NUM_VALUE" precision="30" scale="10" />
+            </key-property>
+            <key-property name="exponent" type="java.lang.Integer">
+                <column name="EXPONENT" precision="5" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

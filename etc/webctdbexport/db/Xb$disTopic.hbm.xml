@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$disTopic" table="XB$DIS_TOPIC">
+        <composite-id name="id" class="webctdbexport.db.Xb$disTopicId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="isgradable" type="boolean">
+            <column name="ISGRADABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="islocked" type="boolean">
+            <column name="ISLOCKED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="isprivate" type="boolean">
+            <column name="ISPRIVATE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="isanonymous" type="boolean">
+            <column name="ISANONYMOUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="iseditable" type="boolean">
+            <column name="ISEDITABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="position" type="int">
+            <column name="POSITION" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="lastPostDate" type="big_decimal">
+            <column name="LAST_POST_DATE" precision="20" scale="0" />
+        </property>
+        <property name="isHtmlContent" type="boolean">
+            <column name="IS_HTML_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="boolean">
+            <column name="DELETED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="topicType" type="string">
+            <column name="TOPIC_TYPE" length="10" not-null="true" />
+        </property>
+        <property name="allowPostReply" type="string">
+            <column name="ALLOW_POST_REPLY" length="10" not-null="true" />
+        </property>
+        <property name="isratable" type="boolean">
+            <column name="ISRATABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="ratingType" type="boolean">
+            <column name="RATING_TYPE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="canAddRatingComment" type="boolean">
+            <column name="CAN_ADD_RATING_COMMENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="canSeeAllPostRating" type="boolean">
+            <column name="CAN_SEE_ALL_POST_RATING" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="anonymousRating" type="boolean">
+            <column name="ANONYMOUS_RATING" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="viewBeforeRate" type="boolean">
+            <column name="VIEW_BEFORE_RATE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="ratingInstructions" type="string">
+            <column name="RATING_INSTRUCTIONS" length="4000" />
+        </property>
+        <property name="accessType" type="boolean">
+            <column name="ACCESS_TYPE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowartifactcreationFlag" type="boolean">
+            <column name="ALLOWARTIFACTCREATION_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

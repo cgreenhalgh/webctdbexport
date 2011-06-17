@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptLearningContextT" table="RPT_LEARNING_CONTEXT_T">
+        <id name="learningContextId" type="big_decimal">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="startDateRestricted" type="java.lang.Boolean">
+            <column name="START_DATE_RESTRICTED" precision="1" scale="0" />
+        </property>
+        <property name="endDateRestricted" type="java.lang.Boolean">
+            <column name="END_DATE_RESTRICTED" precision="1" scale="0" />
+        </property>
+        <property name="parentLearningContextId" type="big_decimal">
+            <column name="PARENT_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="1000" />
+        </property>
+        <property name="longDescription" type="clob">
+            <column name="LONG_DESCRIPTION" />
+        </property>
+        <property name="fullDescription" type="clob">
+            <column name="FULL_DESCRIPTION" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="1000" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="320" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="128" />
+        </property>
+        <property name="type" type="string">
+            <column name="TYPE" length="128" />
+        </property>
+        <property name="organizationName" type="string">
+            <column name="ORGANIZATION_NAME" length="768" />
+        </property>
+        <property name="organizationUnit" type="string">
+            <column name="ORGANIZATION_UNIT" length="768" />
+        </property>
+        <property name="organizationType" type="string">
+            <column name="ORGANIZATION_TYPE" length="96" />
+        </property>
+        <property name="sourceId" type="string">
+            <column name="SOURCE_ID" length="768" />
+        </property>
+        <property name="sourceName" type="string">
+            <column name="SOURCE_NAME" length="510" />
+        </property>
+        <property name="dataSource" type="string">
+            <column name="DATA_SOURCE" length="768" />
+        </property>
+        <property name="lastArchived" type="big_decimal">
+            <column name="LAST_ARCHIVED" precision="20" scale="0" />
+        </property>
+        <property name="administrativePeriod" type="string">
+            <column name="ADMINISTRATIVE_PERIOD" length="96" />
+        </property>
+        <property name="startDate" type="big_decimal">
+            <column name="START_DATE" precision="20" scale="0" />
+        </property>
+        <property name="endDate" type="big_decimal">
+            <column name="END_DATE" precision="20" scale="0" />
+        </property>
+        <property name="learningContextCount" type="big_decimal">
+            <column name="LEARNING_CONTEXT_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="memberCount" type="big_decimal">
+            <column name="MEMBER_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="templateCount" type="big_decimal">
+            <column name="TEMPLATE_COUNT" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

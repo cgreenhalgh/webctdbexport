@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkSummaryReportT" table="TRK_SUMMARY_REPORT_T">
+        <composite-id name="id" class="webctdbexport.db.TrkSummaryReportTId">
+            <key-property name="lcId" type="big_decimal">
+                <column name="LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="totalsession" type="java.lang.Long">
+                <column name="TOTALSESSION" precision="10" scale="0" />
+            </key-property>
+            <key-property name="averagesessionlength" type="big_decimal">
+                <column name="AVERAGESESSIONLENGTH" precision="20" scale="0" />
+            </key-property>
+            <key-property name="averagesessionperday" type="java.lang.Integer">
+                <column name="AVERAGESESSIONPERDAY" precision="5" scale="0" />
+            </key-property>
+            <key-property name="averagesessionperdayweekday" type="java.lang.Integer">
+                <column name="AVERAGESESSIONPERDAYWEEKDAY" precision="5" scale="0" />
+            </key-property>
+            <key-property name="averagesessionperdayweekend" type="java.lang.Integer">
+                <column name="AVERAGESESSIONPERDAYWEEKEND" precision="5" scale="0" />
+            </key-property>
+            <key-property name="mostactiveday" type="date">
+                <column name="MOSTACTIVEDAY" length="7" />
+            </key-property>
+            <key-property name="leastactivday" type="date">
+                <column name="LEASTACTIVDAY" length="7" />
+            </key-property>
+            <key-property name="mostactivehour" type="java.lang.Integer">
+                <column name="MOSTACTIVEHOUR" precision="5" scale="0" />
+            </key-property>
+            <key-property name="leastactivehous" type="java.lang.Integer">
+                <column name="LEASTACTIVEHOUS" precision="5" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

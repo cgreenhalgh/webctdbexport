@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtResponse" table="ASSMT_RESPONSE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="assmtAttemptEvent" class="webctdbexport.db.AssmtAttemptEvent" fetch="select">
+            <column name="ATTEMPT_EVENT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="assmtAttemptItem" class="webctdbexport.db.AssmtAttemptItem" fetch="select">
+            <column name="ATTEMPT_ITEM_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="ident" type="string">
+            <column name="IDENT" length="768" not-null="true" />
+        </property>
+        <property name="position" type="int">
+            <column name="POSITION" precision="8" scale="0" not-null="true" />
+        </property>
+        <property name="resType" type="string">
+            <column name="RES_TYPE" length="10" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="smallValue" type="string">
+            <column name="SMALL_VALUE" length="4000" />
+        </property>
+        <property name="largeValue" type="clob">
+            <column name="LARGE_VALUE" />
+        </property>
+        <property name="numValue" type="big_decimal">
+            <column name="NUM_VALUE" precision="30" scale="10" />
+        </property>
+        <property name="exponent" type="java.lang.Integer">
+            <column name="EXPONENT" precision="5" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ArchiveUnitStatus" table="ARCHIVE_UNIT_STATUS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="sessionId" type="big_decimal">
+            <column name="SESSION_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="statusMessageCode" type="string">
+            <column name="STATUS_MESSAGE_CODE" length="800" />
+        </property>
+        <property name="arg1" type="string">
+            <column name="ARG1" length="1200" />
+        </property>
+        <property name="arg2" type="string">
+            <column name="ARG2" length="1200" />
+        </property>
+        <property name="arg3" type="string">
+            <column name="ARG3" length="1200" />
+        </property>
+        <property name="arg4" type="string">
+            <column name="ARG4" length="1200" />
+        </property>
+        <property name="arg5" type="string">
+            <column name="ARG5" length="1200" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

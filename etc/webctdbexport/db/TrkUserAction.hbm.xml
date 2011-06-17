@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkUserAction" table="TRK_USER_ACTION">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="trkAction" class="webctdbexport.db.TrkAction" fetch="select">
+            <column name="TRK_ACTION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkUserAction" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="TRK_PREVIOUS_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkTool" class="webctdbexport.db.TrkTool" fetch="select">
+            <column name="TRK_TOOL_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkTime" class="webctdbexport.db.TrkTime" fetch="select">
+            <column name="MINUTE" precision="15" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkPerson" class="webctdbexport.db.TrkPerson" fetch="select">
+            <column name="TRK_PERSON_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkSession" class="webctdbexport.db.TrkSession" fetch="select">
+            <column name="TRK_SESSION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkPage" class="webctdbexport.db.TrkPage" fetch="select">
+            <column name="TRK_PAGE_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkLearningContext" class="webctdbexport.db.TrkLearningContext" fetch="select">
+            <column name="TRK_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkDay" class="webctdbexport.db.TrkDay" fetch="select">
+            <column name="TRK_DAY_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="role" type="string">
+            <column name="ROLE" length="40" not-null="true" />
+        </property>
+        <property name="dwellTime" type="big_decimal">
+            <column name="DWELL_TIME" precision="20" scale="0" />
+        </property>
+        <property name="learningObjectId" type="big_decimal">
+            <column name="LEARNING_OBJECT_ID" precision="20" scale="0" />
+        </property>
+        <property name="dupFlag" type="java.lang.Boolean">
+            <column name="DUP_FLAG" precision="1" scale="0" />
+        </property>
+        <property name="eventTime" type="date">
+            <column name="EVENT_TIME" length="7" not-null="true" />
+        </property>
+        <property name="eventTimeMils" type="big_decimal">
+            <column name="EVENT_TIME_MILS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="trkUserActions" table="TRK_USER_ACTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_PREVIOUS_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkUserAction" />
+        </set>
+        <set name="trkLearningContextsForLastActionId" table="TRK_LEARNING_CONTEXT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LAST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkLearningContext" />
+        </set>
+        <set name="trkPersonsForLastActionId" table="TRK_PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LAST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkPerson" />
+        </set>
+        <set name="trkPersonsForFirstActionId" table="TRK_PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkPerson" />
+        </set>
+        <set name="trkLearningContextsForFirstActionId" table="TRK_LEARNING_CONTEXT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkLearningContext" />
+        </set>
+        <set name="trkSessionToolActivitiesForLastActionId" table="TRK_SESSION_TOOL_ACTIVITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LAST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSessionToolActivity" />
+        </set>
+        <set name="trkSessionsForFirstActionId" table="TRK_SESSION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSession" />
+        </set>
+        <set name="trkSessionToolActivitiesForFirstActionId" table="TRK_SESSION_TOOL_ACTIVITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSessionToolActivity" />
+        </set>
+        <set name="trkSessionsForLastActionId" table="TRK_SESSION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LAST_ACTION_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSession" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.GradeBookAuditLog" table="GRADE_BOOK_AUDIT_LOG">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="sectionId" type="big_decimal">
+            <column name="SECTION_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="sectionBookId" type="big_decimal">
+            <column name="SECTION_BOOK_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="userPersonId" type="big_decimal">
+            <column name="USER_PERSON_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="userFirstName" type="string">
+            <column name="USER_FIRST_NAME" length="768" not-null="true" />
+        </property>
+        <property name="userLastName" type="string">
+            <column name="USER_LAST_NAME" length="768" not-null="true" />
+        </property>
+        <property name="role" type="string">
+            <column name="ROLE" length="200" not-null="true" />
+        </property>
+        <property name="logTime" type="big_decimal">
+            <column name="LOG_TIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="memberPersonId" type="big_decimal">
+            <column name="MEMBER_PERSON_ID" precision="20" scale="0" />
+        </property>
+        <property name="memberFirstName" type="string">
+            <column name="MEMBER_FIRST_NAME" length="768" />
+        </property>
+        <property name="memberLastName" type="string">
+            <column name="MEMBER_LAST_NAME" length="768" />
+        </property>
+        <property name="sectionColumnId" type="big_decimal">
+            <column name="SECTION_COLUMN_ID" precision="20" scale="0" />
+        </property>
+        <property name="sectionColumnLabel" type="string">
+            <column name="SECTION_COLUMN_LABEL" length="1000" />
+        </property>
+        <property name="note" type="string">
+            <column name="NOTE" length="3000" />
+        </property>
+        <property name="userNameNOther" type="string">
+            <column name="USER_NAME_N_OTHER" length="768" />
+        </property>
+        <property name="userNameNPrefix" type="string">
+            <column name="USER_NAME_N_PREFIX" length="96" />
+        </property>
+        <property name="userNameNSuffix" type="string">
+            <column name="USER_NAME_N_SUFFIX" length="96" />
+        </property>
+        <property name="userNameNickname" type="string">
+            <column name="USER_NAME_NICKNAME" length="768" />
+        </property>
+        <property name="memberNameNOther" type="string">
+            <column name="MEMBER_NAME_N_OTHER" length="768" />
+        </property>
+        <property name="memberNameNPrefix" type="string">
+            <column name="MEMBER_NAME_N_PREFIX" length="96" />
+        </property>
+        <property name="memberNameNSuffix" type="string">
+            <column name="MEMBER_NAME_N_SUFFIX" length="96" />
+        </property>
+        <property name="memberNameNickname" type="string">
+            <column name="MEMBER_NAME_NICKNAME" length="768" />
+        </property>
+        <one-to-one name="gradeBookAuditLogValue" class="webctdbexport.db.GradeBookAuditLogValue"></one-to-one>
+    </class>
+</hibernate-mapping>

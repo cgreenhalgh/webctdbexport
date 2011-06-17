@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptTracking" table="RPT_TRACKING">
+        <composite-id name="id" class="webctdbexport.db.RptTrackingId">
+            <key-property name="trackingId" type="big_decimal">
+                <column name="TRACKING_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="sessionId" type="big_decimal">
+                <column name="SESSION_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="eventTime" type="date">
+                <column name="EVENT_TIME" length="7" />
+            </key-property>
+            <key-property name="eventTimeMil" type="big_decimal">
+                <column name="EVENT_TIME_MIL" precision="20" scale="0" />
+            </key-property>
+            <key-property name="actionName" type="string">
+                <column name="ACTION_NAME" length="40" />
+            </key-property>
+            <key-property name="toolName" type="string">
+                <column name="TOOL_NAME" length="40" />
+            </key-property>
+            <key-property name="pageName" type="string">
+                <column name="PAGE_NAME" length="4000" />
+            </key-property>
+            <key-property name="dwellTime" type="big_decimal">
+                <column name="DWELL_TIME" precision="20" scale="0" />
+            </key-property>
+            <key-property name="roleName" type="string">
+                <column name="ROLE_NAME" length="40" />
+            </key-property>
+            <key-property name="learningObjectId" type="big_decimal">
+                <column name="LEARNING_OBJECT_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

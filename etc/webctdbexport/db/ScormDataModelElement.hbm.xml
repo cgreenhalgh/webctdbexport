@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ScormDataModelElement" table="SCORM_DATA_MODEL_ELEMENT">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="scormDataModelElement" class="webctdbexport.db.ScormDataModelElement" fetch="select">
+            <column name="PARENT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="dataModel" type="string">
+            <column name="DATA_MODEL" length="10" not-null="true" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" length="256" not-null="true" unique="true" />
+        </property>
+        <property name="multipleValuesFlag" type="boolean">
+            <column name="MULTIPLE_VALUES_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="memberDataFlag" type="boolean">
+            <column name="MEMBER_DATA_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="genericStoreFlag" type="boolean">
+            <column name="GENERIC_STORE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="dataType" type="string">
+            <column name="DATA_TYPE" length="30" />
+        </property>
+        <property name="readWrite" type="string">
+            <column name="READ_WRITE" length="1" />
+        </property>
+        <property name="class_" type="string">
+            <column name="CLASS" length="256" />
+        </property>
+        <set name="scormScoMemberDatas" table="SCORM_SCO_MEMBER_DATA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ELEMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ScormScoMemberData" />
+        </set>
+        <set name="scormDataModelElements" table="SCORM_DATA_MODEL_ELEMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.ScormDataModelElement" />
+        </set>
+    </class>
+</hibernate-mapping>

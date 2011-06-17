@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SectionColumn" table="SECTION_COLUMN">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="sectionBook" class="webctdbexport.db.SectionBook" fetch="select">
+            <column name="SECTION_BOOK_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="CONTENT_ENTRY_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="cobaltType" type="string">
+            <column name="COBALT_TYPE" length="40" not-null="true" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" length="1000" not-null="true" />
+        </property>
+        <property name="mandatoryFl" type="boolean">
+            <column name="MANDATORY_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="editableFl" type="boolean">
+            <column name="EDITABLE_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="releasedFl" type="boolean">
+            <column name="RELEASED_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="overridableFl" type="boolean">
+            <column name="OVERRIDABLE_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="gradeFl" type="boolean">
+            <column name="GRADE_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="inheritedFl" type="boolean">
+            <column name="INHERITED_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="releaseStatisticsFl" type="boolean">
+            <column name="RELEASE_STATISTICS_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="learningActivityId" type="big_decimal">
+            <column name="LEARNING_ACTIVITY_ID" precision="20" scale="0" />
+        </property>
+        <property name="alignment" type="java.lang.Boolean">
+            <column name="ALIGNMENT" precision="1" scale="0" />
+        </property>
+        <property name="decimalScale" type="java.lang.Boolean">
+            <column name="DECIMAL_SCALE" precision="1" scale="0" />
+        </property>
+        <property name="selectionList" type="string">
+            <column name="SELECTION_LIST" length="3000" />
+        </property>
+        <property name="letterGradeScheme" type="string">
+            <column name="LETTER_GRADE_SCHEME" length="1000" />
+        </property>
+        <property name="gradeFormula" type="string">
+            <column name="GRADE_FORMULA" length="4000" />
+        </property>
+        <property name="maxValue" type="big_decimal">
+            <column name="MAX_VALUE" precision="7" />
+        </property>
+        <property name="schemeUpdateDate" type="big_decimal">
+            <column name="SCHEME_UPDATE_DATE" precision="20" scale="0" />
+        </property>
+        <property name="releaseDate" type="big_decimal">
+            <column name="RELEASE_DATE" precision="20" scale="0" />
+        </property>
+        <set name="scormItems" table="SCORM_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SECTION_COLUMN_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.ScormItem" />
+        </set>
+        <set name="memberAttrValues" table="MEMBER_ATTR_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SECTION_COLUMN_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MemberAttrValue" />
+        </set>
+        <set name="rubricLinks" table="RUBRIC_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SECTION_COLUMN_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.RubricLink" />
+        </set>
+        <set name="viewColumns" table="VIEW_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SECTION_COLUMN_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ViewColumn" />
+        </set>
+    </class>
+</hibernate-mapping>

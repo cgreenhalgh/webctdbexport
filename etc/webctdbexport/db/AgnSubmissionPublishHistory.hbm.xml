@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AgnSubmissionPublishHistory" table="AGN_SUBMISSION_PUBLISH_HISTORY">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="agnSubmission" class="webctdbexport.db.AgnSubmission" fetch="select">
+            <column name="SUBMISSION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="eventDate" type="big_decimal">
+            <column name="EVENT_DATE" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="published" type="boolean">
+            <column name="PUBLISHED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

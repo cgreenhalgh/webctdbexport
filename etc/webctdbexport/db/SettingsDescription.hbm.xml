@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SettingsDescription" table="SETTINGS_DESCRIPTION">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="settingsGroup" class="webctdbexport.db.SettingsGroup" fetch="select">
+            <column name="GROUP_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="1000" not-null="true" />
+        </property>
+        <property name="dataType" type="byte">
+            <column name="DATA_TYPE" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="presentationType" type="byte">
+            <column name="PRESENTATION_TYPE" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="inheritableFlag" type="boolean">
+            <column name="INHERITABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="optionalFlag" type="boolean">
+            <column name="OPTIONAL_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="readOnlyFlag" type="boolean">
+            <column name="READ_ONLY_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="hiddenFlag" type="java.lang.Boolean">
+            <column name="HIDDEN_FLAG" precision="1" scale="0" />
+        </property>
+        <property name="defaultValue" type="string">
+            <column name="DEFAULT_VALUE" length="1000" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" length="1000" />
+        </property>
+        <property name="defaultValueBlob" type="blob">
+            <column name="DEFAULT_VALUE_BLOB" />
+        </property>
+        <set name="smsRoleBasedRestrictionses" table="SMS_ROLE_BASED_RESTRICTIONS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SETTINGS_DESC_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SmsRoleBasedRestrictions" />
+        </set>
+        <set name="settingsLcTypeExceptions" table="SETTINGS_LC_TYPE_EXCEPTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SETTINGS_DESC_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SettingsLcTypeException" />
+        </set>
+        <one-to-one name="settingsDescRanges" class="webctdbexport.db.SettingsDescRanges"></one-to-one>
+        <set name="settingses" table="SETTINGS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SETTINGS_DESC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Settings" />
+        </set>
+    </class>
+</hibernate-mapping>

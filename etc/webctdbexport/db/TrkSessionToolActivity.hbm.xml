@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkSessionToolActivity" table="TRK_SESSION_TOOL_ACTIVITY">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="trkUserActionByLastActionId" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="LAST_ACTION_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkTool" class="webctdbexport.db.TrkTool" fetch="select">
+            <column name="TRK_TOOL_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkSession" class="webctdbexport.db.TrkSession" fetch="select">
+            <column name="TRK_SESSION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="trkUserActionByFirstActionId" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="firstActionDemoUser" type="boolean">
+            <column name="FIRST_ACTION_DEMO_USER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="firstActionRole" type="string">
+            <column name="FIRST_ACTION_ROLE" length="40" not-null="true" />
+        </property>
+        <property name="firstActionEventTime" type="date">
+            <column name="FIRST_ACTION_EVENT_TIME" length="7" not-null="true" />
+        </property>
+        <property name="firstActionLcId" type="big_decimal">
+            <column name="FIRST_ACTION_LC_ID" precision="20" scale="0" />
+        </property>
+        <property name="lastActionEventTime" type="date">
+            <column name="LAST_ACTION_EVENT_TIME" length="7" not-null="true" />
+        </property>
+        <property name="lastActionDwellTime" type="big_decimal">
+            <column name="LAST_ACTION_DWELL_TIME" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

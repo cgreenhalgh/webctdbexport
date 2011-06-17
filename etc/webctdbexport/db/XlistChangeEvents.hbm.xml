@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.XlistChangeEvents" table="XLIST_CHANGE_EVENTS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="instLcid" type="big_decimal">
+            <column name="INST_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="masterLcid" type="big_decimal">
+            <column name="MASTER_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="masterSourceId" type="string">
+            <column name="MASTER_SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="masterSourceName" type="string">
+            <column name="MASTER_SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="childLcid" type="big_decimal">
+            <column name="CHILD_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="childSourceId" type="string">
+            <column name="CHILD_SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="childSourceName" type="string">
+            <column name="CHILD_SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="boolean">
+            <column name="DELETED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="processingStatus" type="boolean">
+            <column name="PROCESSING_STATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="processingTs" type="big_decimal">
+            <column name="PROCESSING_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="mark" type="big_decimal">
+            <column name="MARK" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

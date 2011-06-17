@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkPerson" table="TRK_PERSON">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="trkUserActionByLastActionId" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="LAST_ACTION_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkUserActionByFirstActionId" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="familyName" type="string">
+            <column name="FAMILY_NAME" length="768" />
+        </property>
+        <property name="userName" type="string">
+            <column name="USER_NAME" length="768" not-null="true" />
+        </property>
+        <property name="demoUser" type="boolean">
+            <column name="DEMO_USER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="givenName" type="string">
+            <column name="GIVEN_NAME" length="768" />
+        </property>
+        <set name="trkUserActions" table="TRK_USER_ACTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkUserAction" />
+        </set>
+    </class>
+</hibernate-mapping>

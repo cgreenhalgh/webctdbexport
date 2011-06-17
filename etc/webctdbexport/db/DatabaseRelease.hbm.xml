@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.DatabaseRelease" table="DATABASE_RELEASE">
+        <id name="id" type="string">
+            <column name="ID" length="128" />
+            <generator class="assigned" />
+        </id>
+        <property name="application" type="string">
+            <column name="APPLICATION" length="64" not-null="true" />
+        </property>
+        <property name="major" type="string">
+            <column name="MAJOR" length="30" not-null="true" />
+        </property>
+        <property name="minor" type="string">
+            <column name="MINOR" length="30" not-null="true" />
+        </property>
+        <property name="patch" type="string">
+            <column name="PATCH" length="30" not-null="true" />
+        </property>
+        <property name="build" type="string">
+            <column name="BUILD" length="30" not-null="true" />
+        </property>
+        <property name="dateInstalled" type="big_decimal">
+            <column name="DATE_INSTALLED" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

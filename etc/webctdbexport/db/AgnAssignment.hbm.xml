@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AgnAssignment" table="AGN_ASSIGNMENT">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <many-to-one name="simpleFileGroup" class="webctdbexport.db.SimpleFileGroup" fetch="select">
+            <column name="SIMPLE_FILE_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="coTemplate" class="webctdbexport.db.CoTemplate" fetch="select">
+            <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="learnerpublishableFlag" type="boolean">
+            <column name="LEARNERPUBLISHABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="collaborative" type="string">
+            <column name="COLLABORATIVE" length="10" not-null="true" />
+        </property>
+        <property name="takebackableFlag" type="boolean">
+            <column name="TAKEBACKABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="multipleinstructions" type="string">
+            <column name="MULTIPLEINSTRUCTIONS" length="10" not-null="true" />
+        </property>
+        <property name="inCalendar" type="boolean">
+            <column name="IN_CALENDAR" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="ishtmlInstructions" type="boolean">
+            <column name="ISHTML_INSTRUCTIONS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="instructions" type="clob">
+            <column name="INSTRUCTIONS" />
+        </property>
+        <property name="duedate" type="big_decimal">
+            <column name="DUEDATE" precision="20" scale="0" />
+        </property>
+        <property name="leewaydate" type="big_decimal">
+            <column name="LEEWAYDATE" precision="20" scale="0" />
+        </property>
+        <property name="sendemailonsubmissionFlag" type="boolean">
+            <column name="SENDEMAILONSUBMISSION_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="emailaddress" type="string">
+            <column name="EMAILADDRESS" length="320" />
+        </property>
+        <property name="gradereleasestrategy" type="string">
+            <column name="GRADERELEASESTRATEGY" length="20" />
+        </property>
+        <property name="allowartifactcreationFlag" type="boolean">
+            <column name="ALLOWARTIFACTCREATION_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="agnGroupassignments" table="AGN_GROUPASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSIGNMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnGroupassignment" />
+        </set>
+        <set name="agnSubmissions" table="AGN_SUBMISSION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSIGNMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnSubmission" />
+        </set>
+        <set name="agnToolViewStates" table="AGN_TOOL_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSIGNMENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnToolViewState" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtSetting" table="ASSMT_SETTING">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="assmtAssessment" class="webctdbexport.db.AssmtAssessment" fetch="select">
+            <column name="ASSESSMENT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="starttime" type="big_decimal">
+            <column name="STARTTIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="duration" type="int">
+            <column name="DURATION" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="durationunits" type="string">
+            <column name="DURATIONUNITS" length="60" not-null="true" />
+        </property>
+        <property name="durationunlimited" type="boolean">
+            <column name="DURATIONUNLIMITED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="displayNewWindow" type="boolean">
+            <column name="DISPLAY_NEW_WINDOW" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="questiondelivery" type="string">
+            <column name="QUESTIONDELIVERY" length="20" not-null="true" />
+        </property>
+        <property name="numberofattempts" type="short">
+            <column name="NUMBEROFATTEMPTS" precision="3" scale="0" not-null="true" />
+        </property>
+        <property name="showtitle" type="boolean">
+            <column name="SHOWTITLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowsubmissionafter" type="boolean">
+            <column name="ALLOWSUBMISSIONAFTER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="randomizeAttempts" type="boolean">
+            <column name="RANDOMIZE_ATTEMPTS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="showStatistics" type="boolean">
+            <column name="SHOW_STATISTICS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="inCalendar" type="boolean">
+            <column name="IN_CALENDAR" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="endtime" type="big_decimal">
+            <column name="ENDTIME" precision="20" scale="0" />
+        </property>
+        <property name="timebetweenattempts" type="java.lang.Integer">
+            <column name="TIMEBETWEENATTEMPTS" precision="6" scale="0" />
+        </property>
+        <property name="timebetweenattemptsunits" type="string">
+            <column name="TIMEBETWEENATTEMPTSUNITS" length="60" />
+        </property>
+        <property name="instructionsIsHtml" type="boolean">
+            <column name="INSTRUCTIONS_IS_HTML" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="instructionsEveryQuestion" type="boolean">
+            <column name="INSTRUCTIONS_EVERY_QUESTION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="instructions" type="string">
+            <column name="INSTRUCTIONS" length="4000" />
+        </property>
+        <one-to-one name="assmtSecuritySetting" class="webctdbexport.db.AssmtSecuritySetting"></one-to-one>
+        <one-to-one name="assmtSubmissionSetting" class="webctdbexport.db.AssmtSubmissionSetting"></one-to-one>
+        <one-to-one name="assmtResultSetting" class="webctdbexport.db.AssmtResultSetting"></one-to-one>
+    </class>
+</hibernate-mapping>

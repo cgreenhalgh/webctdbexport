@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SectionBook" table="SECTION_BOOK">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="version" type="big_decimal">
+            <column name="VERSION" precision="20" scale="0" />
+        </property>
+        <many-to-one name="coTemplate" class="webctdbexport.db.CoTemplate" fetch="select">
+            <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" unique="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="rowsPerPage" type="java.lang.Short">
+            <column name="ROWS_PER_PAGE" precision="3" scale="0" />
+        </property>
+        <property name="letterGradeScheme" type="string">
+            <column name="LETTER_GRADE_SCHEME" length="1000" />
+        </property>
+        <set name="sectionViews" table="SECTION_VIEW" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SECTION_BOOK_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SectionView" />
+        </set>
+        <set name="sectionColumns" table="SECTION_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SECTION_BOOK_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SectionColumn" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.PersonColValueV" table="PERSON_COL_VALUE_V">
+        <composite-id name="id" class="webctdbexport.db.PersonColValueVId">
+            <key-property name="lcId" type="big_decimal">
+                <column name="LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="colId" type="big_decimal">
+                <column name="COL_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="colName" type="string">
+                <column name="COL_NAME" length="256" />
+            </key-property>
+            <key-property name="datatype" type="short">
+                <column name="DATATYPE" precision="4" scale="0" />
+            </key-property>
+            <key-property name="numberValue" type="big_decimal">
+                <column name="NUMBER_VALUE" precision="30" scale="4" />
+            </key-property>
+            <key-property name="shortStringValue" type="string">
+                <column name="SHORT_STRING_VALUE" length="800" />
+            </key-property>
+            <key-property name="longStringValue" type="string">
+                <column name="LONG_STRING_VALUE" length="4000" />
+            </key-property>
+            <key-property name="blobValue" type="big_decimal">
+                <column name="BLOB_VALUE" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

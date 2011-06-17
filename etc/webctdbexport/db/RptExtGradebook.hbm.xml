@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptExtGradebook" table="RPT_EXT_GRADEBOOK">
+        <composite-id name="id" class="webctdbexport.db.RptExtGradebookId">
+            <key-property name="learningContextName" type="string">
+                <column name="LEARNING_CONTEXT_NAME" length="1000" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="userLoginName" type="string">
+                <column name="USER_LOGIN_NAME" length="768" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="givenName" type="string">
+                <column name="GIVEN_NAME" length="768" />
+            </key-property>
+            <key-property name="familyName" type="string">
+                <column name="FAMILY_NAME" length="768" />
+            </key-property>
+            <key-property name="columnName" type="string">
+                <column name="COLUMN_NAME" length="1000" />
+            </key-property>
+            <key-property name="columnType" type="string">
+                <column name="COLUMN_TYPE" length="40" />
+            </key-property>
+            <key-property name="finalValue" type="string">
+                <column name="FINAL_VALUE" length="4000" />
+            </key-property>
+            <key-property name="override" type="string">
+                <column name="OVERRIDE" length="4000" />
+            </key-property>
+            <key-property name="originalValue" type="string">
+                <column name="ORIGINAL_VALUE" length="4000" />
+            </key-property>
+            <key-property name="sourceLoType" type="string">
+                <column name="SOURCE_LO_TYPE" length="100" />
+            </key-property>
+            <key-property name="sourceLoName" type="string">
+                <column name="SOURCE_LO_NAME" length="1000" />
+            </key-property>
+            <key-property name="sourceLoId" type="big_decimal">
+                <column name="SOURCE_LO_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="maxPoints" type="big_decimal">
+                <column name="MAX_POINTS" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SimpleFileUploader" table="SIMPLE_FILE_UPLOADER">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">simpleFile</param>
+            </generator>
+        </id>
+        <one-to-one name="simpleFile" class="webctdbexport.db.SimpleFile" constrained="true"></one-to-one>
+        <many-to-one name="member" class="webctdbexport.db.Member" fetch="select">
+            <column name="MEMBER_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

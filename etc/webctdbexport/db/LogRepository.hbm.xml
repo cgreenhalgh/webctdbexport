@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.LogRepository" table="LOG_REPOSITORY">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="logCategory" type="string">
+            <column name="LOG_CATEGORY" length="100" not-null="true" />
+        </property>
+        <property name="logNdc" type="string">
+            <column name="LOG_NDC" length="800" not-null="true" />
+        </property>
+        <property name="logTime" type="big_decimal">
+            <column name="LOG_TIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="logPriority" type="string">
+            <column name="LOG_PRIORITY" length="20" />
+        </property>
+        <property name="logMessage" type="string">
+            <column name="LOG_MESSAGE" length="4000" />
+        </property>
+        <property name="nodeName" type="string">
+            <column name="NODE_NAME" length="100" not-null="true" />
+        </property>
+        <one-to-one name="logException" class="webctdbexport.db.LogException"></one-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.MailMessage" table="MAIL_MESSAGE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="simpleFileGroup" class="webctdbexport.db.SimpleFileGroup" fetch="select">
+            <column name="FILE_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="person" class="webctdbexport.db.Person" fetch="select">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="learningContext" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="format" type="byte">
+            <column name="FORMAT" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="urgency" type="byte">
+            <column name="URGENCY" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="subject" type="string">
+            <column name="SUBJECT" length="900" not-null="true" />
+        </property>
+        <property name="enclosures" type="boolean">
+            <column name="ENCLOSURES" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="shortMessageFlag" type="boolean">
+            <column name="SHORT_MESSAGE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="dateSent" type="big_decimal">
+            <column name="DATE_SENT" precision="20" scale="0" />
+        </property>
+        <property name="shortMessage" type="string">
+            <column name="SHORT_MESSAGE" length="4000" />
+        </property>
+        <property name="longMessage" type="clob">
+            <column name="LONG_MESSAGE" />
+        </property>
+        <set name="mailTargets" table="MAIL_TARGET" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MAIL_MESSAGE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MailTarget" />
+        </set>
+        <set name="mailReceipts" table="MAIL_RECEIPT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MAIL_MESSAGE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MailReceipt" />
+        </set>
+    </class>
+</hibernate-mapping>

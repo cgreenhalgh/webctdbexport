@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ScormPackage" table="SCORM_PACKAGE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="isopeninnewwindow" type="boolean">
+            <column name="ISOPENINNEWWINDOW" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="gradable" type="boolean">
+            <column name="GRADABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="control" type="string">
+            <column name="CONTROL" length="40" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="1000" />
+        </property>
+        <property name="numbering" type="string">
+            <column name="NUMBERING" length="2" />
+        </property>
+        <property name="author" type="string">
+            <column name="AUTHOR" length="256" />
+        </property>
+        <property name="keywords" type="string">
+            <column name="KEYWORDS" length="3000" />
+        </property>
+        <set name="scormItems" table="SCORM_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PACKAGE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ScormItem" />
+        </set>
+    </class>
+</hibernate-mapping>

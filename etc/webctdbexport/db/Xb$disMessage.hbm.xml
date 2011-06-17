@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$disMessage" table="XB$DIS_MESSAGE">
+        <composite-id name="id" class="webctdbexport.db.Xb$disMessageId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="subject" type="string">
+            <column name="SUBJECT" length="800" not-null="true" />
+        </property>
+        <property name="isdraft" type="boolean">
+            <column name="ISDRAFT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="ishtml" type="boolean">
+            <column name="ISHTML" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="postdate" type="big_decimal">
+            <column name="POSTDATE" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="indentlevel" type="int">
+            <column name="INDENTLEVEL" precision="5" scale="0" not-null="true" />
+        </property>
+        <property name="editDate" type="big_decimal">
+            <column name="EDIT_DATE" precision="20" scale="0" />
+        </property>
+        <property name="shortMessage" type="string">
+            <column name="SHORT_MESSAGE" length="4000" />
+        </property>
+        <property name="shortMessageFlag" type="boolean">
+            <column name="SHORT_MESSAGE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="islocked" type="boolean">
+            <column name="ISLOCKED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deliveryContextId" type="big_decimal">
+            <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="topicId" type="big_decimal">
+            <column name="TOPIC_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="authorId" type="big_decimal">
+            <column name="AUTHOR_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="parentId" type="big_decimal">
+            <column name="PARENT_ID" precision="20" scale="0" />
+        </property>
+        <property name="rootMessageId" type="big_decimal">
+            <column name="ROOT_MESSAGE_ID" precision="20" scale="0" />
+        </property>
+        <property name="fileGroupId" type="big_decimal">
+            <column name="FILE_GROUP_ID" precision="20" scale="0" />
+        </property>
+        <property name="longMessage" type="clob">
+            <column name="LONG_MESSAGE" />
+        </property>
+        <property name="avgRating" type="big_decimal">
+            <column name="AVG_RATING" precision="4" />
+        </property>
+        <property name="anonymous" type="boolean">
+            <column name="ANONYMOUS" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

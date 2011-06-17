@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$assmtSetting" table="XB$ASSMT_SETTING">
+        <composite-id name="id" class="webctdbexport.db.Xb$assmtSettingId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="starttime" type="big_decimal">
+            <column name="STARTTIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="endtime" type="big_decimal">
+            <column name="ENDTIME" precision="20" scale="0" />
+        </property>
+        <property name="duration" type="int">
+            <column name="DURATION" precision="6" scale="0" not-null="true" />
+        </property>
+        <property name="durationunits" type="string">
+            <column name="DURATIONUNITS" length="60" not-null="true" />
+        </property>
+        <property name="durationunlimited" type="boolean">
+            <column name="DURATIONUNLIMITED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="displayNewWindow" type="boolean">
+            <column name="DISPLAY_NEW_WINDOW" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="questiondelivery" type="string">
+            <column name="QUESTIONDELIVERY" length="20" not-null="true" />
+        </property>
+        <property name="timebetweenattempts" type="java.lang.Integer">
+            <column name="TIMEBETWEENATTEMPTS" precision="6" scale="0" />
+        </property>
+        <property name="timebetweenattemptsunits" type="string">
+            <column name="TIMEBETWEENATTEMPTSUNITS" length="60" />
+        </property>
+        <property name="numberofattempts" type="short">
+            <column name="NUMBEROFATTEMPTS" precision="3" scale="0" not-null="true" />
+        </property>
+        <property name="showtitle" type="boolean">
+            <column name="SHOWTITLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allowsubmissionafter" type="boolean">
+            <column name="ALLOWSUBMISSIONAFTER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="randomizeAttempts" type="boolean">
+            <column name="RANDOMIZE_ATTEMPTS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="showStatistics" type="boolean">
+            <column name="SHOW_STATISTICS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="inCalendar" type="boolean">
+            <column name="IN_CALENDAR" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="assessmentId" type="big_decimal">
+            <column name="ASSESSMENT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deliveryContextId" type="big_decimal">
+            <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="instructionsIsHtml" type="boolean">
+            <column name="INSTRUCTIONS_IS_HTML" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="instructionsEveryQuestion" type="boolean">
+            <column name="INSTRUCTIONS_EVERY_QUESTION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="instructions" type="string">
+            <column name="INSTRUCTIONS" length="4000" />
+        </property>
+    </class>
+</hibernate-mapping>

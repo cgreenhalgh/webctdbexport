@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtExtSubmissionMembers" table="ASSMT_EXT_SUBMISSION_MEMBERS">
+        <composite-id name="id" class="webctdbexport.db.AssmtExtSubmissionMembersId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="22" scale="0" />
+            </key-property>
+            <key-property name="memberId" type="big_decimal">
+                <column name="MEMBER_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assessmentId" type="big_decimal">
+                <column name="ASSESSMENT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="webctId" type="string">
+                <column name="WEBCT_ID" length="768" />
+            </key-property>
+            <key-property name="nameNFamily" type="string">
+                <column name="NAME_N_FAMILY" length="768" />
+            </key-property>
+            <key-property name="nameNGiven" type="string">
+                <column name="NAME_N_GIVEN" length="768" />
+            </key-property>
+            <key-property name="nameFn" type="string">
+                <column name="NAME_FN" length="768" />
+            </key-property>
+            <key-property name="nameNPrefix" type="string">
+                <column name="NAME_N_PREFIX" length="96" />
+            </key-property>
+            <key-property name="nameNOther" type="string">
+                <column name="NAME_N_OTHER" length="768" />
+            </key-property>
+            <key-property name="nameNSuffix" type="string">
+                <column name="NAME_N_SUFFIX" length="96" />
+            </key-property>
+            <key-property name="nameNickname" type="string">
+                <column name="NAME_NICKNAME" length="768" />
+            </key-property>
+            <key-property name="value" type="string">
+                <column name="VALUE" length="4000" />
+            </key-property>
+            <key-property name="overrideValue" type="string">
+                <column name="OVERRIDE_VALUE" length="4000" />
+            </key-property>
+            <key-property name="modifiedFlag" type="big_decimal">
+                <column name="MODIFIED_FLAG" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SettingsV" table="SETTINGS_V">
+        <composite-id name="id" class="webctdbexport.db.SettingsVId">
+            <key-property name="groupName" type="string">
+                <column name="GROUP_NAME" length="800" />
+            </key-property>
+            <key-property name="groupId" type="big_decimal">
+                <column name="GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="groupType" type="java.lang.Byte">
+                <column name="GROUP_TYPE" precision="2" scale="0" />
+            </key-property>
+            <key-property name="groupLabel" type="string">
+                <column name="GROUP_LABEL" length="1000" />
+            </key-property>
+            <key-property name="groupJmxBean" type="string">
+                <column name="GROUP_JMX_BEAN" length="1000" />
+            </key-property>
+            <key-property name="groupHelpId" type="big_decimal">
+                <column name="GROUP_HELP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="groupHiddenFlag" type="java.lang.Boolean">
+                <column name="GROUP_HIDDEN_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="groupCategory" type="string">
+                <column name="GROUP_CATEGORY" length="800" />
+            </key-property>
+            <key-property name="settingName" type="string">
+                <column name="SETTING_NAME" length="1000" />
+            </key-property>
+            <key-property name="settingId" type="big_decimal">
+                <column name="SETTING_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="settingLabel" type="string">
+                <column name="SETTING_LABEL" length="1000" />
+            </key-property>
+            <key-property name="dataType" type="java.lang.Byte">
+                <column name="DATA_TYPE" precision="2" scale="0" />
+            </key-property>
+            <key-property name="presentationType" type="java.lang.Byte">
+                <column name="PRESENTATION_TYPE" precision="2" scale="0" />
+            </key-property>
+            <key-property name="inheritableFlag" type="java.lang.Boolean">
+                <column name="INHERITABLE_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="optionalFlag" type="java.lang.Boolean">
+                <column name="OPTIONAL_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="readOnlyFlag" type="java.lang.Boolean">
+                <column name="READ_ONLY_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="dataRange" type="string">
+                <column name="DATA_RANGE" length="4000" />
+            </key-property>
+            <key-property name="defaultValue" type="string">
+                <column name="DEFAULT_VALUE" length="1000" />
+            </key-property>
+            <key-property name="defaultValueBlob" type="blob">
+                <column name="DEFAULT_VALUE_BLOB" />
+            </key-property>
+            <key-property name="hiddenFlag" type="java.lang.Boolean">
+                <column name="HIDDEN_FLAG" precision="1" scale="0" />
+            </key-property>
+            <key-property name="lcId" type="big_decimal">
+                <column name="LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="valueId" type="big_decimal">
+                <column name="VALUE_ID" precision="22" scale="0" />
+            </key-property>
+            <key-property name="settingValue" type="string">
+                <column name="SETTING_VALUE" length="1000" />
+            </key-property>
+            <key-property name="settingValueBlob" type="blob">
+                <column name="SETTING_VALUE_BLOB" />
+            </key-property>
+            <key-property name="defaultValueFlag" type="big_decimal">
+                <column name="DEFAULT_VALUE_FLAG" precision="22" scale="0" />
+            </key-property>
+            <key-property name="inheritedLcId" type="big_decimal">
+                <column name="INHERITED_LC_ID" precision="22" scale="0" />
+            </key-property>
+            <key-property name="lockedLcId" type="big_decimal">
+                <column name="LOCKED_LC_ID" precision="22" scale="0" />
+            </key-property>
+            <key-property name="lastmodifyTs" type="big_decimal">
+                <column name="LASTMODIFY_TS" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$rubricLinkCellResult" table="XB$RUBRIC_LINK_CELL_RESULT">
+        <composite-id name="id" class="webctdbexport.db.Xb$rubricLinkCellResultId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="rubricVersion" type="big_decimal">
+            <column name="RUBRIC_VERSION" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="rubricLinkId" type="big_decimal">
+            <column name="RUBRIC_LINK_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="rubricRowId" type="big_decimal">
+            <column name="RUBRIC_ROW_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="rubricCellId" type="big_decimal">
+            <column name="RUBRIC_CELL_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="rubricId" type="big_decimal">
+            <column name="RUBRIC_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="markerId" type="big_decimal">
+            <column name="MARKER_ID" precision="20" scale="0" />
+        </property>
+        <property name="learnerId" type="big_decimal">
+            <column name="LEARNER_ID" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

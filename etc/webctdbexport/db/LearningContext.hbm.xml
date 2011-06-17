@@ -1,0 +1,371 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.LearningContext" table="LEARNING_CONTEXT">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="learningContext" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="PARENT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="HOMEFOLDER_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="lcType" class="webctdbexport.db.LcType" fetch="select">
+            <column name="TYPE_CODE" length="128" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="1000" not-null="true" />
+        </property>
+        <property name="sourceId" type="string">
+            <column name="SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="sourceName" type="string">
+            <column name="SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="glcid" type="string">
+            <column name="GLCID" length="256" not-null="true" />
+        </property>
+        <property name="statusTimestamp" type="big_decimal">
+            <column name="STATUS_TIMESTAMP" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deletableFlag" type="boolean">
+            <column name="DELETABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="enrollacceptFlag" type="boolean">
+            <column name="ENROLLACCEPT_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="enrollallowedFlag" type="boolean">
+            <column name="ENROLLALLOWED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="nameLowercase" type="string">
+            <column name="NAME_LOWERCASE" length="1000" not-null="true" />
+        </property>
+        <property name="licenseGenerated" type="boolean">
+            <column name="LICENSE_GENERATED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="startRestrict" type="java.lang.Boolean">
+            <column name="START_RESTRICT" precision="1" scale="0" />
+        </property>
+        <property name="endRestrict" type="java.lang.Boolean">
+            <column name="END_RESTRICT" precision="1" scale="0" />
+        </property>
+        <property name="description" type="clob">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="deletedFlag" type="big_decimal">
+            <column name="DELETED_FLAG" precision="20" scale="0" />
+        </property>
+        <property name="status" type="java.lang.Boolean">
+            <column name="STATUS" precision="1" scale="0" />
+        </property>
+        <property name="fulldescription" type="clob">
+            <column name="FULLDESCRIPTION" />
+        </property>
+        <property name="orgname" type="string">
+            <column name="ORGNAME" length="768" />
+        </property>
+        <property name="orgunit" type="string">
+            <column name="ORGUNIT" length="768" />
+        </property>
+        <property name="orgtype" type="string">
+            <column name="ORGTYPE" length="96" />
+        </property>
+        <property name="orgid" type="string">
+            <column name="ORGID" length="768" />
+        </property>
+        <property name="adminperiod" type="string">
+            <column name="ADMINPERIOD" length="96" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="320" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="1000" />
+        </property>
+        <property name="datasource" type="string">
+            <column name="DATASOURCE" length="768" />
+        </property>
+        <property name="lastarchived" type="big_decimal">
+            <column name="LASTARCHIVED" precision="20" scale="0" />
+        </property>
+        <property name="startdateTime" type="big_decimal">
+            <column name="STARTDATE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="enddateTime" type="big_decimal">
+            <column name="ENDDATE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="deliveryUnitType" type="string">
+            <column name="DELIVERY_UNIT_TYPE" length="20" />
+        </property>
+        <property name="instLcid" type="big_decimal">
+            <column name="INST_LCID" precision="20" scale="0" />
+        </property>
+        <property name="convertedToBb" type="boolean">
+            <column name="CONVERTED_TO_BB" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="lcTermMappings" table="LC_TERM_MAPPING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ASSIGNED_LCID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LcTermMapping" />
+        </set>
+        <set name="myCampusBookmarkDatas" table="MY_CAMPUS_BOOKMARK_DATA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="INSTITUTION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MyCampusBookmarkData" />
+        </set>
+        <set name="xlistLcMappingsForMasterLcid" table="XLIST_LC_MAPPING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MASTER_LCID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.XlistLcMapping" />
+        </set>
+        <set name="colMetaLcVises" table="COL_META_LC_VIS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcVis" />
+        </set>
+        <set name="personsForPortfolioId" table="PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PORTFOLIO_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.Person" />
+        </set>
+        <set name="agnSubmissionViewStates" table="AGN_SUBMISSION_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnSubmissionViewState" />
+        </set>
+        <set name="announcementsForCreatedInLcid" table="ANNOUNCEMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CREATED_IN_LCID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Announcement" />
+        </set>
+        <set name="mailMessages" table="MAIL_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MailMessage" />
+        </set>
+        <set name="srCriteriaDetails" table="SR_CRITERIA_DETAIL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_GROUP_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SrCriteriaDetail" />
+        </set>
+        <set name="searchableObjectWas" table="SEARCHABLE_OBJECT_WA" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SearchableObjectWa" />
+        </set>
+        <set name="agnToolViewStates" table="AGN_TOOL_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnToolViewState" />
+        </set>
+        <set name="selfEnrollmentLcs" table="SELF_ENROLLMENT_LC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SelfEnrollmentLc" />
+        </set>
+        <set name="lcCategories" table="LC_CATEGORY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="OWNER_LC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LcCategory" />
+        </set>
+        <set name="personQueries" table="PERSON_QUERY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PersonQuery" />
+        </set>
+        <set name="colValues" table="COL_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColValue" />
+        </set>
+        <set name="coLcAssignments" table="CO_LC_ASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoLcAssignment" />
+        </set>
+        <set name="settingses" table="SETTINGS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Settings" />
+        </set>
+        <set name="announcementsForDeliverToLcid" table="ANNOUNCEMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVER_TO_LCID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Announcement" />
+        </set>
+        <set name="lcQueries" table="LC_QUERY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LcQuery" />
+        </set>
+        <set name="learningContextIndexesForLeftLcId" table="LEARNING_CONTEXT_INDEX" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEFT_LC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LearningContextIndex" />
+        </set>
+        <set name="members" table="MEMBER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Member" />
+        </set>
+        <set name="colMetaLcModules" table="COL_META_LC_MODULE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcModule" />
+        </set>
+        <set name="calendarEntries" table="CALENDAR_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CalendarEntry" />
+        </set>
+        <set name="lcTerms" table="LC_TERM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="INST_LCID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LcTerm" />
+        </set>
+        <set name="xlistLcMappingsForChildLcid" table="XLIST_LC_MAPPING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CHILD_LCID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.XlistLcMapping" />
+        </set>
+        <set name="cpmLcAclRels" table="CPM_LC_ACL_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcAclRel" />
+        </set>
+        <one-to-one name="learningContextProxy" class="webctdbexport.db.LearningContextProxy"></one-to-one>
+        <set name="personsForLearningContextId" table="PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Person" />
+        </set>
+        <set name="agnGroupassignments" table="AGN_GROUPASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_GROUP_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnGroupassignment" />
+        </set>
+        <one-to-one name="lcOperation" class="webctdbexport.db.LcOperation"></one-to-one>
+        <set name="lmsIntegrations" table="LMS_INTEGRATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="INST_LCID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LmsIntegration" />
+        </set>
+        <set name="colMetas" table="COL_META" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="OWNER_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMeta" />
+        </set>
+        <set name="learningContextIndexesForRightLcId" table="LEARNING_CONTEXT_INDEX" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RIGHT_LC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LearningContextIndex" />
+        </set>
+        <set name="cpmLcEditorRels" table="CPM_LC_EDITOR_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcEditorRel" />
+        </set>
+        <set name="lcCategorizations" table="LC_CATEGORIZATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LcCategorization" />
+        </set>
+        <set name="searchableObjects" table="SEARCHABLE_OBJECT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SearchableObject" />
+        </set>
+        <set name="cpmLcGroupRels" table="CPM_LC_GROUP_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcGroupRel" />
+        </set>
+        <set name="mailBoxes" table="MAIL_BOX" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MailBox" />
+        </set>
+        <set name="learningContexts" table="LEARNING_CONTEXT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.LearningContext" />
+        </set>
+        <set name="tocBookmarks" table="TOC_BOOKMARK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TocBookmark" />
+        </set>
+        <set name="colMetaLcPersons" table="COL_META_LC_PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcPerson" />
+        </set>
+        <set name="colMetaAttrValues" table="COL_META_ATTR_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaAttrValue" />
+        </set>
+        <set name="personChangeEventses" table="PERSON_CHANGE_EVENTS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PersonChangeEvents" />
+        </set>
+        <set name="coLcAssociations" table="CO_LC_ASSOCIATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoLcAssociation" />
+        </set>
+    </class>
+</hibernate-mapping>

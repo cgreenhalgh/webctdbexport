@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$assmtAttemptItem" table="XB$ASSMT_ATTEMPT_ITEM">
+        <composite-id name="id" class="webctdbexport.db.Xb$assmtAttemptItemId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="score" type="big_decimal">
+            <column name="SCORE" precision="9" scale="4" />
+        </property>
+        <property name="initialScore" type="big_decimal">
+            <column name="INITIAL_SCORE" precision="9" scale="4" />
+        </property>
+        <property name="position" type="int">
+            <column name="POSITION" precision="8" scale="0" not-null="true" />
+        </property>
+        <property name="randomSeed" type="big_decimal">
+            <column name="RANDOM_SEED" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="modifiedFlag" type="boolean">
+            <column name="MODIFIED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="visitedFlag" type="boolean">
+            <column name="VISITED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="attemptId" type="big_decimal">
+            <column name="ATTEMPT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="questionLinkId" type="big_decimal">
+            <column name="QUESTION_LINK_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="comments" type="clob">
+            <column name="COMMENTS" />
+        </property>
+    </class>
+</hibernate-mapping>

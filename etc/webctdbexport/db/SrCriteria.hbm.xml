@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SrCriteria" table="SR_CRITERIA">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="srHead" class="webctdbexport.db.SrHead" fetch="select">
+            <column name="HEAD_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="operand" type="string">
+            <column name="OPERAND" length="1024" />
+        </property>
+        <property name="operator" type="string">
+            <column name="OPERATOR" length="64" />
+        </property>
+        <property name="booleanOperator" type="string">
+            <column name="BOOLEAN_OPERATOR" length="10" />
+        </property>
+        <property name="srLevel" type="java.lang.Byte">
+            <column name="SR_LEVEL" precision="2" scale="0" />
+        </property>
+        <property name="srType" type="java.lang.Byte">
+            <column name="SR_TYPE" precision="2" scale="0" />
+        </property>
+        <property name="srOrder" type="java.lang.Byte">
+            <column name="SR_ORDER" precision="2" scale="0" />
+        </property>
+        <property name="operandId" type="big_decimal">
+            <column name="OPERAND_ID" precision="20" scale="0" />
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE" length="4000" />
+        </property>
+        <set name="srCriteriaDetails" table="SR_CRITERIA_DETAIL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CRITERIA_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SrCriteriaDetail" />
+        </set>
+    </class>
+</hibernate-mapping>

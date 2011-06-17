@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CacheConfig" table="CACHE_CONFIG">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="300" not-null="true" unique="true" />
+        </property>
+        <property name="maxObjects" type="int">
+            <column name="MAX_OBJECTS" precision="8" scale="0" not-null="true" />
+        </property>
+        <property name="maxMemoryIdle" type="big_decimal">
+            <column name="MAX_MEMORY_IDLE" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="shrinkerInterval" type="big_decimal">
+            <column name="SHRINKER_INTERVAL" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="maxLife" type="big_decimal">
+            <column name="MAX_LIFE" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="localCache" type="boolean">
+            <column name="LOCAL_CACHE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="stateVerifier" type="string">
+            <column name="STATE_VERIFIER" length="2000" />
+        </property>
+        <property name="sendBeforeCommit" type="boolean">
+            <column name="SEND_BEFORE_COMMIT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" />
+        </property>
+        <property name="lastUpdateTs" type="big_decimal">
+            <column name="LAST_UPDATE_TS" precision="20" scale="0" />
+        </property>
+        <property name="cacheCategory" type="string">
+            <column name="CACHE_CATEGORY" length="1000" />
+        </property>
+        <property name="useMemoryShrinker" type="java.lang.Character">
+            <column name="USE_MEMORY_SHRINKER" length="1" />
+        </property>
+        <property name="cloneObjects" type="java.lang.Character">
+            <column name="CLONE_OBJECTS" length="1" />
+        </property>
+        <property name="useDisc" type="java.lang.Character">
+            <column name="USE_DISC" length="1" />
+        </property>
+        <property name="useLateral" type="java.lang.Character">
+            <column name="USE_LATERAL" length="1" />
+        </property>
+        <property name="useSynchGroups" type="java.lang.Character">
+            <column name="USE_SYNCH_GROUPS" length="1" />
+        </property>
+        <property name="useGroupsAsRelations" type="java.lang.Character">
+            <column name="USE_GROUPS_AS_RELATIONS" length="1" />
+        </property>
+        <property name="loaderClass" type="string">
+            <column name="LOADER_CLASS" length="2000" />
+        </property>
+        <property name="schemaConsistent" type="boolean">
+            <column name="SCHEMA_CONSISTENT" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

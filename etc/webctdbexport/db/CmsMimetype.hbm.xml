@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CmsMimetype" table="CMS_MIMETYPE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="cmsCeSubtype" class="webctdbexport.db.CmsCeSubtype" fetch="select">
+            <column name="CE_TYPE_NAME" length="100" not-null="true" />
+            <column name="CE_SUBTYPE_NAME" length="100" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="100" not-null="true" />
+        </property>
+        <property name="mimetype" type="string">
+            <column name="MIMETYPE" length="100" not-null="true" />
+        </property>
+        <property name="binary" type="boolean">
+            <column name="BINARY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="extension" type="string">
+            <column name="EXTENSION" length="100" not-null="true" />
+        </property>
+        <property name="usesRelativeLinks" type="boolean">
+            <column name="USES_RELATIVE_LINKS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="indexable" type="boolean">
+            <column name="INDEXABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="cmsFileContents" table="CMS_FILE_CONTENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MIMETYPE_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsFileContent" />
+        </set>
+    </class>
+</hibernate-mapping>

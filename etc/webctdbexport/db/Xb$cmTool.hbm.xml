@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$cmTool" table="XB$CM_TOOL">
+        <composite-id name="id" class="webctdbexport.db.Xb$cmToolId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="256" not-null="true" />
+        </property>
+        <property name="category" type="string">
+            <column name="CATEGORY" length="256" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="2000" />
+        </property>
+        <property name="defaultIcon" type="string">
+            <column name="DEFAULT_ICON" length="1024" />
+        </property>
+        <property name="courseMapDisplayName" type="string">
+            <column name="COURSE_MAP_DISPLAY_NAME" length="850" not-null="true" />
+        </property>
+        <property name="settingsGroupName" type="string">
+            <column name="SETTINGS_GROUP_NAME" length="1000" />
+        </property>
+        <property name="myToolFlag" type="boolean">
+            <column name="MY_TOOL_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="courseToolbarFlag" type="boolean">
+            <column name="COURSE_TOOLBAR_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="action" type="string">
+            <column name="ACTION" length="2000" />
+        </property>
+        <property name="toolTip" type="string">
+            <column name="TOOL_TIP" length="100" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="subToolFlag" type="boolean">
+            <column name="SUB_TOOL_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

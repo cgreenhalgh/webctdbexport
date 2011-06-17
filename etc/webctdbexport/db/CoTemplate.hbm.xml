@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CoTemplate" table="CO_TEMPLATE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="keywords" type="string">
+            <column name="KEYWORDS" length="4000" />
+        </property>
+        <set name="notesItems" table="NOTES_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.NotesItem" />
+        </set>
+        <set name="rubrics" table="RUBRIC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Rubric" />
+        </set>
+        <set name="localContentDesktopConfigs" table="LOCAL_CONTENT_DESKTOP_CONFIG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LocalContentDesktopConfig" />
+        </set>
+        <set name="coLcAssignments" table="CO_LC_ASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoLcAssignment" />
+        </set>
+        <set name="genericGroups" table="GENERIC_GROUP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.GenericGroup" />
+        </set>
+        <set name="localContentTools" table="LOCAL_CONTENT_TOOL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LocalContentTool" />
+        </set>
+        <set name="pstSettingBundles" table="PST_SETTING_BUNDLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.PstSettingBundle" />
+        </set>
+        <set name="coTemplateRootOrganizers" table="CO_TEMPLATE_ROOT_ORGANIZER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoTemplateRootOrganizer" />
+        </set>
+        <set name="mlChangeQueues" table="ML_CHANGE_QUEUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MlChangeQueue" />
+        </set>
+        <set name="coLcAssociations" table="CO_LC_ASSOCIATION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoLcAssociation" />
+        </set>
+        <set name="agnAssignments" table="AGN_ASSIGNMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnAssignment" />
+        </set>
+        <set name="deliveryContextIconsets" table="DELIVERY_CONTEXT_ICONSET" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DeliveryContextIconset" />
+        </set>
+        <set name="pstReplacementIcons" table="PST_REPLACEMENT_ICON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PstReplacementIcon" />
+        </set>
+        <set name="coNewStatuses" table="CO_NEW_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoNewStatus" />
+        </set>
+        <set name="mlDefaultCollections" table="ML_DEFAULT_COLLECTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="MEDIA_TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MlDefaultCollection" />
+        </set>
+        <set name="coTemplateSettings" table="CO_TEMPLATE_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoTemplateSetting" />
+        </set>
+        <set name="sectionBooks" table="SECTION_BOOK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SectionBook" />
+        </set>
+        <set name="localContentEntries" table="LOCAL_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LocalContentEntry" />
+        </set>
+        <set name="coReadStatuses" table="CO_READ_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoReadStatus" />
+        </set>
+        <set name="cmCoursemenus" table="CM_COURSEMENU" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmCoursemenu" />
+        </set>
+        <set name="srUsages" table="SR_USAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SrUsage" />
+        </set>
+        <set name="disTemplateSummaries" table="DIS_TEMPLATE_SUMMARY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DisTemplateSummary" />
+        </set>
+    </class>
+</hibernate-mapping>

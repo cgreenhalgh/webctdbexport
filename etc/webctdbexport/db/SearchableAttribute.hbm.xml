@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SearchableAttribute" table="SEARCHABLE_ATTRIBUTE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="lookupId" type="big_decimal">
+            <column name="LOOKUP_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="attributeName" type="string">
+            <column name="ATTRIBUTE_NAME" length="30" not-null="true" />
+        </property>
+        <property name="attributeValue" type="string">
+            <column name="ATTRIBUTE_VALUE" length="4000" />
+        </property>
+        <property name="attributeBinaryFormat" type="string">
+            <column name="ATTRIBUTE_BINARY_FORMAT" length="40" />
+        </property>
+        <property name="attributeBinaryExtension" type="string">
+            <column name="ATTRIBUTE_BINARY_EXTENSION" length="100" />
+        </property>
+        <property name="attributeBinaryCharset" type="string">
+            <column name="ATTRIBUTE_BINARY_CHARSET" length="40" />
+        </property>
+        <property name="attributeBinaryLanguage" type="string">
+            <column name="ATTRIBUTE_BINARY_LANGUAGE" length="40" />
+        </property>
+        <property name="timestmp" type="string">
+            <column name="TIMESTMP" length="40" />
+        </property>
+        <property name="attributeText" type="string">
+            <column name="ATTRIBUTE_TEXT" length="1" />
+        </property>
+        <property name="attributeBinary" type="string">
+            <column name="ATTRIBUTE_BINARY" length="1" />
+        </property>
+    </class>
+</hibernate-mapping>

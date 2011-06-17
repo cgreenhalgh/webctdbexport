@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Person" table="PERSON">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="settingsGroup" class="webctdbexport.db.SettingsGroup" fetch="select">
+            <column name="SMS_GROUP_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="learningContextByPortfolioId" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="PORTFOLIO_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="learningContextByLearningContextId" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="webctId" type="string">
+            <column name="WEBCT_ID" length="768" not-null="true" />
+        </property>
+        <property name="webctIdLowercase" type="string">
+            <column name="WEBCT_ID_LOWERCASE" length="768" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="activestatus" type="boolean">
+            <column name="ACTIVESTATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="defaultuser" type="boolean">
+            <column name="DEFAULTUSER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="enableExternalMail" type="boolean">
+            <column name="ENABLE_EXTERNAL_MAIL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="demouser" type="boolean">
+            <column name="DEMOUSER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="ftimeLoginPwreqOk" type="boolean">
+            <column name="FTIME_LOGIN_PWREQ_OK" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="webctPassword" type="string">
+            <column name="WEBCT_PASSWORD" length="128" />
+        </property>
+        <property name="remoteUserid" type="string">
+            <column name="REMOTE_USERID" length="768" not-null="true" />
+        </property>
+        <property name="nameNFamily" type="string">
+            <column name="NAME_N_FAMILY" length="768" />
+        </property>
+        <property name="nameNGiven" type="string">
+            <column name="NAME_N_GIVEN" length="768" />
+        </property>
+        <property name="nameNOther" type="string">
+            <column name="NAME_N_OTHER" length="768" />
+        </property>
+        <property name="nameNPrefix" type="string">
+            <column name="NAME_N_PREFIX" length="96" />
+        </property>
+        <property name="nameNSuffix" type="string">
+            <column name="NAME_N_SUFFIX" length="96" />
+        </property>
+        <property name="nameFn" type="string">
+            <column name="NAME_FN" length="768" />
+        </property>
+        <property name="nameSort" type="string">
+            <column name="NAME_SORT" length="768" />
+        </property>
+        <property name="nameNickname" type="string">
+            <column name="NAME_NICKNAME" length="768" />
+        </property>
+        <property name="hintQuestion" type="string">
+            <column name="HINT_QUESTION" length="1000" />
+        </property>
+        <property name="hintAnswer" type="string">
+            <column name="HINT_ANSWER" length="300" />
+        </property>
+        <property name="demographicsGender" type="string">
+            <column name="DEMOGRAPHICS_GENDER" length="64" />
+        </property>
+        <property name="demographicsBday" type="big_decimal">
+            <column name="DEMOGRAPHICS_BDAY" precision="20" scale="0" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="320" />
+        </property>
+        <property name="lastloginSessionid" type="string">
+            <column name="LASTLOGIN_SESSIONID" length="256" />
+        </property>
+        <property name="lastlogintime" type="big_decimal">
+            <column name="LASTLOGINTIME" precision="20" scale="0" />
+        </property>
+        <property name="lastlogoutSessionid" type="string">
+            <column name="LASTLOGOUT_SESSIONID" length="256" />
+        </property>
+        <property name="lastlogouttime" type="big_decimal">
+            <column name="LASTLOGOUTTIME" precision="20" scale="0" />
+        </property>
+        <property name="deletestatus" type="big_decimal">
+            <column name="DELETESTATUS" precision="20" scale="0" />
+        </property>
+        <property name="sourcedidSource" type="string">
+            <column name="SOURCEDID_SOURCE" length="510" not-null="true" />
+        </property>
+        <property name="lastpalmsynctime" type="big_decimal">
+            <column name="LASTPALMSYNCTIME" precision="20" scale="0" />
+        </property>
+        <property name="lastPwChangeTime" type="big_decimal">
+            <column name="LAST_PW_CHANGE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="homefolderId" type="big_decimal">
+            <column name="HOMEFOLDER_ID" precision="20" scale="0" />
+        </property>
+        <property name="expirationDate" type="big_decimal">
+            <column name="EXPIRATION_DATE" precision="20" scale="0" />
+        </property>
+        <property name="datasource" type="string">
+            <column name="DATASOURCE" length="510" not-null="true" />
+        </property>
+        <property name="convertedToBb" type="boolean">
+            <column name="CONVERTED_TO_BB" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="cwbActivechatusers" table="CWB_ACTIVECHATUSER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CwbActivechatuser" />
+        </set>
+        <set name="agnSubmissionViewStates" table="AGN_SUBMISSION_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnSubmissionViewState" />
+        </set>
+        <set name="colMetaLcPersons" table="COL_META_LC_PERSON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColMetaLcPerson" />
+        </set>
+        <set name="myBookmarks" table="MY_BOOKMARK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MyBookmark" />
+        </set>
+        <set name="agnToolViewStates" table="AGN_TOOL_VIEW_STATE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AgnToolViewState" />
+        </set>
+        <set name="tocBookmarks" table="TOC_BOOKMARK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TocBookmark" />
+        </set>
+        <set name="coNewStatuses" table="CO_NEW_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoNewStatus" />
+        </set>
+        <set name="disMessages" table="DIS_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="AUTHOR_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DisMessage" />
+        </set>
+        <set name="coReadStatuses" table="CO_READ_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoReadStatus" />
+        </set>
+        <set name="disRatings" table="DIS_RATING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DisRating" />
+        </set>
+        <set name="calendarEntries" table="CALENDAR_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CalendarEntry" />
+        </set>
+        <set name="localContentDesktopConfigs" table="LOCAL_CONTENT_DESKTOP_CONFIG" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LocalContentDesktopConfig" />
+        </set>
+        <set name="preferenceNodes" table="PREFERENCE_NODE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PreferenceNode" />
+        </set>
+        <set name="myPortalPreferences" table="MY_PORTAL_PREFERENCE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MyPortalPreference" />
+        </set>
+        <set name="notesItems" table="NOTES_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.NotesItem" />
+        </set>
+        <set name="disPersonMessages" table="DIS_PERSON_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DisPersonMessage" />
+        </set>
+        <set name="members" table="MEMBER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Member" />
+        </set>
+        <set name="photos" table="PHOTO" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Photo" />
+        </set>
+        <set name="disTopicPersonSummaries" table="DIS_TOPIC_PERSON_SUMMARY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DisTopicPersonSummary" />
+        </set>
+        <set name="srCriteriaDetails" table="SR_CRITERIA_DETAIL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SrCriteriaDetail" />
+        </set>
+        <set name="pinAuths" table="PIN_AUTH" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PinAuth" />
+        </set>
+        <set name="announcementPersonReads" table="ANNOUNCEMENT_PERSON_READ" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AnnouncementPersonRead" />
+        </set>
+        <set name="phones" table="PHONE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Phone" />
+        </set>
+        <set name="cpmLcEditorRels" table="CPM_LC_EDITOR_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcEditorRel" />
+        </set>
+        <set name="mailMessages" table="MAIL_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MailMessage" />
+        </set>
+        <set name="myNotepads" table="MY_NOTEPAD" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MyNotepad" />
+        </set>
+        <set name="cmsContentEntries" table="CMS_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="OWNER_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsContentEntry" />
+        </set>
+        <set name="mailBoxes" table="MAIL_BOX" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.MailBox" />
+        </set>
+        <one-to-one name="personContentQuota" class="webctdbexport.db.PersonContentQuota"></one-to-one>
+        <set name="colValues" table="COL_VALUE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.ColValue" />
+        </set>
+        <set name="addresses" table="ADDRESS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Address" />
+        </set>
+        <set name="localContentTools" table="LOCAL_CONTENT_TOOL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LocalContentTool" />
+        </set>
+        <set name="announcements" table="ANNOUNCEMENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.Announcement" />
+        </set>
+    </class>
+</hibernate-mapping>

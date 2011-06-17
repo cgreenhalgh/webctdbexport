@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Syllabus" table="SYLLABUS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="useSourceFileFl" type="boolean">
+            <column name="USE_SOURCE_FILE_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="sourceFilename" type="string">
+            <column name="SOURCE_FILENAME" length="1000" />
+        </property>
+        <set name="syllitems" table="SYLLITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="SYLLABUS_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.Syllitem" />
+        </set>
+    </class>
+</hibernate-mapping>

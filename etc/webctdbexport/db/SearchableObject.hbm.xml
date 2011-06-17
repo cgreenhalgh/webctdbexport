@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SearchableObject" table="SEARCHABLE_OBJECT">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="learningContext" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="lookupId" type="big_decimal">
+            <column name="LOOKUP_ID" precision="20" scale="0" not-null="true" unique="true" />
+        </property>
+        <property name="areaName" type="string">
+            <column name="AREA_NAME" length="30" not-null="true" />
+        </property>
+        <property name="searchDate" type="big_decimal">
+            <column name="SEARCH_DATE" precision="20" scale="0" />
+        </property>
+        <property name="personIdFilter" type="big_decimal">
+            <column name="PERSON_ID_FILTER" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

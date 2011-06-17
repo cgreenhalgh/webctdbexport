@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.ScrHistory" table="SCR_HISTORY">
+        <id name="fileName" type="string">
+            <column name="FILE_NAME" length="128" />
+            <generator class="assigned" />
+        </id>
+        <property name="scriptType" type="string">
+            <column name="SCRIPT_TYPE" length="64" not-null="true" />
+        </property>
+        <property name="dateApplied" type="big_decimal">
+            <column name="DATE_APPLIED" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="status" type="string">
+            <column name="STATUS" length="10" />
+        </property>
+        <property name="scriptIndex" type="big_decimal">
+            <column name="SCRIPT_INDEX" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptAddress" table="RPT_ADDRESS">
+        <composite-id name="id" class="webctdbexport.db.RptAddressId">
+            <key-property name="addrId" type="big_decimal">
+                <column name="ADDR_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="addrType" type="string">
+                <column name="ADDR_TYPE" length="90" />
+            </key-property>
+            <key-property name="adrCountry" type="string">
+                <column name="ADR_COUNTRY" length="192" />
+            </key-property>
+            <key-property name="adrExtadd" type="string">
+                <column name="ADR_EXTADD" length="384" />
+            </key-property>
+            <key-property name="adrLocality" type="string">
+                <column name="ADR_LOCALITY" length="192" />
+            </key-property>
+            <key-property name="adrPobox" type="string">
+                <column name="ADR_POBOX" length="96" />
+            </key-property>
+            <key-property name="adrRegion" type="string">
+                <column name="ADR_REGION" length="192" />
+            </key-property>
+            <key-property name="adrPcode" type="string">
+                <column name="ADR_PCODE" length="96" />
+            </key-property>
+            <key-property name="adrStreet" type="string">
+                <column name="ADR_STREET" length="384" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Rubric" table="RUBRIC">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="version" type="big_decimal">
+            <column name="VERSION" precision="20" scale="0" not-null="true" />
+        </property>
+        <many-to-one name="coTemplate" class="webctdbexport.db.CoTemplate" fetch="select">
+            <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="750" not-null="true" />
+        </property>
+        <property name="rubricType" type="byte">
+            <column name="RUBRIC_TYPE" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="maxScore" type="string">
+            <column name="MAX_SCORE" length="200" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="3000" />
+        </property>
+        <set name="rubricRows" table="RUBRIC_ROW" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RUBRIC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.RubricRow" />
+        </set>
+        <set name="rubricLinks" table="RUBRIC_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RUBRIC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.RubricLink" />
+        </set>
+        <set name="rubricColumns" table="RUBRIC_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RUBRIC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.RubricColumn" />
+        </set>
+        <set name="rubricUsages" table="RUBRIC_USAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RUBRIC_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.RubricUsage" />
+        </set>
+    </class>
+</hibernate-mapping>

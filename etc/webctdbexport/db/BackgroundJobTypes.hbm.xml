@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.BackgroundJobTypes" table="BACKGROUND_JOB_TYPES">
+        <id name="jobType" type="string">
+            <column name="JOB_TYPE" length="100" />
+            <generator class="assigned" />
+        </id>
+        <property name="pojo" type="string">
+            <column name="POJO" length="500" not-null="true" />
+        </property>
+        <property name="defaultMaxConcurrentThreads" type="int">
+            <column name="DEFAULT_MAX_CONCURRENT_THREADS" precision="5" scale="0" not-null="true" />
+        </property>
+        <property name="defaultPriority" type="int">
+            <column name="DEFAULT_PRIORITY" precision="5" scale="0" not-null="true" />
+        </property>
+        <property name="reportingKey" type="string">
+            <column name="REPORTING_KEY" length="200" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifiedTs" type="big_decimal">
+            <column name="LASTMODIFIED_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="backgroundJobses" table="BACKGROUND_JOBS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="JOB_TYPE" length="100" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.BackgroundJobs" />
+        </set>
+    </class>
+</hibernate-mapping>

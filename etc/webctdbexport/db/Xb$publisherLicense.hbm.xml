@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$publisherLicense" table="XB$PUBLISHER_LICENSE">
+        <composite-id name="id" class="webctdbexport.db.Xb$publisherLicenseId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <version name="version" type="string">
+            <column name="VERSION" length="2" />
+        </version>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="secret" type="string">
+            <column name="SECRET" length="1000" not-null="true" />
+        </property>
+        <property name="pinlength" type="long">
+            <column name="PINLENGTH" precision="10" scale="0" not-null="true" />
+        </property>
+        <property name="organization" type="string">
+            <column name="ORGANIZATION" length="1000" />
+        </property>
+        <property name="requesturl" type="string">
+            <column name="REQUESTURL" length="1000" />
+        </property>
+        <property name="senddesturl" type="string">
+            <column name="SENDDESTURL" length="1000" />
+        </property>
+        <property name="ackdesturl" type="string">
+            <column name="ACKDESTURL" length="1000" />
+        </property>
+        <property name="serialno" type="string">
+            <column name="SERIALNO" length="40" />
+        </property>
+        <property name="isbn" type="string">
+            <column name="ISBN" length="40" not-null="true" />
+        </property>
+        <property name="instid" type="big_decimal">
+            <column name="INSTID" precision="20" scale="0" />
+        </property>
+        <property name="orgid" type="big_decimal">
+            <column name="ORGID" precision="20" scale="0" />
+        </property>
+        <property name="pinclid" type="big_decimal">
+            <column name="PINCLID" precision="20" scale="0" />
+        </property>
+        <property name="price" type="big_decimal">
+            <column name="PRICE" precision="20" scale="0" />
+        </property>
+        <property name="currency" type="string">
+            <column name="CURRENCY" length="2" />
+        </property>
+        <property name="duration" type="string">
+            <column name="DURATION" length="10" />
+        </property>
+        <property name="durationLength" type="java.lang.Long">
+            <column name="DURATION_LENGTH" precision="10" scale="0" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="license" type="blob">
+            <column name="LICENSE" />
+        </property>
+    </class>
+</hibernate-mapping>

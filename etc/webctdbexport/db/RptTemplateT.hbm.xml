@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptTemplateT" table="RPT_TEMPLATE_T">
+        <id name="templateId" type="big_decimal">
+            <column name="TEMPLATE_ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="learningContextId" type="big_decimal">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+        </property>
+        <property name="path" type="string">
+            <column name="PATH" length="4000" />
+        </property>
+        <property name="templateSize" type="big_decimal">
+            <column name="TEMPLATE_SIZE" precision="20" scale="0" />
+        </property>
+        <property name="assessmentCount" type="big_decimal">
+            <column name="ASSESSMENT_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="questiondbQuestionCount" type="big_decimal">
+            <column name="QUESTIONDB_QUESTION_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="assignmentCount" type="big_decimal">
+            <column name="ASSIGNMENT_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="chatRoomCount" type="big_decimal">
+            <column name="CHAT_ROOM_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="pageCount" type="big_decimal">
+            <column name="PAGE_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="discussionTopicCount" type="big_decimal">
+            <column name="DISCUSSION_TOPIC_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="learningModuleCount" type="big_decimal">
+            <column name="LEARNING_MODULE_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="mediaLibraryEntryCount" type="big_decimal">
+            <column name="MEDIA_LIBRARY_ENTRY_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="organizerPageCount" type="big_decimal">
+            <column name="ORGANIZER_PAGE_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="urlEntryCount" type="big_decimal">
+            <column name="URL_ENTRY_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="scoCount" type="big_decimal">
+            <column name="SCO_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="appBridgeCount" type="big_decimal">
+            <column name="APP_BRIDGE_COUNT" precision="20" scale="0" />
+        </property>
+        <property name="syllabus" type="big_decimal">
+            <column name="SYLLABUS" precision="20" scale="0" />
+        </property>
+        <property name="publicFlag" type="java.lang.Boolean">
+            <column name="PUBLIC_FLAG" precision="1" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

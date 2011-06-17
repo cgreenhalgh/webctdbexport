@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtItemMemberStat" table="ASSMT_ITEM_MEMBER_STAT">
+        <composite-id name="id" class="webctdbexport.db.AssmtItemMemberStatId">
+            <key-property name="processId" type="big_decimal">
+                <column name="PROCESS_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deliveryContextId" type="big_decimal">
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberId" type="big_decimal">
+                <column name="MEMBER_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assmtId" type="big_decimal">
+                <column name="ASSMT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assmtItemId" type="big_decimal">
+                <column name="ASSMT_ITEM_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assmtItemPoints" type="big_decimal">
+                <column name="ASSMT_ITEM_POINTS" precision="6" />
+            </key-property>
+            <key-property name="assmtItemScore" type="big_decimal">
+                <column name="ASSMT_ITEM_SCORE" precision="22" scale="0" />
+            </key-property>
+            <key-property name="assmtItemRatioScore" type="big_decimal">
+                <column name="ASSMT_ITEM_RATIO_SCORE" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

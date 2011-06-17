@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$rubric" table="XB$RUBRIC">
+        <composite-id name="id" class="webctdbexport.db.Xb$rubricId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <version name="version" type="big_decimal">
+            <column name="VERSION" precision="20" scale="0" not-null="true" />
+        </version>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="750" not-null="true" />
+        </property>
+        <property name="rubricType" type="byte">
+            <column name="RUBRIC_TYPE" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="maxScore" type="string">
+            <column name="MAX_SCORE" length="200" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="3000" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="templateId" type="big_decimal">
+            <column name="TEMPLATE_ID" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

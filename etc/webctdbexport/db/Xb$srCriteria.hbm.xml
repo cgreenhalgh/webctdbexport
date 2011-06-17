@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$srCriteria" table="XB$SR_CRITERIA">
+        <composite-id name="id" class="webctdbexport.db.Xb$srCriteriaId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="operand" type="string">
+            <column name="OPERAND" length="1024" />
+        </property>
+        <property name="operator" type="string">
+            <column name="OPERATOR" length="64" />
+        </property>
+        <property name="booleanOperator" type="string">
+            <column name="BOOLEAN_OPERATOR" length="10" />
+        </property>
+        <property name="srLevel" type="java.lang.Byte">
+            <column name="SR_LEVEL" precision="2" scale="0" />
+        </property>
+        <property name="srType" type="java.lang.Byte">
+            <column name="SR_TYPE" precision="2" scale="0" />
+        </property>
+        <property name="srOrder" type="java.lang.Byte">
+            <column name="SR_ORDER" precision="2" scale="0" />
+        </property>
+        <property name="operandId" type="big_decimal">
+            <column name="OPERAND_ID" precision="20" scale="0" />
+        </property>
+        <property name="value" type="string">
+            <column name="VALUE" length="4000" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="headId" type="big_decimal">
+            <column name="HEAD_ID" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TocBookmark" table="TOC_BOOKMARK">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="coToc" class="webctdbexport.db.CoToc" fetch="select">
+            <column name="TOC_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="coTocLink" class="webctdbexport.db.CoTocLink" fetch="select">
+            <column name="TOC_LINK_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="person" class="webctdbexport.db.Person" fetch="select">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="learningContext" class="webctdbexport.db.LearningContext" fetch="select">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="tocLinkPosition" type="java.lang.Integer">
+            <column name="TOC_LINK_POSITION" precision="8" scale="0" />
+        </property>
+        <property name="bookmarkComment" type="string">
+            <column name="BOOKMARK_COMMENT" length="4000" />
+        </property>
+        <property name="bookmarkPosition" type="java.lang.Integer">
+            <column name="BOOKMARK_POSITION" precision="8" scale="0" />
+        </property>
+        <property name="commentHtmlEnabled" type="boolean">
+            <column name="COMMENT_HTML_ENABLED" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

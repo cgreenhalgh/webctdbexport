@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CoResource" table="CO_RESOURCE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="foreign">
+                <param name="property">cmsContentEntry</param>
+            </generator>
+        </id>
+        <one-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" constrained="true"></one-to-one>
+        <property name="resourcetype" type="string">
+            <column name="RESOURCETYPE" length="40" not-null="true" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="1000" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="author" type="string">
+            <column name="AUTHOR" length="1000" />
+        </property>
+        <property name="year" type="string">
+            <column name="YEAR" length="40" />
+        </property>
+        <property name="edition" type="string">
+            <column name="EDITION" length="1000" />
+        </property>
+        <property name="publisher" type="string">
+            <column name="PUBLISHER" length="1000" />
+        </property>
+        <property name="journal" type="string">
+            <column name="JOURNAL" length="1000" />
+        </property>
+        <property name="volume" type="string">
+            <column name="VOLUME" length="40" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="1000" />
+        </property>
+        <property name="deschtmlenable" type="boolean">
+            <column name="DESCHTMLENABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resnumber" type="string">
+            <column name="RESNUMBER" length="40" />
+        </property>
+    </class>
+</hibernate-mapping>

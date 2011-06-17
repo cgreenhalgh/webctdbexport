@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Old$htmlEditorMacData" table="OLD$HTML_EDITOR_MAC_DATA">
+        <composite-id name="id" class="webctdbexport.db.Old$htmlEditorMacDataId">
+            <key-property name="jsessionid" type="string">
+                <column name="JSESSIONID" length="1000" />
+            </key-property>
+            <key-property name="timestamp" type="big_decimal">
+                <column name="TIMESTAMP" precision="20" scale="0" />
+            </key-property>
+            <key-property name="data" type="clob">
+                <column name="DATA" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

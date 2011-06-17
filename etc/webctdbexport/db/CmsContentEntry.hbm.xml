@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CmsContentEntry" table="CMS_CONTENT_ENTRY">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="cmsCeLanguage" class="webctdbexport.db.CmsCeLanguage" fetch="select">
+            <column name="LANGUAGE" length="30" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntryByDeliveryContextId" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="cmsFileContent" class="webctdbexport.db.CmsFileContent" fetch="select">
+            <column name="FILE_CONTENT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntryByParentId" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="PARENT_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="publisherLicense" class="webctdbexport.db.PublisherLicense" fetch="select">
+            <column name="PUBLISHER_LICENSE_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="accessControlList" class="webctdbexport.db.AccessControlList" fetch="select">
+            <column name="ACL_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="cmsCeSubtype" class="webctdbexport.db.CmsCeSubtype" fetch="select">
+            <column name="CE_TYPE_NAME" length="100" not-null="true" />
+            <column name="CE_SUBTYPE_NAME" length="100" not-null="true" />
+        </many-to-one>
+        <many-to-one name="person" class="webctdbexport.db.Person" fetch="select">
+            <column name="OWNER_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntryByOriginalContentId" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="ORIGINAL_CONTENT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="NAME" length="1000" not-null="true" />
+        </property>
+        <property name="guid" type="string">
+            <column name="GUID" length="256" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="big_decimal">
+            <column name="DELETED_FLAG" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="filesize" type="big_decimal">
+            <column name="FILESIZE" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="quotable" type="boolean">
+            <column name="QUOTABLE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="htmlDescriptionFlag" type="boolean">
+            <column name="HTML_DESCRIPTION_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="description" type="clob">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="entryCreateTs" type="big_decimal">
+            <column name="ENTRY_CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="entryLastmodifyTs" type="big_decimal">
+            <column name="ENTRY_LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="transactionStatus" type="big_decimal">
+            <column name="TRANSACTION_STATUS" precision="20" scale="0" />
+        </property>
+        <property name="subscriptionFlag" type="boolean">
+            <column name="SUBSCRIPTION_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="learnerWritableFlag" type="boolean">
+            <column name="LEARNER_WRITABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="cmsUniqueNames" table="CMS_UNIQUE_NAME" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsUniqueName" />
+        </set>
+        <one-to-one name="cwbChatroom" class="webctdbexport.db.CwbChatroom"></one-to-one>
+        <one-to-one name="disCategory" class="webctdbexport.db.DisCategory"></one-to-one>
+        <set name="coReadStatuses" table="CO_READ_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoReadStatus" />
+        </set>
+        <one-to-one name="coTemplate" class="webctdbexport.db.CoTemplate"></one-to-one>
+        <set name="cmsContentEntriesForOriginalContentId" table="CMS_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ORIGINAL_CONTENT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsContentEntry" />
+        </set>
+        <one-to-one name="coActionmenuById" class="webctdbexport.db.CoActionmenu"></one-to-one>
+        <set name="coNewStatuses" table="CO_NEW_STATUS" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoNewStatus" />
+        </set>
+        <one-to-one name="scormPackage" class="webctdbexport.db.ScormPackage"></one-to-one>
+        <one-to-one name="coOrganizerpage" class="webctdbexport.db.CoOrganizerpage"></one-to-one>
+        <one-to-one name="syllabus" class="webctdbexport.db.Syllabus"></one-to-one>
+        <set name="simpleFileGroups" table="SIMPLE_FILE_GROUP" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SimpleFileGroup" />
+        </set>
+        <one-to-one name="mlEntry" class="webctdbexport.db.MlEntry"></one-to-one>
+        <set name="searchableObjects" table="SEARCHABLE_OBJECT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SearchableObject" />
+        </set>
+        <one-to-one name="disTopic" class="webctdbexport.db.DisTopic"></one-to-one>
+        <set name="pstSettingBundles" table="PST_SETTING_BUNDLE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="BG_IMAGE_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.PstSettingBundle" />
+        </set>
+        <set name="learningContexts" table="LEARNING_CONTEXT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="HOMEFOLDER_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.LearningContext" />
+        </set>
+        <one-to-one name="mlCollection" class="webctdbexport.db.MlCollection"></one-to-one>
+        <set name="assmtSettings" table="ASSMT_SETTING" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AssmtSetting" />
+        </set>
+        <set name="notesItems" table="NOTES_ITEM" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.NotesItem" />
+        </set>
+        <set name="cmsLinkOrders" table="CMS_LINK_ORDER" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEFTOBJECT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsLinkOrder" />
+        </set>
+        <set name="rubricUsages" table="RUBRIC_USAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.RubricUsage" />
+        </set>
+        <one-to-one name="agnAssignment" class="webctdbexport.db.AgnAssignment"></one-to-one>
+        <set name="coOrganizerlinks" table="CO_ORGANIZERLINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ICONFILE_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoOrganizerlink" />
+        </set>
+        <one-to-one name="coContentpage" class="webctdbexport.db.CoContentpage"></one-to-one>
+        <set name="disMessages" table="DIS_MESSAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.DisMessage" />
+        </set>
+        <set name="pstReplacementIcons" table="PST_REPLACEMENT_ICON" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="ICONFILE_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.PstReplacementIcon" />
+        </set>
+        <one-to-one name="coResource" class="webctdbexport.db.CoResource"></one-to-one>
+        <one-to-one name="assmtQuestion" class="webctdbexport.db.AssmtQuestion"></one-to-one>
+        <one-to-one name="assmtAssessment" class="webctdbexport.db.AssmtAssessment"></one-to-one>
+        <set name="cmsContentEntriesForParentId" table="CMS_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsContentEntry" />
+        </set>
+        <one-to-one name="assmtQdb" class="webctdbexport.db.AssmtQdb"></one-to-one>
+        <set name="selfEnrollmentLcs" table="SELF_ENROLLMENT_LC" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SelfEnrollmentLc" />
+        </set>
+        <set name="cmsLinksForLeftobjectId" table="CMS_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LEFTOBJECT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsLink" />
+        </set>
+        <one-to-one name="fmsAttributes" class="webctdbexport.db.FmsAttributes"></one-to-one>
+        <set name="sectionColumns" table="SECTION_COLUMN" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.SectionColumn" />
+        </set>
+        <set name="coActionmenusForReferenceId" table="CO_ACTIONMENU" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="REFERENCE_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CoActionmenu" />
+        </set>
+        <one-to-one name="coUrl" class="webctdbexport.db.CoUrl"></one-to-one>
+        <set name="cmsContentEntriesForDeliveryContextId" table="CMS_CONTENT_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsContentEntry" />
+        </set>
+        <set name="calendarEntries" table="CALENDAR_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" />
+            </key>
+            <one-to-many class="webctdbexport.db.CalendarEntry" />
+        </set>
+        <set name="srUsages" table="SR_USAGE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CONTENT_ENTRY_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SrUsage" />
+        </set>
+        <set name="cmsLinksForRightobjectId" table="CMS_LINK" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="RIGHTOBJECT_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsLink" />
+        </set>
+        <one-to-one name="coToc" class="webctdbexport.db.CoToc"></one-to-one>
+    </class>
+</hibernate-mapping>

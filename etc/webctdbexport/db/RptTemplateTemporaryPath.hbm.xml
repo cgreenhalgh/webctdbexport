@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptTemplateTemporaryPath" table="RPT_TEMPLATE_TEMPORARY_PATH">
+        <composite-id name="id" class="webctdbexport.db.RptTemplateTemporaryPathId">
+            <key-property name="templateId" type="big_decimal">
+                <column name="TEMPLATE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="path" type="string">
+                <column name="PATH" length="4000" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

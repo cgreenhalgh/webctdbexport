@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.EnrollmentChangeEvents" table="ENROLLMENT_CHANGE_EVENTS">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="instLcid" type="big_decimal">
+            <column name="INST_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="learningContextId" type="big_decimal">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lcSourceId" type="string">
+            <column name="LC_SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="lcSourceName" type="string">
+            <column name="LC_SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="personId" type="big_decimal">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="webctId" type="string">
+            <column name="WEBCT_ID" length="768" not-null="true" />
+        </property>
+        <property name="personSourceId" type="string">
+            <column name="PERSON_SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="personSourceName" type="string">
+            <column name="PERSON_SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="boolean">
+            <column name="DELETED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="statusFlag" type="boolean">
+            <column name="STATUS_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="memberId" type="big_decimal">
+            <column name="MEMBER_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="roleId" type="big_decimal">
+            <column name="ROLE_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="roleName" type="string">
+            <column name="ROLE_NAME" length="30" not-null="true" />
+        </property>
+        <property name="processingStatus" type="boolean">
+            <column name="PROCESSING_STATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="processingTs" type="big_decimal">
+            <column name="PROCESSING_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="mark" type="big_decimal">
+            <column name="MARK" precision="20" scale="0" />
+        </property>
+        <property name="childMemberId" type="big_decimal">
+            <column name="CHILD_MEMBER_ID" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtItemStat" table="ASSMT_ITEM_STAT">
+        <composite-id name="id" class="webctdbexport.db.AssmtItemStatId">
+            <key-property name="processId" type="big_decimal">
+                <column name="PROCESS_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deliveryContextId" type="big_decimal">
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assmtId" type="big_decimal">
+                <column name="ASSMT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberId" type="big_decimal">
+                <column name="MEMBER_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberGroupId" type="big_decimal">
+                <column name="MEMBER_GROUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberGroupLabel" type="string">
+                <column name="MEMBER_GROUP_LABEL" length="1000" />
+            </key-property>
+            <key-property name="memberGroup" type="string">
+                <column name="MEMBER_GROUP" length="1000" />
+            </key-property>
+            <key-property name="assmtItemId" type="big_decimal">
+                <column name="ASSMT_ITEM_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="questionId" type="big_decimal">
+                <column name="QUESTION_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="questionType" type="string">
+                <column name="QUESTION_TYPE" length="100" />
+            </key-property>
+            <key-property name="assmtItemPoints" type="big_decimal">
+                <column name="ASSMT_ITEM_POINTS" precision="6" />
+            </key-property>
+            <key-property name="assmtItemScore" type="big_decimal">
+                <column name="ASSMT_ITEM_SCORE" precision="22" scale="0" />
+            </key-property>
+            <key-property name="assmtItemRatioScore" type="big_decimal">
+                <column name="ASSMT_ITEM_RATIO_SCORE" precision="22" scale="0" />
+            </key-property>
+            <key-property name="assmtScore" type="big_decimal">
+                <column name="ASSMT_SCORE" precision="22" scale="0" />
+            </key-property>
+            <key-property name="assmtRatioScore" type="big_decimal">
+                <column name="ASSMT_RATIO_SCORE" precision="22" scale="0" />
+            </key-property>
+            <key-property name="memberRank" type="big_decimal">
+                <column name="MEMBER_RANK" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberGroupRank" type="big_decimal">
+                <column name="MEMBER_GROUP_RANK" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberRankDesc" type="big_decimal">
+                <column name="MEMBER_RANK_DESC" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberGroupRankDesc" type="big_decimal">
+                <column name="MEMBER_GROUP_RANK_DESC" precision="20" scale="0" />
+            </key-property>
+            <key-property name="upper25" type="java.lang.Boolean">
+                <column name="UPPER_25" precision="1" scale="0" />
+            </key-property>
+            <key-property name="lower25" type="java.lang.Boolean">
+                <column name="LOWER_25" precision="1" scale="0" />
+            </key-property>
+            <key-property name="groupUpper25" type="java.lang.Boolean">
+                <column name="GROUP_UPPER_25" precision="1" scale="0" />
+            </key-property>
+            <key-property name="groupLower25" type="java.lang.Boolean">
+                <column name="GROUP_LOWER_25" precision="1" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CpmLcGroupDef" table="CPM_LC_GROUP_DEF">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="lcType" class="webctdbexport.db.LcType" fetch="select">
+            <column name="LC_TYPE_CODE" length="128" not-null="true" />
+        </many-to-one>
+        <property name="groupType" type="string">
+            <column name="GROUP_TYPE" length="128" not-null="true" />
+        </property>
+        <property name="systemFlag" type="boolean">
+            <column name="SYSTEM_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="upGroupType" type="string">
+            <column name="UP_GROUP_TYPE" length="128" />
+        </property>
+        <property name="downGroupType" type="string">
+            <column name="DOWN_GROUP_TYPE" length="128" />
+        </property>
+        <set name="cpmApplicableRoleIds" table="CPM_APPLICABLE_ROLE_ID" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="GROUP_DEF_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmApplicableRoleId" />
+        </set>
+        <set name="cpmLcGroupRels" table="CPM_LC_GROUP_REL" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="GROUP_DEF_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcGroupRel" />
+        </set>
+        <set name="cpmFolderPermDefs" table="CPM_FOLDER_PERM_DEF" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_GROUP_DEF_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmFolderPermDef" />
+        </set>
+    </class>
+</hibernate-mapping>

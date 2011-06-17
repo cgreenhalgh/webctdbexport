@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.WioUserInformation" table="WIO_USER_INFORMATION">
+        <id name="webctId" type="string">
+            <column name="WEBCT_ID" length="1000" />
+            <generator class="assigned" />
+        </id>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="768" not-null="true" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="768" not-null="true" />
+        </property>
+        <property name="loginTime" type="big_decimal">
+            <column name="LOGIN_TIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastAccessTime" type="big_decimal">
+            <column name="LAST_ACCESS_TIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="availableMode" type="boolean">
+            <column name="AVAILABLE_MODE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="visibleMode" type="boolean">
+            <column name="VISIBLE_MODE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="liveChatSession" type="java.lang.Integer">
+            <column name="LIVE_CHAT_SESSION" precision="5" scale="0" />
+        </property>
+        <property name="otherName" type="string">
+            <column name="OTHER_NAME" length="768" />
+        </property>
+        <property name="prefixName" type="string">
+            <column name="PREFIX_NAME" length="768" />
+        </property>
+        <property name="suffixName" type="string">
+            <column name="SUFFIX_NAME" length="768" />
+        </property>
+        <property name="nickName" type="string">
+            <column name="NICK_NAME" length="768" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.EnrollmentCount" table="ENROLLMENT_COUNT">
+        <composite-id name="id" class="webctdbexport.db.EnrollmentCountId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="sinsCount" type="big_decimal">
+                <column name="SINS_COUNT" precision="22" scale="0" />
+            </key-property>
+            <key-property name="sdesCount" type="big_decimal">
+                <column name="SDES_COUNT" precision="22" scale="0" />
+            </key-property>
+            <key-property name="steaCount" type="big_decimal">
+                <column name="STEA_COUNT" precision="22" scale="0" />
+            </key-property>
+            <key-property name="learnerCount" type="big_decimal">
+                <column name="LEARNER_COUNT" precision="22" scale="0" />
+            </key-property>
+            <key-property name="totalEnrollment" type="big_decimal">
+                <column name="TOTAL_ENROLLMENT" precision="22" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

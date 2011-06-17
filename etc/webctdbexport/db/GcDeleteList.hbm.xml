@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.GcDeleteList" table="GC_DELETE_LIST">
+        <composite-id name="id" class="webctdbexport.db.GcDeleteListId">
+            <key-property name="processId" type="big_decimal">
+                <column name="PROCESS_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="taskName" type="string">
+                <column name="TASK_NAME" length="30" />
+            </key-property>
+            <key-property name="groupName" type="string">
+                <column name="GROUP_NAME" length="30" />
+            </key-property>
+            <key-property name="deleteId" type="big_decimal">
+                <column name="DELETE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="lvl" type="java.lang.Short">
+                <column name="LVL" precision="3" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

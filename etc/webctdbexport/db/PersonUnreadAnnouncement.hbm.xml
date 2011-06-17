@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.PersonUnreadAnnouncement" table="PERSON_UNREAD_ANNOUNCEMENT">
+        <composite-id name="id" class="webctdbexport.db.PersonUnreadAnnouncementId">
+            <key-property name="announcementId" type="big_decimal">
+                <column name="ANNOUNCEMENT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="personId" type="big_decimal">
+                <column name="PERSON_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="annLearningContextId" type="big_decimal">
+                <column name="ANN_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="enrLearningContextId" type="big_decimal">
+                <column name="ENR_LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="learningContextType" type="string">
+                <column name="LEARNING_CONTEXT_TYPE" length="128" />
+            </key-property>
+            <key-property name="enrLearningContextType" type="string">
+                <column name="ENR_LEARNING_CONTEXT_TYPE" length="128" />
+            </key-property>
+            <key-property name="title" type="string">
+                <column name="TITLE" length="1000" />
+            </key-property>
+            <key-property name="content" type="clob">
+                <column name="CONTENT" />
+            </key-property>
+            <key-property name="startTimestamp" type="big_decimal">
+                <column name="START_TIMESTAMP" precision="20" scale="0" />
+            </key-property>
+            <key-property name="endTimestamp" type="big_decimal">
+                <column name="END_TIMESTAMP" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deliverAsPopup" type="boolean">
+                <column name="DELIVER_AS_POPUP" precision="1" scale="0" />
+            </key-property>
+            <key-property name="htmlContent" type="boolean">
+                <column name="HTML_CONTENT" precision="1" scale="0" />
+            </key-property>
+            <key-property name="createPersonId" type="big_decimal">
+                <column name="CREATE_PERSON_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

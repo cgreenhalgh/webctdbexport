@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.LcType" table="LC_TYPE">
+        <id name="typeCode" type="string">
+            <column name="TYPE_CODE" length="128" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="lcType" class="webctdbexport.db.LcType" fetch="select">
+            <column name="PARENT_TYPE_CODE" length="128" />
+        </many-to-one>
+        <property name="labelRsrcKey" type="string">
+            <column name="LABEL_RSRC_KEY" length="256" not-null="true" />
+        </property>
+        <property name="categoryFlag" type="boolean">
+            <column name="CATEGORY_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="categorizationFlag" type="boolean">
+            <column name="CATEGORIZATION_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="associatedCoFlag" type="boolean">
+            <column name="ASSOCIATED_CO_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="deliveryUnitFlag" type="boolean">
+            <column name="DELIVERY_UNIT_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="disabledFlag" type="boolean">
+            <column name="DISABLED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="saveCoFlag" type="boolean">
+            <column name="SAVE_CO_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="addtlGrpLcTypeFlag" type="boolean">
+            <column name="ADDTL_GRP_LC_TYPE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="imsTypelevel" type="byte">
+            <column name="IMS_TYPELEVEL" precision="2" scale="0" not-null="true" />
+        </property>
+        <property name="imsTypevalue" type="string">
+            <column name="IMS_TYPEVALUE" length="256" not-null="true" />
+        </property>
+        <property name="imsScheme" type="string">
+            <column name="IMS_SCHEME" length="1000" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="termFlag" type="boolean">
+            <column name="TERM_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="termAssignableFlag" type="boolean">
+            <column name="TERM_ASSIGNABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="cpmLcFolderDefs" table="CPM_LC_FOLDER_DEF" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_TYPE_CODE" length="128" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcFolderDef" />
+        </set>
+        <set name="settingsLcTypeExceptions" table="SETTINGS_LC_TYPE_EXCEPTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_TYPE_CODE" length="128" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.SettingsLcTypeException" />
+        </set>
+        <set name="roleDefinitions" table="ROLE_DEFINITION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_TYPE_CODE" length="128" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.RoleDefinition" />
+        </set>
+        <set name="lcTypes" table="LC_TYPE" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PARENT_TYPE_CODE" length="128" />
+            </key>
+            <one-to-many class="webctdbexport.db.LcType" />
+        </set>
+        <set name="cpmLcGroupDefs" table="CPM_LC_GROUP_DEF" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="LC_TYPE_CODE" length="128" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.CpmLcGroupDef" />
+        </set>
+        <set name="learningContexts" table="LEARNING_CONTEXT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TYPE_CODE" length="128" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.LearningContext" />
+        </set>
+    </class>
+</hibernate-mapping>

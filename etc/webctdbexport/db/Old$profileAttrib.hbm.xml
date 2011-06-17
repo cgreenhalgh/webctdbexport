@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Old$profileAttrib" table="OLD$PROFILE_ATTRIB">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="profileMetadataId" type="big_decimal">
+            <column name="PROFILE_METADATA_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="mandatory" type="boolean">
+            <column name="MANDATORY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="visibility" type="boolean">
+            <column name="VISIBILITY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="deletestatus" type="boolean">
+            <column name="DELETESTATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="learningContextId" type="big_decimal">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+        </property>
+        <property name="alignment" type="string">
+            <column name="ALIGNMENT" length="10" />
+        </property>
+        <property name="label" type="string">
+            <column name="LABEL" length="1000" />
+        </property>
+        <property name="decimals" type="java.lang.Integer">
+            <column name="DECIMALS" precision="5" scale="0" />
+        </property>
+        <property name="seqnum" type="java.lang.Integer">
+            <column name="SEQNUM" precision="5" scale="0" />
+        </property>
+        <property name="sortorder" type="java.lang.Boolean">
+            <column name="SORTORDER" precision="1" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

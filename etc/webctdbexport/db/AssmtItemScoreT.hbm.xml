@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AssmtItemScoreT" table="ASSMT_ITEM_SCORE_T">
+        <composite-id name="id" class="webctdbexport.db.AssmtItemScoreTId">
+            <key-property name="processId" type="big_decimal">
+                <column name="PROCESS_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deliveryContextId" type="big_decimal">
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assmtId" type="big_decimal">
+                <column name="ASSMT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="assmtItemId" type="big_decimal">
+                <column name="ASSMT_ITEM_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberId" type="big_decimal">
+                <column name="MEMBER_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="assmtSubId" type="big_decimal">
+            <column name="ASSMT_SUB_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="assmtItemScore" type="big_decimal">
+            <column name="ASSMT_ITEM_SCORE" precision="7" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

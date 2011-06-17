@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CmsCeCharset" table="CMS_CE_CHARSET">
+        <id name="characterSet" type="string">
+            <column name="CHARACTER_SET" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="oracleCharset" type="string">
+            <column name="ORACLE_CHARSET" length="30" not-null="true" />
+        </property>
+        <property name="sqlserverCharset" type="string">
+            <column name="SQLSERVER_CHARSET" length="30" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="DESCRIPTION" length="100" not-null="true" />
+        </property>
+        <set name="cmsFileContents" table="CMS_FILE_CONTENT" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="CHARACTER_SET" length="30" />
+            </key>
+            <one-to-many class="webctdbexport.db.CmsFileContent" />
+        </set>
+    </class>
+</hibernate-mapping>

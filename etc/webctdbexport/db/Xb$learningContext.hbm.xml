@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$learningContext" table="XB$LEARNING_CONTEXT">
+        <composite-id name="id" class="webctdbexport.db.Xb$learningContextId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="parentId" type="big_decimal">
+            <column name="PARENT_ID" precision="20" scale="0" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="1000" not-null="true" />
+        </property>
+        <property name="typeCode" type="string">
+            <column name="TYPE_CODE" length="128" not-null="true" />
+        </property>
+        <property name="deletedFlag" type="big_decimal">
+            <column name="DELETED_FLAG" precision="20" scale="0" />
+        </property>
+        <property name="sourceId" type="string">
+            <column name="SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="sourceName" type="string">
+            <column name="SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="glcid" type="string">
+            <column name="GLCID" length="256" not-null="true" />
+        </property>
+        <property name="status" type="java.lang.Boolean">
+            <column name="STATUS" precision="1" scale="0" />
+        </property>
+        <property name="orgname" type="string">
+            <column name="ORGNAME" length="768" />
+        </property>
+        <property name="orgunit" type="string">
+            <column name="ORGUNIT" length="768" />
+        </property>
+        <property name="orgtype" type="string">
+            <column name="ORGTYPE" length="96" />
+        </property>
+        <property name="orgid" type="string">
+            <column name="ORGID" length="768" />
+        </property>
+        <property name="adminperiod" type="string">
+            <column name="ADMINPERIOD" length="96" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="320" />
+        </property>
+        <property name="url" type="string">
+            <column name="URL" length="1000" />
+        </property>
+        <property name="datasource" type="string">
+            <column name="DATASOURCE" length="768" />
+        </property>
+        <property name="lastarchived" type="big_decimal">
+            <column name="LASTARCHIVED" precision="20" scale="0" />
+        </property>
+        <property name="statusTimestamp" type="big_decimal">
+            <column name="STATUS_TIMESTAMP" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="deletableFlag" type="boolean">
+            <column name="DELETABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="enrollacceptFlag" type="boolean">
+            <column name="ENROLLACCEPT_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="enrollallowedFlag" type="boolean">
+            <column name="ENROLLALLOWED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="startdateTime" type="big_decimal">
+            <column name="STARTDATE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="startRestrict" type="java.lang.Boolean">
+            <column name="START_RESTRICT" precision="1" scale="0" />
+        </property>
+        <property name="enddateTime" type="big_decimal">
+            <column name="ENDDATE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="endRestrict" type="java.lang.Boolean">
+            <column name="END_RESTRICT" precision="1" scale="0" />
+        </property>
+        <property name="nameLowercase" type="string">
+            <column name="NAME_LOWERCASE" length="1000" not-null="true" />
+        </property>
+        <property name="licenseGenerated" type="boolean">
+            <column name="LICENSE_GENERATED" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="homefolderId" type="big_decimal">
+            <column name="HOMEFOLDER_ID" precision="20" scale="0" />
+        </property>
+        <property name="description" type="clob">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="fulldescription" type="clob">
+            <column name="FULLDESCRIPTION" />
+        </property>
+        <property name="deliveryUnitType" type="string">
+            <column name="DELIVERY_UNIT_TYPE" length="20" />
+        </property>
+        <property name="instLcid" type="big_decimal">
+            <column name="INST_LCID" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

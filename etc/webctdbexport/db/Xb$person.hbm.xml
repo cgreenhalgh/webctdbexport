@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$person" table="XB$PERSON">
+        <composite-id name="id" class="webctdbexport.db.Xb$personId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="smsGroupId" type="big_decimal">
+            <column name="SMS_GROUP_ID" precision="20" scale="0" />
+        </property>
+        <property name="learningContextId" type="big_decimal">
+            <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="webctId" type="string">
+            <column name="WEBCT_ID" length="768" not-null="true" />
+        </property>
+        <property name="webctPassword" type="string">
+            <column name="WEBCT_PASSWORD" length="128" />
+        </property>
+        <property name="remoteUserid" type="string">
+            <column name="REMOTE_USERID" length="768" not-null="true" />
+        </property>
+        <property name="nameNFamily" type="string">
+            <column name="NAME_N_FAMILY" length="768" />
+        </property>
+        <property name="nameNGiven" type="string">
+            <column name="NAME_N_GIVEN" length="768" />
+        </property>
+        <property name="nameNOther" type="string">
+            <column name="NAME_N_OTHER" length="768" />
+        </property>
+        <property name="nameNPrefix" type="string">
+            <column name="NAME_N_PREFIX" length="96" />
+        </property>
+        <property name="nameNSuffix" type="string">
+            <column name="NAME_N_SUFFIX" length="96" />
+        </property>
+        <property name="nameFn" type="string">
+            <column name="NAME_FN" length="768" />
+        </property>
+        <property name="nameSort" type="string">
+            <column name="NAME_SORT" length="768" />
+        </property>
+        <property name="nameNickname" type="string">
+            <column name="NAME_NICKNAME" length="768" />
+        </property>
+        <property name="hintQuestion" type="string">
+            <column name="HINT_QUESTION" length="1000" />
+        </property>
+        <property name="hintAnswer" type="string">
+            <column name="HINT_ANSWER" length="300" />
+        </property>
+        <property name="demographicsGender" type="string">
+            <column name="DEMOGRAPHICS_GENDER" length="64" />
+        </property>
+        <property name="demographicsBday" type="big_decimal">
+            <column name="DEMOGRAPHICS_BDAY" precision="20" scale="0" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="320" />
+        </property>
+        <property name="lastloginSessionid" type="string">
+            <column name="LASTLOGIN_SESSIONID" length="256" />
+        </property>
+        <property name="lastlogintime" type="big_decimal">
+            <column name="LASTLOGINTIME" precision="20" scale="0" />
+        </property>
+        <property name="lastlogoutSessionid" type="string">
+            <column name="LASTLOGOUT_SESSIONID" length="256" />
+        </property>
+        <property name="lastlogouttime" type="big_decimal">
+            <column name="LASTLOGOUTTIME" precision="20" scale="0" />
+        </property>
+        <property name="activestatus" type="boolean">
+            <column name="ACTIVESTATUS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="deletestatus" type="big_decimal">
+            <column name="DELETESTATUS" precision="20" scale="0" />
+        </property>
+        <property name="sourcedidSource" type="string">
+            <column name="SOURCEDID_SOURCE" length="510" not-null="true" />
+        </property>
+        <property name="defaultuser" type="boolean">
+            <column name="DEFAULTUSER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="enableExternalMail" type="boolean">
+            <column name="ENABLE_EXTERNAL_MAIL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="demouser" type="boolean">
+            <column name="DEMOUSER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="lastpalmsynctime" type="big_decimal">
+            <column name="LASTPALMSYNCTIME" precision="20" scale="0" />
+        </property>
+        <property name="lastPwChangeTime" type="big_decimal">
+            <column name="LAST_PW_CHANGE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="ftimeLoginPwreqOk" type="boolean">
+            <column name="FTIME_LOGIN_PWREQ_OK" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="homefolderId" type="big_decimal">
+            <column name="HOMEFOLDER_ID" precision="20" scale="0" />
+        </property>
+        <property name="webctIdLowercase" type="string">
+            <column name="WEBCT_ID_LOWERCASE" length="768" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="expirationDate" type="big_decimal">
+            <column name="EXPIRATION_DATE" precision="20" scale="0" />
+        </property>
+        <property name="portfolioId" type="big_decimal">
+            <column name="PORTFOLIO_ID" precision="20" scale="0" />
+        </property>
+        <property name="datasource" type="string">
+            <column name="DATASOURCE" length="510" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

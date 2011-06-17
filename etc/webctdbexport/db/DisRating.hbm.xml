@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.DisRating" table="DIS_RATING">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="disMessage" class="webctdbexport.db.DisMessage" fetch="select">
+            <column name="MESSAGE_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="person" class="webctdbexport.db.Person" fetch="select">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="disRatingDefinition" class="webctdbexport.db.DisRatingDefinition" fetch="select">
+            <column name="RATING_DEFINITION_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="ratingComment" type="string">
+            <column name="RATING_COMMENT" length="4000" />
+        </property>
+    </class>
+</hibernate-mapping>

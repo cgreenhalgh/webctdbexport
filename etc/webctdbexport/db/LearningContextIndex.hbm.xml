@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.LearningContextIndex" table="LEARNING_CONTEXT_INDEX">
+        <composite-id name="id" class="webctdbexport.db.LearningContextIndexId">
+            <key-property name="leftLcId" type="big_decimal">
+                <column name="LEFT_LC_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="rightLcId" type="big_decimal">
+                <column name="RIGHT_LC_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="learningContextByLeftLcId" class="webctdbexport.db.LearningContext" update="false" insert="false" fetch="select">
+            <column name="LEFT_LC_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <many-to-one name="learningContextByRightLcId" class="webctdbexport.db.LearningContext" update="false" insert="false" fetch="select">
+            <column name="RIGHT_LC_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="hierarchyLevel" type="short">
+            <column name="HIERARCHY_LEVEL" precision="3" scale="0" not-null="true" />
+        </property>
+        <property name="leftTypeCode" type="string">
+            <column name="LEFT_TYPE_CODE" length="128" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="rightTypeCode" type="string">
+            <column name="RIGHT_TYPE_CODE" length="128" />
+        </property>
+    </class>
+</hibernate-mapping>

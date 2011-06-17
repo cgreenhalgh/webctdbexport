@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$syllsubitem" table="XB$SYLLSUBITEM">
+        <composite-id name="id" class="webctdbexport.db.Xb$syllsubitemId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="itemTypeCd" type="string">
+            <column name="ITEM_TYPE_CD" length="40" not-null="true" />
+        </property>
+        <property name="sortOrder" type="big_decimal">
+            <column name="SORT_ORDER" precision="8" scale="4" />
+        </property>
+        <property name="custItemName" type="string">
+            <column name="CUST_ITEM_NAME" length="1000" />
+        </property>
+        <property name="custItemValue" type="string">
+            <column name="CUST_ITEM_VALUE" length="4000" />
+        </property>
+        <property name="resourceName" type="string">
+            <column name="RESOURCE_NAME" length="1000" />
+        </property>
+        <property name="resourcePublisher" type="string">
+            <column name="RESOURCE_PUBLISHER" length="1000" />
+        </property>
+        <property name="resourceAuthor" type="string">
+            <column name="RESOURCE_AUTHOR" length="1000" />
+        </property>
+        <property name="resourceIsbn" type="string">
+            <column name="RESOURCE_ISBN" length="40" />
+        </property>
+        <property name="resourceRequiredFl" type="boolean">
+            <column name="RESOURCE_REQUIRED_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resourceInfo" type="string">
+            <column name="RESOURCE_INFO" length="2700" />
+        </property>
+        <property name="resourceEditionYear" type="string">
+            <column name="RESOURCE_EDITION_YEAR" length="256" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="syllitemId" type="big_decimal">
+            <column name="SYLLITEM_ID" precision="20" scale="0" />
+        </property>
+        <property name="custHtmlValue" type="clob">
+            <column name="CUST_HTML_VALUE" />
+        </property>
+    </class>
+</hibernate-mapping>

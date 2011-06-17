@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$assmtResultSettng" table="XB$ASSMT_RESULT_SETTNG">
+        <composite-id name="id" class="webctdbexport.db.Xb$assmtResultSettngId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="resultsemail" type="string">
+            <column name="RESULTSEMAIL" length="320" />
+        </property>
+        <property name="resultsreleasetype" type="string">
+            <column name="RESULTSRELEASETYPE" length="30" not-null="true" />
+        </property>
+        <property name="resultsscoretype" type="string">
+            <column name="RESULTSSCORETYPE" length="20" not-null="true" />
+        </property>
+        <property name="resultscorrectanswer" type="boolean">
+            <column name="RESULTSCORRECTANSWER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultsevaluation" type="boolean">
+            <column name="RESULTSEVALUATION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultsfeedback" type="boolean">
+            <column name="RESULTSFEEDBACK" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultsfullevaluation" type="boolean">
+            <column name="RESULTSFULLEVALUATION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultsgradercomments" type="boolean">
+            <column name="RESULTSGRADERCOMMENTS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultsresponse" type="boolean">
+            <column name="RESULTSRESPONSE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultsscore" type="boolean">
+            <column name="RESULTSSCORE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultstext" type="boolean">
+            <column name="RESULTSTEXT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="resultstotalscore" type="boolean">
+            <column name="RESULTSTOTALSCORE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="allowartifactcreation" type="boolean">
+            <column name="ALLOWARTIFACTCREATION" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

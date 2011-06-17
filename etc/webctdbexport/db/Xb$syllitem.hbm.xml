@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$syllitem" table="XB$SYLLITEM">
+        <composite-id name="id" class="webctdbexport.db.Xb$syllitemId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="itemTypeCd" type="string">
+            <column name="ITEM_TYPE_CD" length="40" not-null="true" />
+        </property>
+        <property name="title" type="string">
+            <column name="TITLE" length="1000" />
+        </property>
+        <property name="sortOrder" type="java.lang.Double">
+            <column name="SORT_ORDER" precision="126" scale="0" />
+        </property>
+        <property name="activeFl" type="boolean">
+            <column name="ACTIVE_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="htmlFl" type="boolean">
+            <column name="HTML_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="linkedFl" type="boolean">
+            <column name="LINKED_FL" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="lessonTitle" type="string">
+            <column name="LESSON_TITLE" length="1000" />
+        </property>
+        <property name="lessonDate" type="big_decimal">
+            <column name="LESSON_DATE" precision="20" scale="0" />
+        </property>
+        <property name="inCalendar" type="java.lang.Boolean">
+            <column name="IN_CALENDAR" precision="1" scale="0" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="syllabusId" type="big_decimal">
+            <column name="SYLLABUS_ID" precision="20" scale="0" />
+        </property>
+        <property name="lessonCalId" type="big_decimal">
+            <column name="LESSON_CAL_ID" precision="20" scale="0" />
+        </property>
+        <property name="roleId" type="big_decimal">
+            <column name="ROLE_ID" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

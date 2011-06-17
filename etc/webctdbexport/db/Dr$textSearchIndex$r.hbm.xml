@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Dr$textSearchIndex$r" table="DR$TEXT_SEARCH_INDEX$R">
+        <composite-id name="id" class="webctdbexport.db.Dr$textSearchIndex$rId">
+            <key-property name="rowNo" type="java.lang.Short">
+                <column name="ROW_NO" precision="3" scale="0" />
+            </key-property>
+            <key-property name="data" type="blob">
+                <column name="DATA" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

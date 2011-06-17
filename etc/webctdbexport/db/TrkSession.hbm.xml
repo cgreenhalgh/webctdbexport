@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkSession" table="TRK_SESSION">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="trkUserActionByLastActionId" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="LAST_ACTION_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="trkUserActionByFirstActionId" class="webctdbexport.db.TrkUserAction" fetch="select">
+            <column name="FIRST_ACTION_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="httpSessionId" type="string">
+            <column name="HTTP_SESSION_ID" length="900" not-null="true" unique="true" />
+        </property>
+        <property name="dirty" type="boolean">
+            <column name="DIRTY" precision="1" scale="0" not-null="true" />
+        </property>
+        <set name="trkUserActions" table="TRK_USER_ACTION" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_SESSION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkUserAction" />
+        </set>
+        <set name="trkSessionToolActivities" table="TRK_SESSION_TOOL_ACTIVITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_SESSION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSessionToolActivity" />
+        </set>
+        <set name="trkSessionContextActivities" table="TRK_SESSION_CONTEXT_ACTIVITY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="TRK_SESSION_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.TrkSessionContextActivity" />
+        </set>
+    </class>
+</hibernate-mapping>

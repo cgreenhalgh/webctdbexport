@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.PstSettingBundle" table="PST_SETTING_BUNDLE">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="coTemplate" class="webctdbexport.db.CoTemplate" fetch="select">
+            <column name="TEMPLATE_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="coOrganizerpage" class="webctdbexport.db.CoOrganizerpage" fetch="select">
+            <column name="ORGANIZERPAGE_ID" precision="20" scale="0" />
+        </many-to-one>
+        <many-to-one name="cmsContentEntry" class="webctdbexport.db.CmsContentEntry" fetch="select">
+            <column name="BG_IMAGE_ID" precision="20" scale="0" />
+        </many-to-one>
+        <property name="allNewOrgFlag" type="boolean">
+            <column name="ALL_NEW_ORG_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="tileimageFlag" type="boolean">
+            <column name="TILEIMAGE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="allOrgFlag" type="boolean">
+            <column name="ALL_ORG_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="iconAlignment" type="string">
+            <column name="ICON_ALIGNMENT" length="40" not-null="true" />
+        </property>
+        <property name="textAlignment" type="string">
+            <column name="TEXT_ALIGNMENT" length="40" not-null="true" />
+        </property>
+        <property name="bgColor" type="string">
+            <column name="BG_COLOR" length="10" />
+        </property>
+        <property name="iconImagetext" type="string">
+            <column name="ICON_IMAGETEXT" length="30" />
+        </property>
+        <property name="numOfCol" type="java.lang.Short">
+            <column name="NUM_OF_COL" precision="3" scale="0" />
+        </property>
+        <property name="currentColorSet" type="string">
+            <column name="CURRENT_COLOR_SET" length="10" />
+        </property>
+        <property name="colorBg" type="string">
+            <column name="COLOR_BG" length="10" />
+        </property>
+        <property name="colorText" type="string">
+            <column name="COLOR_TEXT" length="10" />
+        </property>
+        <property name="colorLink" type="string">
+            <column name="COLOR_LINK" length="10" />
+        </property>
+        <property name="colorVlink" type="string">
+            <column name="COLOR_VLINK" length="10" />
+        </property>
+        <property name="colorMenuBg" type="string">
+            <column name="COLOR_MENU_BG" length="10" />
+        </property>
+        <property name="colorMenuLink" type="string">
+            <column name="COLOR_MENU_LINK" length="10" />
+        </property>
+        <property name="colorMenuCurrBg" type="string">
+            <column name="COLOR_MENU_CURR_BG" length="10" />
+        </property>
+        <property name="colorMenuCurrLink" type="string">
+            <column name="COLOR_MENU_CURR_LINK" length="10" />
+        </property>
+        <property name="colorMenuHighBg" type="string">
+            <column name="COLOR_MENU_HIGH_BG" length="10" />
+        </property>
+        <property name="colorMenuHighLink" type="string">
+            <column name="COLOR_MENU_HIGH_LINK" length="10" />
+        </property>
+        <property name="colorTableHeadBg" type="string">
+            <column name="COLOR_TABLE_HEAD_BG" length="10" />
+        </property>
+        <property name="colorTableHeadText" type="string">
+            <column name="COLOR_TABLE_HEAD_TEXT" length="10" />
+        </property>
+        <property name="colorTableFootBg" type="string">
+            <column name="COLOR_TABLE_FOOT_BG" length="10" />
+        </property>
+        <property name="selectedLayout" type="string">
+            <column name="SELECTED_LAYOUT" length="40" />
+        </property>
+        <property name="tableWidth" type="string">
+            <column name="TABLE_WIDTH" length="40" />
+        </property>
+    </class>
+</hibernate-mapping>

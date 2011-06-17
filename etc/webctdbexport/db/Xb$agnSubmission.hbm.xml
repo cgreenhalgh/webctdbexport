@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$agnSubmission" table="XB$AGN_SUBMISSION">
+        <composite-id name="id" class="webctdbexport.db.Xb$agnSubmissionId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="status" type="string">
+            <column name="STATUS" length="40" not-null="true" />
+        </property>
+        <property name="lastsubmitteddate" type="big_decimal">
+            <column name="LASTSUBMITTEDDATE" precision="20" scale="0" />
+        </property>
+        <property name="grade" type="string">
+            <column name="GRADE" length="4000" />
+        </property>
+        <property name="graderNameGiven" type="string">
+            <column name="GRADER_NAME_GIVEN" length="768" />
+        </property>
+        <property name="graderNameFamily" type="string">
+            <column name="GRADER_NAME_FAMILY" length="768" />
+        </property>
+        <property name="completiondate" type="big_decimal">
+            <column name="COMPLETIONDATE" precision="20" scale="0" />
+        </property>
+        <property name="latestComment" type="string">
+            <column name="LATEST_COMMENT" length="4000" />
+        </property>
+        <property name="publishedFlag" type="boolean">
+            <column name="PUBLISHED_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="attempts" type="short">
+            <column name="ATTEMPTS" precision="4" scale="0" not-null="true" />
+        </property>
+        <property name="websiteFileGroupId" type="big_decimal">
+            <column name="WEBSITE_FILE_GROUP_ID" precision="20" scale="0" />
+        </property>
+        <property name="ishtmlSubmission" type="boolean">
+            <column name="ISHTML_SUBMISSION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="groupassignmentId" type="big_decimal">
+            <column name="GROUPASSIGNMENT_ID" precision="20" scale="0" />
+        </property>
+        <property name="assignmentId" type="big_decimal">
+            <column name="ASSIGNMENT_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="instructorFileGroupId" type="big_decimal">
+            <column name="INSTRUCTOR_FILE_GROUP_ID" precision="20" scale="0" />
+        </property>
+        <property name="studentFileGroupId" type="big_decimal">
+            <column name="STUDENT_FILE_GROUP_ID" precision="20" scale="0" />
+        </property>
+        <property name="startingPageId" type="big_decimal">
+            <column name="STARTING_PAGE_ID" precision="20" scale="0" />
+        </property>
+        <property name="submission" type="clob">
+            <column name="SUBMISSION" />
+        </property>
+        <property name="memberId" type="big_decimal">
+            <column name="MEMBER_ID" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

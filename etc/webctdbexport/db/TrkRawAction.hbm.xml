@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.TrkRawAction" table="TRK_RAW_ACTION">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="eventTime" type="big_decimal">
+            <column name="EVENT_TIME" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="personId" type="big_decimal">
+            <column name="PERSON_ID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="httpSessionId" type="string">
+            <column name="HTTP_SESSION_ID" length="900" not-null="true" />
+        </property>
+        <property name="role" type="string">
+            <column name="ROLE" length="40" />
+        </property>
+        <property name="toolName" type="string">
+            <column name="TOOL_NAME" length="40" />
+        </property>
+        <property name="actionName" type="string">
+            <column name="ACTION_NAME" length="80" />
+        </property>
+        <property name="pageName" type="string">
+            <column name="PAGE_NAME" length="4000" />
+        </property>
+        <property name="lcId" type="big_decimal">
+            <column name="LC_ID" precision="20" scale="0" />
+        </property>
+        <property name="learningObjectId" type="big_decimal">
+            <column name="LEARNING_OBJECT_ID" precision="20" scale="0" />
+        </property>
+        <property name="pageNameExtra" type="clob">
+            <column name="PAGE_NAME_EXTRA" />
+        </property>
+        <property name="isfail" type="boolean">
+            <column name="ISFAIL" precision="1" scale="0" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.CmsFileContentV" table="CMS_FILE_CONTENT_V">
+        <composite-id name="id" class="webctdbexport.db.CmsFileContentVId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="content" type="blob">
+                <column name="CONTENT" />
+            </key-property>
+            <key-property name="mimetypeId" type="big_decimal">
+                <column name="MIMETYPE_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="characterSet" type="string">
+                <column name="CHARACTER_SET" length="30" />
+            </key-property>
+            <key-property name="location" type="string">
+                <column name="LOCATION" length="6" />
+            </key-property>
+            <key-property name="remoteLobId" type="big_decimal">
+                <column name="REMOTE_LOB_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="xythosId" type="string">
+                <column name="XYTHOS_ID" length="30" />
+            </key-property>
+            <key-property name="createTs" type="big_decimal">
+                <column name="CREATE_TS" precision="20" scale="0" />
+            </key-property>
+            <key-property name="lastmodifyTs" type="big_decimal">
+                <column name="LASTMODIFY_TS" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

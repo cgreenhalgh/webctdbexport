@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.AccessControlPermissionSet" table="ACCESS_CONTROL_PERMISSION_SET">
+        <id name="id" type="big_decimal">
+            <column name="ID" precision="20" scale="0" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="NAME" length="128" not-null="true" unique="true" />
+        </property>
+        <property name="immutableFlag" type="boolean">
+            <column name="IMMUTABLE_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclRead" type="boolean">
+            <column name="ACL_READ" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclWrite" type="boolean">
+            <column name="ACL_WRITE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclDelete" type="boolean">
+            <column name="ACL_DELETE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclAccessArea" type="boolean">
+            <column name="ACL_ACCESS_AREA" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclPreview" type="boolean">
+            <column name="ACL_PREVIEW" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclCreateFolder" type="boolean">
+            <column name="ACL_CREATE_FOLDER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclCreateContent" type="boolean">
+            <column name="ACL_CREATE_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclUpload" type="boolean">
+            <column name="ACL_UPLOAD" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclRenameContent" type="boolean">
+            <column name="ACL_RENAME_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclRenameFolder" type="boolean">
+            <column name="ACL_RENAME_FOLDER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclEditContent" type="boolean">
+            <column name="ACL_EDIT_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclDeclareCharacterset" type="boolean">
+            <column name="ACL_DECLARE_CHARACTERSET" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclDeleteContent" type="boolean">
+            <column name="ACL_DELETE_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclDeleteFolder" type="boolean">
+            <column name="ACL_DELETE_FOLDER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclDeleteDeliveryContext" type="boolean">
+            <column name="ACL_DELETE_DELIVERY_CONTEXT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclCopy" type="boolean">
+            <column name="ACL_COPY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclMove" type="boolean">
+            <column name="ACL_MOVE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclPublishto" type="boolean">
+            <column name="ACL_PUBLISHTO" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclPublish" type="boolean">
+            <column name="ACL_PUBLISH" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclPackage" type="boolean">
+            <column name="ACL_PACKAGE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclExtract" type="boolean">
+            <column name="ACL_EXTRACT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclManageRepSettings" type="boolean">
+            <column name="ACL_MANAGE_REP_SETTINGS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclRenameRepository" type="boolean">
+            <column name="ACL_RENAME_REPOSITORY" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclSetPermission" type="boolean">
+            <column name="ACL_SET_PERMISSION" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclViewContentUsage" type="boolean">
+            <column name="ACL_VIEW_CONTENT_USAGE" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="aclListContent" type="boolean">
+            <column name="ACL_LIST_CONTENT" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="systemFlag" type="boolean">
+            <column name="SYSTEM_FLAG" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <set name="accessControlEntries" table="ACCESS_CONTROL_ENTRY" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="PERMISSION_SET_ID" precision="20" scale="0" not-null="true" />
+            </key>
+            <one-to-many class="webctdbexport.db.AccessControlEntry" />
+        </set>
+    </class>
+</hibernate-mapping>

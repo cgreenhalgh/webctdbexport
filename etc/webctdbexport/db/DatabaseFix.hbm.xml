@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.DatabaseFix" table="DATABASE_FIX">
+        <composite-id name="id" class="webctdbexport.db.DatabaseFixId">
+            <key-property name="id" type="string">
+                <column name="ID" length="128" />
+            </key-property>
+            <key-property name="releaseId" type="string">
+                <column name="RELEASE_ID" length="128" />
+            </key-property>
+            <key-property name="status" type="string">
+                <column name="STATUS" length="128" />
+            </key-property>
+            <key-property name="dateInstalled" type="big_decimal">
+                <column name="DATE_INSTALLED" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

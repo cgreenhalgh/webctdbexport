@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.SearchableObjectWaBak" table="SEARCHABLE_OBJECT_WA_BAK">
+        <composite-id name="id" class="webctdbexport.db.SearchableObjectWaBakId">
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="lookupId" type="big_decimal">
+                <column name="LOOKUP_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="areaName" type="string">
+                <column name="AREA_NAME" length="30" />
+            </key-property>
+            <key-property name="learningContextId" type="big_decimal">
+                <column name="LEARNING_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deliveryContextId" type="big_decimal">
+                <column name="DELIVERY_CONTEXT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="deleted" type="boolean">
+                <column name="DELETED" precision="1" scale="0" />
+            </key-property>
+            <key-property name="syncFlag" type="boolean">
+                <column name="SYNC_FLAG" precision="1" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

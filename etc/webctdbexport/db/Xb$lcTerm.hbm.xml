@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.Xb$lcTerm" table="XB$LC_TERM">
+        <composite-id name="id" class="webctdbexport.db.Xb$lcTermId">
+            <key-property name="archiveUnitId" type="big_decimal">
+                <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="id" type="big_decimal">
+                <column name="ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="archiveUnit" class="webctdbexport.db.ArchiveUnit" update="false" insert="false" fetch="select">
+            <column name="ARCHIVE_UNIT_ID" precision="20" scale="0" not-null="true" />
+        </many-to-one>
+        <property name="instLcid" type="big_decimal">
+            <column name="INST_LCID" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="name" type="string">
+            <column name="NAME" length="1000" not-null="true" />
+        </property>
+        <property name="nameLowercase" type="string">
+            <column name="NAME_LOWERCASE" length="1000" not-null="true" />
+        </property>
+        <property name="sourceName" type="string">
+            <column name="SOURCE_NAME" length="510" not-null="true" />
+        </property>
+        <property name="sourceId" type="string">
+            <column name="SOURCE_ID" length="768" not-null="true" />
+        </property>
+        <property name="restrictLearner" type="boolean">
+            <column name="RESTRICT_LEARNER" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="restrictSdes" type="boolean">
+            <column name="RESTRICT_SDES" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="restrictSins" type="boolean">
+            <column name="RESTRICT_SINS" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="restrictStea" type="boolean">
+            <column name="RESTRICT_STEA" precision="1" scale="0" not-null="true" />
+        </property>
+        <property name="startdateTime" type="big_decimal">
+            <column name="STARTDATE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="enddateTime" type="big_decimal">
+            <column name="ENDDATE_TIME" precision="20" scale="0" />
+        </property>
+        <property name="datasource" type="string">
+            <column name="DATASOURCE" length="768" />
+        </property>
+        <property name="createTs" type="big_decimal">
+            <column name="CREATE_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="lastmodifyTs" type="big_decimal">
+            <column name="LASTMODIFY_TS" precision="20" scale="0" not-null="true" />
+        </property>
+        <property name="description" type="clob">
+            <column name="DESCRIPTION" />
+        </property>
+        <property name="fulldescription" type="clob">
+            <column name="FULLDESCRIPTION" />
+        </property>
+    </class>
+</hibernate-mapping>

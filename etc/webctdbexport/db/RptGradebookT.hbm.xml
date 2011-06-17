@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 17-Jun-2011 10:59:34 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="webctdbexport.db.RptGradebookT" table="RPT_GRADEBOOK_T">
+        <composite-id name="id" class="webctdbexport.db.RptGradebookTId">
+            <key-property name="sectionColumnId" type="big_decimal">
+                <column name="SECTION_COLUMN_ID" precision="20" scale="0" />
+            </key-property>
+            <key-property name="memberId" type="big_decimal">
+                <column name="MEMBER_ID" precision="20" scale="0" />
+            </key-property>
+        </composite-id>
+        <property name="version" type="big_decimal">
+            <column name="VERSION" precision="20" scale="0" />
+        </property>
+        <property name="finalValue" type="string">
+            <column name="FINAL_VALUE" length="4000" />
+        </property>
+        <property name="originalValue" type="string">
+            <column name="ORIGINAL_VALUE" length="4000" />
+        </property>
+        <property name="overrideValue" type="string">
+            <column name="OVERRIDE_VALUE" length="4000" />
+        </property>
+        <property name="learningObjectId" type="big_decimal">
+            <column name="LEARNING_OBJECT_ID" precision="20" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

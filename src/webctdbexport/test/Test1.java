@@ -46,7 +46,7 @@ public class Test1 {
 		    logger.info("Homefolder for "+p.getId());
 		    File dir = new File(outdir, DbUtils.getSafeName(p.getWebctId()));
 		    dir.mkdir();
-		    DbUtils.dumpHomefolder(s, p, dir);
+		    //DbUtils.dumpHomefolder(s, p, dir);
 		    for (LearningContext lc : lcs) {
 		    	logger.info("Homefolder for "+lc.getId()+": "+lc.getName());
 			    dir = new File(outdir, DbUtils.getSafeName(lc.getName()));

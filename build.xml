@@ -119,7 +119,7 @@
 
 	<target name="test1">
 	
-		<java classpathref="hibernate" classname="webctdbexport.test.Test1" fork="true">
+		<java classpathref="hibernate" classname="webctdbexport.test.Test1" fork="false">
 			<arg value="-Djava.security.manager"/>
 			<arg value="-Djava.security.policy=etc/security.policy"/>
 		</java>

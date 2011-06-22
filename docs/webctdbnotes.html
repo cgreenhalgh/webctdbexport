@@ -1,19 +1,139 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>WebCT DB Notes</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+  <title>WebCT DB Notes</title>
 </head>
+
+
 <body>
+
 <h1>WebCT DB Notes</h1>
+
 <p>Chris Greenhalgh, University of Nottingham, 2011</p>
-<h3>Person</h3>
+<h2>General</h2>
+The application is written using the Hibernate object/relational
+mapping system. The classes for the database were generated using the
+Hibernate tools from the database schema using (basically) the default
+mapping. The database schema includes many but not all foreign key
+relationships and so these are supported in the generated classes in
+most cases.
+ <h2>Key tables / types</h2>
+
 <p>Table PERSON / class Person, key fields:</p>
+
 <ul>
-<li>Id</li>
-<li>webctId - login</li>
-<li>homefolderId - CmsContentEntry.id</li>
-<li>nameFn - and various other more specific fields</li>
+
+  <li>Id</li>
+
+  <li>webctId - login</li>
+
+  <li>homefolderId - CmsContentEntry.id</li>
+
+  <li>nameFn - and various other more specific fields</li>
+
 </ul>
+Table LEARNING_CONTENT / class LearningContext, key fields:<br>
+<ul>
+  <li>id</li>
+  <li>name</li>
+  <li>typeCode - Section, Course, Institution, Domain, Server</li>
+  <li>parentId</li>
+  <li>homefolderId - CmsContentEntry.id</li>
+</ul>
+Table CMS_CONTENT_ENTRY / class CmsContentEntry, key fields:<br>
+<ul>
+  <li>id</li>
+  <li>name</li>
+  <li>ceTypeName - Container, Folder, ContentFile, Template, ORGANIZER_PAGE_TYPE, WebLinkContainer, CHAT_ROOM_TYPE, WEBLINKSCATEGORY, <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"></span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">DISCUSSION_TOPIC_TYPE,&nbsp;</span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"></span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">SYLLABUS_TYPE, ...</span></li>
+  <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">ceSubtypeName - Default, (Container) </span>LcHomeFolder, (Container) PersonalContent</li>
+  <li>ownerId</li>
+  <li>aclId</li>
+  <li>deletedFlag</li>
+  <li>filesize</li>
+  <li>parentId</li>
+  <li>fileContentId -&gt; CmsFileContent</li>
+</ul>
+Table CMS_FILE_CONTENT / class CmsFileContent, key fields<br>
+<ul>
+  <li>id</li>
+  <li>content</li>
+  <li>mimetypeId</li>
+  <li>characterSet</li>
+</ul>
+Table MEMBER / class Member, key fields:<br>
+<ul>
+  <li>personId -&gt; Person</li>
+  <li>learningContextId -&gt; LearningContext</li>
+  <li>statusFlag</li>
+</ul>
+Table ROLE / class Role, key fields: <br>
+<ul>
+  <li>memberId -&gt; Member</li>
+  <li>roleDefinitionId -&gt; ROLE_DEFINITION</li>
+  <li>primaryFlag</li>
+  <li>roleStatus</li>
+  <li>deleteStatus</li>
+</ul>
+Table ROLE_DEFINITION / class RoleDefinition, key fields:<br>
+<ul>
+  <li>id</li>
+  <li>name - &lt;scope&gt;&lt;role&gt;, where &lt;scope&gt; = V
+(server) I (institution) C (course) S (section) D (domain) K (campus) N
+(division) and &lt;role&gt; = ADM (administrator) MEM (member) DES
+(designer) MGR (manager) MEN (mentor?) TEA (teacher) INS (instructor)
+STU (student) AUD (auditor)</li>
+</ul>
+<h2>CMS Usage</h2>
+<ul>
+  <li>LearningContext homefolderId -&gt;&nbsp;</li>
+  <ul>
+    <li>CmsContentEntry name: LC title, type:&nbsp;Container, subtype LcHomeFolder, child</li>
+    <ul>
+      <li>RepositoryFolder CmsContentEntry type: Container, subtype: RepositoryFolder, child</li>
+      <ul>
+        <li>Blank CmsContentEntry type: Template, subtype: Default, children</li>
+        <ul>
+          <li>ChatFiles type <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">TEMPLATE_CHAT_FOLDER Default</span></li>
+          <li>C_O_M_M_O_N_R_O_O_M type: <span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">CHAT_ROOM_TYPE Default</span></li>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">D_E_F_A_U_L_T_T_O_P_I_C type: </span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">DISCUSSION_TOPIC_TYPE Default</span></li>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">mediaLibrary.defaultCollection.name type </span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">MEDIA_COLLECTION_TYPE Default</span></li>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">MediaLibraryEntryContainer type Library Media</span></li>
+          <li>ORGANIZER_PAGE_HOME_PAGE_NAME type:&nbsp;<span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">ORGANIZER_PAGE_TYPE Default, w. Links (type OrganizerLink) &amp; Organizer, w. children&nbsp;</span></li>
+          <ul>
+            <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">(folder name) type </span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">ORGANIZER_PAGE_TYPE Default, w. Links (type OrganizerLink) &amp; Organizer, may have children</span></li>
+            <ul>
+              <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">(subfolder name) type </span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"></span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">ORGANIZER_PAGE_TYPE Default ...</span></li>
+            </ul>
+          </ul>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">Public Files type TEMPLATE_PUBLIC_AREA Default<br>
+            </span></li>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">S_Y_L_L_A_B_U_S type: </span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">SYLLABUS_TYPE Default</span></li>
+          <li>WebLinkContainer type&nbsp;<span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">WebLinkContainer Default, child</span></li>
+          <ul>
+            <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">Default type </span><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">WEBLINKSCATEGORY Default, children</span></li>
+            <ul>
+              <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">CmsContentEntry name: <span style="font-style: italic;">link name</span>, type URL_TYPE Default, URL: <span style="font-style: italic;">url</span></span></li>
+            </ul>
+          </ul>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">(filename(s)) Lots of files</span></li>
+          <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">(linkname(s)) Quite a lot of links to files, type PAGE_TYPE Default, link of type FileLink, w. ContentPage</span></li>
+        </ul>
+      </ul>
+    </ul>
+  </ul>
+  <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">Person homefolderId -&gt;</span></li>
+  <ul>
+    <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">CmsContentEntry name &lt;userid&gt;_HomeFolder type Container / PersonalContent, children</span></li>
+    <ul>
+      <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">(foldername) CmsContentEntry type Folder / Default</span></li>
+      <li><span class="Apple-style-span" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;">(filename) File<br>
+        </span></li>
+    </ul>
+  </ul>
+</ul>
+
 </body>
 </html>

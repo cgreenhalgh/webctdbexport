@@ -34,6 +34,7 @@
 	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.8.jar"/>
 	<classpathentry kind="lib" path="lib/swarmcache-1.0rc2.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry kind="lib" path="lib/org.json.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

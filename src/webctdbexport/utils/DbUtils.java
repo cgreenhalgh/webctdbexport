@@ -114,7 +114,7 @@ public class DbUtils {
 	}
 	public static final String ORGANIZER_PAGE_TYPE = "ORGANIZER_PAGE_TYPE/Default";
 	public static final String PAGE_TYPE = "PAGE_TYPE/Default";
-	private static String getTypename(CmsContentEntry ce) {
+	public static String getTypename(CmsContentEntry ce) {
 		CmsCeSubtype subtype = ce.getCmsCeSubtype();
 		String typename=(subtype!=null ? subtype.getCmsCeType().getName()+"/"+subtype.getId().getName() : "unknown/null");
 		return typename;

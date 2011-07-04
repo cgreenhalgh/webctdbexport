@@ -67,6 +67,7 @@
 		<path location="lib/slf4j-api-1.5.8.jar" />
 		<path location="lib/slf4j-log4j12-1.5.8.jar" />
 		<path location="lib/swarmcache-1.0rc2.jar" />
+		<path location="lib/org.json.jar" />
 		<path location="lib/.jar" />
 
 		<path location="build"/>
@@ -122,6 +123,17 @@
 		<java classpathref="hibernate" classname="webctdbexport.test.Test1" fork="false">
 			<arg value="-Djava.security.manager"/>
 			<arg value="-Djava.security.policy=etc/security.policy"/>
+		</java>
+ 		
+	</target>
+
+	<target name="testrepository">
+	
+		<java classpathref="hibernate" classname="webctdbexport.test.TestRepository" fork="false">
+			<jvmarg value="-Djava.security.manager"/>
+			<jvmarg value="-Djava.security.policy=etc/security.policy"/>
+			<!-- example user -->
+			<arg value="pszcmg"/>
 		</java>
  		
 	</target>

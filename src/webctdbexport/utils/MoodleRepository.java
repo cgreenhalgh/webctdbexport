@@ -3,7 +3,11 @@
  */
 package webctdbexport.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +24,8 @@ import org.json.JSONObject;
 import webctdbexport.db.CmsContentEntry;
 import webctdbexport.db.CmsFileContent;
 import webctdbexport.db.CmsLink;
+import webctdbexport.db.CoOrganizerlink;
+import webctdbexport.db.CoUrl;
 import webctdbexport.db.LearningContext;
 import webctdbexport.db.Person;
 
@@ -32,15 +38,18 @@ public class MoodleRepository {
 	static Logger logger = Logger.getLogger(MoodleRepository.class.getName());
 	public static final String PATH = "path";
 	public static final String TITLE = "title";
-	private static final String SIZE = "size";
+	public static final String SIZE = "size";
 	public static final String URL = "url";
-	private static final String NAME = "name";
+	public static final String SOURCE = "source";
+	public static final String NAME = "name";
 	public static final String LIST = "list";
 	private static final String PERSON_TYPE = "p";
 	private static final String LC_TYPE = "lc";
 	private static final String FC_TYPE = "fc";
 	private static final String CE_TYPE = "ce";
 	private static final String CHILDREN = "children";
+	public static final String DESCRIPTION = "description";
+	public static final String WEBCT_TYPE = "webcttype";
 	private static JSONObject getListingObject() throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("dynload", true);
@@ -48,18 +57,40 @@ public class MoodleRepository {
 		obj.put("nosearch", true);
 		return obj;
 	}
-	private static JSONObject getFileObject(String title, long lastModified, long size, String url) throws JSONException {
+	private static JSONObject getFileObject(String title, String description, String webctType, long lastModified, long size, String url) throws JSONException {
 		JSONObject fileobj = new JSONObject();
 		fileobj.put(TITLE, title);
+		if (description!=null)
+			fileobj.put(DESCRIPTION, description);
+		if (webctType!=null)
+			fileobj.put(WEBCT_TYPE, webctType);
+//		if (lastModified!=0)
+//			fileobj.put(DATE, format?);
+		fileobj.put(SIZE, size);
+//		fileobj.put(URL, url);
+		fileobj.put(SOURCE, url);
+		return fileobj;
+	}
+	private static JSONObject getLinkObject(String title, String description, String webctType, long lastModified, long size, String url) throws JSONException {
+		JSONObject fileobj = new JSONObject();
+		fileobj.put(TITLE, title);
+		if (description!=null)
+			fileobj.put(DESCRIPTION, description);
+		if (webctType!=null)
+			fileobj.put(WEBCT_TYPE, webctType);
 //		if (lastModified!=0)
 //			fileobj.put(DATE, format?);
 		fileobj.put(SIZE, size);
 		fileobj.put(URL, url);
 		return fileobj;
 	}
-	private static JSONObject getFolderObject(String title, String path, long lastModified) throws JSONException {
+	private static JSONObject getFolderObject(String title, String description, String webctType, String path, long lastModified) throws JSONException {
 		JSONObject fileobj = new JSONObject();
 		fileobj.put(TITLE, title);
+		if (description!=null)
+			fileobj.put(DESCRIPTION, description);
+		if (webctType!=null)
+			fileobj.put(WEBCT_TYPE, webctType);
 //		if (lastModified!=0)
 //			fileobj.put(DATE, format?);
 		fileobj.put(SIZE, 0);
@@ -86,12 +117,12 @@ public class MoodleRepository {
 			logger.log(Level.WARNING, "Could not find Person "+username);
 			return userobj;
 		}
-		list.put(getFolderObject(username, root+getFilename(p)+"/", 0));
+		list.put(getFolderObject(username, null, "Person folder", root+getFilename(p)+"/", 0));
 		// LCs
 		List<LearningContext> lcs = DbUtils.getLearningContextsForPersonAsRole(s, p, DbUtils.getRoleDefinitionForSectionDesigner(s));
 		Collections.sort(lcs, new LearningContextComparator());
 		for (LearningContext lc : lcs) {
-			list.put(getFolderObject(lc.getName(), root+getFilename(lc)+"/", 0));
+			list.put(getFolderObject(lc.getName(), DbUtils.getDescription(lc), lc.getLcType().getTypeCode(), root+getFilename(lc)+"/", 0));
 		}
 		
 		return userobj;
@@ -122,9 +153,21 @@ public class MoodleRepository {
 		patharr.put(getPathObject(root, root));
 
 		String elements [] = path.split("/");
+		StringBuffer pathbuf = new StringBuffer();
+		pathbuf.append("/");
 		for (int ei=0; ei<elements.length; ei++) {
-			logger.log(Level.INFO, "Path element "+ei+": "+elements[ei]);
-			// TODO ...
+			String filename = elements[ei];
+			if (filename.length()==0)
+				continue;
+			logger.log(Level.INFO, "Path element "+ei+": "+filename);
+			Object pathel = getPathElementObject(s, filename);
+			String name = getPathElementName(pathel);
+			pathbuf.append(filename);
+			pathbuf.append("/");
+			JSONObject pathobj = new JSONObject();
+			pathobj.put(NAME, name!=null ? name : "null");
+			pathobj.put(PATH, pathbuf.toString());
+			patharr.put(pathobj);
 		}
 		if (elements.length==0) {
 			logger.log(Level.WARNING, "path is empty ("+path+")");
@@ -134,44 +177,100 @@ public class MoodleRepository {
 		JSONArray list = new JSONArray();
 
 		String filename = elements[elements.length-1];
+		Object pathel = getPathElementObject(s, filename);
+		CmsContentEntry ce = getPathElementContentEntry(s, pathel);
+		if (ce!=null)
+			list = getChildren(s, ce, path);
+
+		listing.put(LIST, list);
+		
+		return listing;
+	}
+	private static Object getPathElementObject(Session s, String filename) {
 		String type = getFilenameType(filename);
 		BigDecimal id = getFilenameId(filename);
 		
 		if (PERSON_TYPE.equals(type)) {
 			Person p = (Person)s.createQuery("from Person as p where p.id=?").setBigDecimal(0, id).uniqueResult();
 			if (p==null) {
-				logger.log(Level.WARNING, "Could not file Person "+id);
-				return listing;
+				logger.log(Level.WARNING, "Could not find Person "+id);
+				return null;
 			}
-			BigDecimal folderId = p.getHomefolderId();
-			CmsContentEntry ce = (CmsContentEntry)s.createQuery("from CmsContentEntry as ce where ce.id=?").setBigDecimal(0, folderId).uniqueResult();
-			list = getChildren(s, ce, path);
+			return p;
 		}
 		else if (LC_TYPE.equals(type)) {
 			LearningContext lc = (LearningContext)s.createQuery("from LearningContext as lc where lc.id=?").setBigDecimal(0, id).uniqueResult();
 			if (lc==null) {
 				logger.log(Level.WARNING, "Could not file LearningContext "+id);
-				return listing;
+				return null;
 			}
-			CmsContentEntry ce = lc.getCmsContentEntry();
-			if (ce==null) {
-				logger.log(Level.WARNING, "LearningContext "+id+" had no CmsContentEntry");
-				return listing;				
-			}
-			list = getChildren(s, lc.getCmsContentEntry(), path);			
+			return lc;
 		}
 		else if (CE_TYPE.equals(type)) {
 			CmsContentEntry ce = (CmsContentEntry)s.createQuery("from CmsContentEntry as ce where ce.id=?").setBigDecimal(0, id).uniqueResult();
 			if (ce==null) {
 				logger.log(Level.WARNING, "Could not file CmsContentEntry "+id);
-				return listing;
+				return null;
 			}
-			list = getChildren(s, ce, path);			
+			return ce;
 		}
-		
-		listing.put(LIST, sortChildren(list));
-		
-		return listing;
+		else if (FC_TYPE.equals(type)) {
+			CmsFileContent fc = (CmsFileContent)s.createQuery("from CmsFileContent as fc where fc.id=?").setBigDecimal(0, id).uniqueResult();
+			if (fc==null) {
+				logger.log(Level.WARNING, "Could not file CmsFileContent "+id);
+				return null;
+			}
+			return fc;
+		}
+		logger.log(Level.WARNING, "Unknown path element type "+filename);
+		return null;
+	}
+	private static CmsContentEntry getPathElementContentEntry(Session s, Object pathElementObject) {
+		if (pathElementObject==null)
+			return null;
+		if (pathElementObject instanceof Person) {
+			Person p = (Person)pathElementObject;
+			BigDecimal folderId = p.getHomefolderId();
+			CmsContentEntry ce = (CmsContentEntry)s.createQuery("from CmsContentEntry as ce where ce.id=?").setBigDecimal(0, folderId).uniqueResult();
+			return ce;
+		}
+		else if (pathElementObject instanceof LearningContext) {
+			LearningContext lc = (LearningContext)pathElementObject;
+			CmsContentEntry ce = lc.getCmsContentEntry();
+			if (ce==null) {
+				logger.log(Level.WARNING, "LearningContext "+lc.getId()+" had no CmsContentEntry");
+				return null;				
+			}
+			return ce;
+		}
+		else if (pathElementObject instanceof CmsContentEntry) {
+			CmsContentEntry ce = (CmsContentEntry)pathElementObject;
+			return ce;
+		}
+		else {
+			logger.log(Level.WARNING, "pathElementObject of unsupported type "+pathElementObject.getClass());
+			return null;
+		}
+	}
+	private static String getPathElementName(Object pathElementObject) {
+		if (pathElementObject instanceof Person) {
+			Person p = (Person)pathElementObject;
+			return p.getWebctId();
+		}
+		else if (pathElementObject instanceof LearningContext) {
+			LearningContext lc = (LearningContext)pathElementObject;
+			return lc.getName();
+		}
+		else if (pathElementObject instanceof CmsContentEntry) {
+			CmsContentEntry ce = (CmsContentEntry)pathElementObject;
+			return ce.getName();
+		}
+		else {
+			if (pathElementObject!=null)
+				logger.log(Level.WARNING, "pathElementName of unsupported type "+pathElementObject.getClass());
+			return null;
+		}
+	
 	}
 	private static JSONArray sortChildren(JSONArray list) throws JSONException {
 		Vector<JSONObject> items = new Vector<JSONObject>();
@@ -187,7 +286,27 @@ public class MoodleRepository {
 		JSONArray list = new JSONArray();
 		String typename = DbUtils.getTypename(ce);
 		if (DbUtils.ORGANIZER_PAGE_TYPE.equals(typename)) {
-			// TODO ...
+
+			Set<CmsLink> linkset = ce.getCmsLinksForLeftobjectId();
+			List<CmsLink> links = new ArrayList<CmsLink>();
+			links.addAll(linkset);
+			Collections.sort(links, new OrganizerlinkComparator());
+			
+			for(CmsLink link : links) {
+				CmsContentEntry child = link.getCmsContentEntryByRightobjectId();
+				// default name/desc from linked item
+				String linkName = child.getName();
+				String linkDesc = DbUtils.getText(child.getDescription());
+				CoOrganizerlink orgLink = link.getCoOrganizerlink();
+				if (orgLink!=null) {
+					// should be! - override?!
+					if (orgLink.getLinkname()!=null)
+						linkName = orgLink.getLinkname();
+					if (orgLink.getLongDescription()!=null)
+						linkDesc = DbUtils.getText(orgLink.getLongDescription());
+				}
+				list.put(getItem(s, child, linkName, linkDesc, path));
+			}
 		}
 		else {
 			// children...
@@ -195,6 +314,7 @@ public class MoodleRepository {
 			for (CmsContentEntry child : children) {
 				list.put(getItem(s, child, path));
 			}
+			list = sortChildren(list);
 		}
 		return list;
 	}
@@ -203,10 +323,16 @@ public class MoodleRepository {
 	private static JSONObject getItem(Session s, CmsContentEntry ce,
 			String parentPath) throws JSONException {
 		String name = ce.getName();
-		return getItem(s, ce, name, parentPath);
+		String description = DbUtils.getDescription(ce);
+		return getItem(s, ce, name, description, parentPath);
 	}
-	private static JSONObject getItem(Session s, CmsContentEntry ce, String name,
+	private static JSONObject getItem(Session s, CmsContentEntry ce, String name, String description,
 			String parentPath) throws JSONException {
+		String typename = DbUtils.getTypename(ce);
+		CoUrl url = ce.getCoUrl();
+		if (url!=null && url.getLink()!=null) {
+			return getLinkObject(name, description, typename, 0, 0, url.getLink());
+		}
 		CmsFileContent fc = ce.getCmsFileContent();
 		if (fc!=null) {
 			String filename = getFilename(fc);
@@ -218,10 +344,9 @@ public class MoodleRepository {
 			catch (Exception e) {
 				logger.log(Level.WARNING, "Could not get length of FileContent "+fc.getId(), e);
 			}
-			return getFileObject(name, 0, len, parentPath+filename+"/"+ce.getName());
+			return getFileObject(name, description, typename, 0, len, parentPath+filename+"/"+ce.getName());
 		}
 		else {
-			String typename = DbUtils.getTypename(ce);
 			if (DbUtils.PAGE_TYPE.equals(typename)) {
 				// Page Type = link
 				Set<CmsLink> links = ce.getCmsLinksForLeftobjectId();
@@ -232,17 +357,17 @@ public class MoodleRepository {
 					CmsLink link = links.iterator().next();
 					CmsContentEntry child = link.getCmsContentEntryByRightobjectId();
 					if (child!=null)
-						return getItem(s, child, name, parentPath);
+						return getItem(s, child, name, description, parentPath);
 					logger.log(Level.WARNING,"PAGE_TYPE with link without child");
 				}
-				return getFileObject(name, 0, 0, parentPath+getFilename(ce)+".error");
+				return getFileObject(name, description, typename, 0, 0, parentPath+getFilename(ce)+".error");
 
 			} else {
 				// Organizer 
 				// other folder type
 				String filename = getFilename(ce);
 				String path = parentPath+filename+"/";
-				JSONObject folderobj = getFolderObject(name, path, 0);
+				JSONObject folderobj = getFolderObject(name, description, typename, path, 0);
 				//folderobj.put(CHILDREN, getChildren(s, ce, path));
 				return folderobj;
 			}
@@ -262,5 +387,32 @@ public class MoodleRepository {
 		while(i<filename.length() && !Character.isDigit(filename.charAt(i)))
 			i++;
 		return filename.substring(0, i);
+	}
+	/** get_file for 'url' returned from getListingForPath 
+	 * @throws SQLException */
+	public static File getFile(Session s, String url, File tmpdir) throws IOException, SQLException {
+		if (url.startsWith("http"))
+			// external URL...
+			return null;
+		int ix= url.lastIndexOf("/");
+		if (ix<0 || ix>=url.length()-1) {
+			throw new IOException("getFile for invalid file url "+url);
+		}
+		String pathElements[] = url.split("/");
+		String filename = pathElements[pathElements.length-2];
+		Object pathobj = getPathElementObject(s, filename);
+		if (!(pathobj instanceof CmsFileContent)) 
+			throw new IOException("getFile for non-CmsFileContent "+url);
+		CmsFileContent fc = (CmsFileContent)pathobj;
+		
+		File file = new File(tmpdir, url);
+		file.getParentFile().mkdirs();
+		if (file.exists() && file.isFile() && file.length()==fc.getContent().length())
+			logger.log(Level.INFO, "File already exists: "+file);
+		else {
+			logger.info("Download "+file);
+			DbUtils.dumpCmsFileContent(fc, file);
+		}
+		return file;
 	}
 }

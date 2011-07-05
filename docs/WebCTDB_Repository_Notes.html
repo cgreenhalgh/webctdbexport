@@ -1,8 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
-<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>WebCT-DB Repository Notes</title>
-
-</head><body>
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"><title>WebCT-DB Repository Notes</title></head>
+<body>
 <h1>WebCT-DB Repository Notes</h1>
 <p>Chris Greenhalgh, 2011-07-04</p>
 <p>A first integration point between WebCT-DB and Moodle is the
@@ -18,5 +17,5 @@ $page=''') - returns a list of files like this:<br><span class="Apple-style-span
 the file browser calls get_listing initially with no path. It may call
 it subsequently with the path(s) returned in the path element
 (breadcrumbs) or&nbsp; folder item.</li><li>The full tree can be returned, or dynload set to true and children omitted to force additional (recursive) queries &nbsp;&nbsp;</li><li>Each call needs to return:</li><ul><li>the path as a list of containing contexts, each with their own path and name</li><li>the children - files and folders - of that path, with a url for each file and a path for each folder</li></ul></ul><li>get_file($url, $filename = '') - get and save; url presumably from get_listing item url; by default just uses curl.</li><li>[get_link($url) - map iternal file url to normal url - only if URL is not really...]</li>
-</ul><h2>WebCT-DB Repository Mapping</h2><p>There are a number of initial cases for the implementation of get_listing against WebCT-DB:</p><ul><li>Root [username] =&gt; user's home files, plus each module that they are a designer for (could include hierarchy)&nbsp;</li><ul><li>path '/USERNAME'</li></ul><li>Learning context =&gt; CMS (ContentEntry) hierarchy for Learning Context [optional]</li><ul><li>path .../lcNNN</li></ul><li>User's home files =&gt; CMS hierarchy for Person</li><ul><li>path .../pNNN</li></ul><li>ContentEntry =&gt; CMS children / links</li><ul><li>path .../ceNNN</li><li>path .../fcNNN.EXT</li></ul></ul><p>For file, there must be a way to serve the file content itself, initial from a simple URL</p><p>The get_listing implementation requires:</p><ul><li>username (presumed the same for WebCT and Moodle)</li><li>path - unique name for 'folder', i.e. [user] root, module learning context, person, cms 'folder'</li><li>[security - sequence, signature]</li></ul>
+</ul><h2>WebCT-DB Repository Mapping</h2><p>There are a number of initial cases for the implementation of get_listing against WebCT-DB:</p><ul><li>Root [username] =&gt; user's home files, plus each module that they are a designer for (could include hierarchy)&nbsp;</li><ul><li>path '/USERNAME'</li></ul><li>Learning context =&gt; CMS (ContentEntry) hierarchy for Learning Context [optional]</li><ul><li>path .../lcNNN</li></ul><li>User's home files =&gt; CMS hierarchy for Person</li><ul><li>path .../pNNN</li></ul><li>ContentEntry =&gt; CMS children / links</li><ul><li>path .../ceNNN</li><li>path .../fcNNN/NAME.EXT</li></ul></ul><p>For file, there must be a way to serve the file content itself, initial from a simple URL</p><p>The get_listing implementation requires:</p><ul><li>username (presumed the same for WebCT and Moodle)</li><li>path - unique name for 'folder', i.e. [user] root, module learning context, person, cms 'folder'</li><li>[security - sequence, signature]</li></ul>
 </body></html>

@@ -269,7 +269,7 @@ public class DbUtils {
 			}
 		//}
 	}
-	private static void dumpCmsFileContent(CmsFileContent fc, File f) {
+	public static void dumpCmsFileContent(CmsFileContent fc, File f) {
 		Blob blob = fc.getContent();
 		try {
 			logger.info("    blob "+blob.length()+" bytes -> "+f);
@@ -406,10 +406,13 @@ public class DbUtils {
 			dumpCmsContentEntry(s, ce, dumpDir);
 		return filename+".html";
 	}
-	private static String getDescription(CmsContentEntry ce) {
+	public static String getDescription(CmsContentEntry ce) {
 		return getText(ce.getDescription());
 	}
-	private static String getText(Clob desc) {
+	public static String getDescription(LearningContext lc) {
+		return getText(lc.getDescription());
+	}
+	static String getText(Clob desc) {
 		if (desc==null)
 			return null;
 		try {

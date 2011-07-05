@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Web app deployment descriptor. -->
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+  
+  <!-- =====================================================================
+       General web application properties
+       ===================================================================== -->
+  
+  <!-- web application name -->
+  <display-name>WebCT-DB WebApp</display-name>
+  <!-- web application description -->
+  <description>WebCT-DB WebApp</description>
+  
+  <!-- =====================================================================
+       General web application configuration (esp. Log4j & Spring)
+       ===================================================================== -->
+  
+  <!-- Used in Log4j.properties: 
+       Key of the system property that should specify the root directory of this
+       web app. Applied by WebAppRootListener or Log4jConfigListener. -->
+  <context-param>
+    <param-name>webAppRootKey</param-name>
+    <param-value>webapp.root</param-value>
+  </context-param>
+
+  <!-- Location of the Log4J config file (used by Spring), Applied by Log4jConfigListener. -->
+  <context-param>
+    <param-name>log4jConfigLocation</param-name>
+    <!-- our log4j configuration file path -->
+    <param-value>/WEB-INF/log4j.properties</param-value>
+  </context-param>
+
+	<!-- =====================================================================
+		Servlet configuration 
+		===================================================================== -->
+
+	<servlet>
+		<servlet-name>GetListingServlet</servlet-name>
+		<servlet-class>webctdbexport.server.GetListingServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GetListingServlet</servlet-name>
+		<url-pattern>/get_listing/*</url-pattern>
+	</servlet-mapping>  
+	
+	<servlet>
+		<servlet-name>GetFileServlet</servlet-name>
+		<servlet-class>webctdbexport.server.GetFileServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	 <servlet-mapping>
+		<servlet-name>GetFileServlet</servlet-name>
+		<url-pattern>/get_file/*</url-pattern>
+	</servlet-mapping>  
+
+	<!-- =====================================================================
+		General web application configuration - home, errors, etc.
+		===================================================================== -->
+
+	<!-- what file/path should be return when a request is made for the web application path itself? -->
+	<welcome-file-list>
+		<!-- a static test file for now -->
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

@@ -391,6 +391,21 @@ public class MoodleRepository {
 	/** get_file for 'url' returned from getListingForPath 
 	 * @throws SQLException */
 	public static File getFile(Session s, String url, File tmpdir) throws IOException, SQLException {
+		CmsFileContent fc = getFileContent(s, url);
+		if (fc==null)
+			return null;
+		
+		File file = new File(tmpdir, url);
+		file.getParentFile().mkdirs();
+		if (file.exists() && file.isFile() && file.length()==fc.getContent().length())
+			logger.log(Level.INFO, "File already exists: "+file);
+		else {
+			logger.info("Download "+file);
+			DbUtils.dumpCmsFileContent(fc, file);
+		}
+		return file;
+	}
+	public static CmsFileContent getFileContent(Session s, String url) throws IOException {
 		if (url.startsWith("http"))
 			// external URL...
 			return null;
@@ -404,15 +419,6 @@ public class MoodleRepository {
 		if (!(pathobj instanceof CmsFileContent)) 
 			throw new IOException("getFile for non-CmsFileContent "+url);
 		CmsFileContent fc = (CmsFileContent)pathobj;
-		
-		File file = new File(tmpdir, url);
-		file.getParentFile().mkdirs();
-		if (file.exists() && file.isFile() && file.length()==fc.getContent().length())
-			logger.log(Level.INFO, "File already exists: "+file);
-		else {
-			logger.info("Download "+file);
-			DbUtils.dumpCmsFileContent(fc, file);
-		}
-		return file;
+		return fc;
 	}
 }

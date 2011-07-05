@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +43,7 @@ public class MoodleRepository {
 	public static final String PATH = "path";
 	public static final String TITLE = "title";
 	public static final String SIZE = "size";
-	public static final String URL = "url";
+	//public static final String URL = "url";
 	public static final String SOURCE = "source";
 	public static final String NAME = "name";
 	public static final String LIST = "list";
@@ -83,7 +85,7 @@ public class MoodleRepository {
 //		if (lastModified!=0)
 //			fileobj.put(DATE, format?);
 		fileobj.put(SIZE, size);
-		fileobj.put(URL, url);
+		fileobj.put(SOURCE, url);
 		return fileobj;
 	}
 	private static JSONObject getFolderObject(String title, String description, String webctType, String path, long lastModified) throws JSONException {
@@ -102,14 +104,16 @@ public class MoodleRepository {
 	}
 	
 	/** get_listing response for a user, i.e. modules and person 
+	 * @param showLinks 
+	 * @param showFiles 
 	 * @throws JSONException */
-	public static JSONObject getListingForUser(Session s, String username) throws JSONException {
+	public static JSONObject getListingForUser(Session s, String username, boolean showFiles, boolean showLinks) throws JSONException {
 		JSONObject userobj = getListingObject();
 		JSONArray path = new JSONArray();
 		userobj.put(PATH, path);
 		
 		String root = "/";
-		path.put(getPathObject(root, root));
+		path.put(getPathObject("WebCT", root));
 		
 		JSONArray list = new JSONArray();
 		userobj.put(LIST, list);
@@ -120,7 +124,9 @@ public class MoodleRepository {
 			logger.log(Level.WARNING, "Could not find Person "+username);
 			return userobj;
 		}
-		list.put(getFolderObject(username, null, "Person folder", root+getFilename(p)+"/", 0));
+		if (showFiles) {
+			list.put(getFolderObject(username, null, "Person folder", root+getFilename(p)+"/", 0));
+		}
 		// LCs
 		List<LearningContext> lcs = DbUtils.getLearningContextsForPersonAsRole(s, p, DbUtils.getRoleDefinitionForSectionDesigner(s));
 		Collections.sort(lcs, new LearningContextComparator());
@@ -146,15 +152,17 @@ public class MoodleRepository {
 		return FC_TYPE+fc.getId();
 	}
 	/** get_listing for a path, i.e. person, learning context, content entry, ... 
+	 * @param showLinks 
+	 * @param showFiles 
 	 * @throws JSONException 
 	 * @throws UnsupportedEncodingException */
-	public static JSONObject getListingForPath(Session s, String path) throws JSONException, UnsupportedEncodingException {
+	public static JSONObject getListingForPath(Session s, String path, boolean showFiles, boolean showLinks) throws JSONException, UnsupportedEncodingException {
 		JSONObject listing = getListingObject();
 		JSONArray patharr = new JSONArray();
 		listing.put(PATH, patharr);
 
 		String root = "/";
-		patharr.put(getPathObject(root, root));
+		patharr.put(getPathObject("WebCT", root));
 
 		String elements [] = path.split("/");
 		StringBuffer pathbuf = new StringBuffer();
@@ -184,7 +192,7 @@ public class MoodleRepository {
 		Object pathel = getPathElementObject(s, filename);
 		CmsContentEntry ce = getPathElementContentEntry(s, pathel);
 		if (ce!=null)
-			list = getChildren(s, ce, path);
+			list = getChildren(s, ce, path, showFiles, showLinks);
 
 		listing.put(LIST, list);
 		
@@ -245,6 +253,7 @@ public class MoodleRepository {
 				logger.log(Level.WARNING, "LearningContext "+lc.getId()+" had no CmsContentEntry");
 				return null;				
 			}
+			logger.log(Level.INFO, "LearningContext CmsContentEntry is type "+DbUtils.getTypename(ce));
 			return ce;
 		}
 		else if (pathElementObject instanceof CmsContentEntry) {
@@ -286,9 +295,54 @@ public class MoodleRepository {
 			children.put(o);
 		return children;
 	}
-	private static JSONArray getChildren(Session s, CmsContentEntry ce, String path) throws JSONException, UnsupportedEncodingException {
+	private static JSONArray getChildren(Session s, CmsContentEntry ce, String path, boolean showFiles, boolean showLinks) throws JSONException, UnsupportedEncodingException {
 		JSONArray list = new JSONArray();
 		String typename = DbUtils.getTypename(ce);
+		// other special cases...
+		// - learning context -> Container/LcHomeFolder -> Container/RepositoryFolder -> Template/Default [files] 
+		//    -> ORGANIZER_PAGE_TYPE/Default -> ContentFile/... | PAGE_TYPE/Default | URL_TYPE/Default
+		//    |  WebLinkContainer/Default -> WEBLINKSCATEGORY/Default -> URL_TYPE/Default
+		//    |  Folder/Default
+		// TODO
+		if (DbUtils.LC_HOME_FOLDER_TYPE.equals(typename)) {
+			Set<CmsContentEntry> children = ce.getCmsContentEntriesForParentId();
+			if (children.size()==1) {
+				ce = children.iterator().next();
+				typename = DbUtils.getTypename(ce);
+			}
+			if (DbUtils.REPOSITORY_FOLDER_TYPE.equals(typename)) {
+				children = ce.getCmsContentEntriesForParentId();
+				if (children.size()==1) {
+					CmsContentEntry filesce = children.iterator().next();
+					String filesTypename = DbUtils.getTypename(filesce);
+					if (DbUtils.TEMPLATE_TYPE.equals(filesTypename)) {
+						if (showFiles)
+							list.put(getItem(s, filesce, "Files", null, path));
+						// just what we expected
+						// look for ORGANIZER_PAGE_TYPE/Default and WebLinkContainer/Default 
+						{
+							//ce.getCmsContentEntryByParentId()
+							//ce.getCmsCeSubtype().getCmsCeType().getName()
+							Query q = s.createQuery("from CmsContentEntry as ce where ce.cmsContentEntryByParentId=? and ce.cmsCeSubtype.cmsCeType.name='ORGANIZER_PAGE_TYPE'").setEntity(0, filesce);
+							List ces = q.list();
+							for (Object ceo : ces) {
+								CmsContentEntry orgce = (CmsContentEntry)ceo;
+								list.put(getItem(s, orgce, "Home Page", orgce.getName(), path));							
+							}
+						}
+						if (showLinks) {
+							Query q = s.createQuery("from CmsContentEntry as ce where ce.cmsContentEntryByParentId=? and ce.cmsCeSubtype.cmsCeType.name='WebLinkContainer'").setEntity(0, filesce);
+							List ces = q.list();
+							for (Object ceo : ces) {
+								CmsContentEntry orgce = (CmsContentEntry)ceo;
+								list.put(getItem(s, orgce, "Links", orgce.getName(), path));							
+							}							
+						}
+						return list;
+					}
+				}
+			}
+		}
 		if (DbUtils.ORGANIZER_PAGE_TYPE.equals(typename)) {
 
 			Set<CmsLink> linkset = ce.getCmsLinksForLeftobjectId();
@@ -309,18 +363,60 @@ public class MoodleRepository {
 					if (orgLink.getLongDescription()!=null)
 						linkDesc = DbUtils.getText(orgLink.getLongDescription());
 				}
-				list.put(getItem(s, child, linkName, linkDesc, path));
+				if (include(child, showFiles, showLinks))
+					list.put(getItem(s, child, linkName, linkDesc, path));
 			}
 		}
-		else {
+		else if (DbUtils.TEMPLATE_TYPE.equals(typename)) {
+			// filter for files only
+			Set<CmsContentEntry> children = ce.getCmsContentEntriesForParentId();
+			for (CmsContentEntry child : children) {
+				String childTypename = DbUtils.getTypename(child);
+				if (DbUtils.FOLDER_TYPE.equals(childTypename) || child.getCmsFileContent()!=null) {
+					if (include(child, showFiles, showLinks))
+						list.put(getItem(s, child, path));
+				}
+				else
+					logger.fine("Skipping item type "+childTypename+" under "+DbUtils.TEMPLATE_TYPE);
+			}
+			list = sortChildren(list);
+			
+		} else {
 			// children...
 			Set<CmsContentEntry> children = ce.getCmsContentEntriesForParentId();
 			for (CmsContentEntry child : children) {
-				list.put(getItem(s, child, path));
+				if (include(child, showFiles, showLinks))
+					list.put(getItem(s, child, path));
 			}
 			list = sortChildren(list);
 		}
 		return list;
+	}
+	private static boolean include(CmsContentEntry ce, boolean showFiles,
+			boolean showLinks) {
+		if (ce.getCmsFileContent()!=null) {
+			return showFiles;
+		}
+		String typename = DbUtils.getTypename(ce);
+		if (DbUtils.PAGE_TYPE.equals(typename)) {
+			// Page Type = link
+			Set<CmsLink> links = ce.getCmsLinksForLeftobjectId();
+			if (links.size()>0) {
+				if (links.size()>1) {
+					logger.log(Level.WARNING, "PAGE_TYPE with "+links.size()+" links! - only using first");					
+				}
+				CmsLink link = links.iterator().next();
+				CmsContentEntry child = link.getCmsContentEntryByRightobjectId();
+				if (child!=null)
+					return include(child, showFiles, showLinks);
+				logger.log(Level.WARNING,"PAGE_TYPE with link without child");
+			}
+		}
+		if (DbUtils.URL_TYPE.equals(typename)) {
+			return showLinks;
+		}
+		// yes?
+		return true;
 	}
 	/** get file/folder JSONObject for this entry 
 	 * @throws JSONException 
@@ -344,7 +440,9 @@ public class MoodleRepository {
 			// fcNNN/actual-file-name??
 			long len = 0;
 			try {
-				len =  fc.getContent().length();
+				Blob blob = fc.getContent();
+				len =  blob.length();
+				//blob.free();
 			}
 			catch (Exception e) {
 				logger.log(Level.WARNING, "Could not get length of FileContent "+fc.getId(), e);
@@ -402,12 +500,9 @@ public class MoodleRepository {
 		
 		File file = new File(tmpdir, url);
 		file.getParentFile().mkdirs();
-		if (file.exists() && file.isFile() && file.length()==fc.getContent().length())
-			logger.log(Level.INFO, "File already exists: "+file);
-		else {
-			logger.info("Download "+file);
-			DbUtils.dumpCmsFileContent(fc, file);
-		}
+		long len = 0;
+		logger.info("Download "+file);
+		DbUtils.dumpCmsFileContent(fc, file);
 		return file;
 	}
 	public static CmsFileContent getFileContent(Session s, String url) throws IOException {

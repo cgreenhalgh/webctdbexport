@@ -55,7 +55,7 @@ public class TestRepository {
 			File dir = new File("tmp."+username);
 			dir.mkdirs();
 			System.out.println("Write to "+dir);
-			JSONObject listing = MoodleRepository.getListingForUser(s, username);
+			JSONObject listing = MoodleRepository.getListingForUser(s, username, true, true);
 
 			writeResponse(listing, dir);
 
@@ -67,7 +67,10 @@ public class TestRepository {
 						items.add(list.getJSONObject(li));
 				}
 			}			
+			s.close();
+			s = null;
 			while(items.size()>0) {
+				s = DbUtils.getSession();
 				JSONObject item = items.remove(0);
 				if (item.has(MoodleRepository.SOURCE)) {
 					String url = item.getString(MoodleRepository.SOURCE);
@@ -87,7 +90,7 @@ public class TestRepository {
 					String title = item.getString(MoodleRepository.TITLE);
 					String path = item.getString(MoodleRepository.PATH);
 					System.out.println("dump folder "+title+" path="+path);
-					JSONObject itemlisting = MoodleRepository.getListingForPath(s, path);
+					JSONObject itemlisting = MoodleRepository.getListingForPath(s, path, true, true);
 					File itemdir = new File(dir+path);
 					itemdir.mkdirs();
 					writeResponse(itemlisting, itemdir);
@@ -100,6 +103,8 @@ public class TestRepository {
 					}
 				}				
 				// TODO ...
+				s.close();
+				s= null;
 			}
 			
 			// TODO Auto-generated method stub
@@ -182,11 +187,11 @@ public class TestRepository {
 				else
 					pw.println("<li><a href=\""+relativePath+url+"\">"+title+"</a> (file"+(size>=0 ? ", "+size+" bytes" : "")+", "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
 			}
-			else if (item.has(MoodleRepository.URL)) {
-				String url = item.getString(MoodleRepository.URL);
-				// link
-				pw.println("<li><a href=\""+url+"\">"+title+"</a> (link, "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
-			}
+//			else if (item.has(MoodleRepository.URL)) {
+//				String url = item.getString(MoodleRepository.URL);
+//				// link
+//				pw.println("<li><a href=\""+url+"\">"+title+"</a> (link, "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
+//			}
 			else {
 				pw.println("<li>"+title+" ("+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");				
 			}

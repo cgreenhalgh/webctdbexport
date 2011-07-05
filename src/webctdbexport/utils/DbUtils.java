@@ -114,6 +114,11 @@ public class DbUtils {
 	}
 	public static final String ORGANIZER_PAGE_TYPE = "ORGANIZER_PAGE_TYPE/Default";
 	public static final String PAGE_TYPE = "PAGE_TYPE/Default";
+	public static final String LC_HOME_FOLDER_TYPE = "Container/LcHomeFolder";
+	public static final String REPOSITORY_FOLDER_TYPE = "Container/RepositoryFolder";
+	public static final String TEMPLATE_TYPE = "Template/Default";
+	public static final String FOLDER_TYPE = "Folder/Default";
+	public static final String URL_TYPE = "URL_TYPE/Default";
 	public static String getTypename(CmsContentEntry ce) {
 		CmsCeSubtype subtype = ce.getCmsCeSubtype();
 		String typename=(subtype!=null ? subtype.getCmsCeType().getName()+"/"+subtype.getId().getName() : "unknown/null");
@@ -272,6 +277,10 @@ public class DbUtils {
 	public static void dumpCmsFileContent(CmsFileContent fc, File f) {
 		Blob blob = fc.getContent();
 		try {
+			if (f.exists() && f.isFile() && f.length()==blob.length()) {
+				logger.log(Level.INFO, "File already exists: "+f);
+				return;
+			}
 			logger.info("    blob "+blob.length()+" bytes -> "+f);
 			OutputStream os = new FileOutputStream(f);
 			InputStream is = blob.getBinaryStream();
@@ -295,6 +304,12 @@ public class DbUtils {
 			}				
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Could not write blob to "+f, e);
+		}
+		finally {
+//			try {
+//				//blob.free();
+//			} catch (SQLException e) {
+//			}
 		}
 	}
 	private static void dumpOrganizerPage(Session s, CmsContentEntry ce, String name,

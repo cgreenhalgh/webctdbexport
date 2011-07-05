@@ -39,6 +39,9 @@ public class GetListingServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String path = req.getPathInfo();
 		String username = req.getParameter("username");
+		String view = req.getParameter("view");
+		boolean showFiles = !("links".equals(view));
+		boolean showLinks = !("files".equals(view));
 		logger.log(Level.INFO, "GetListingServlet path="+path+" username="+username);
 
 		JSONObject listing = null;
@@ -50,7 +53,7 @@ public class GetListingServlet extends HttpServlet {
 			}
 			Session s = DbUtils.getSession();
 			try {
-				listing = MoodleRepository.getListingForUser(s, username);
+				listing = MoodleRepository.getListingForUser(s, username, showFiles, showLinks);
 			} catch (JSONException e) {
 				logger.log(Level.SEVERE, "getting user listing", e);
 				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "getting user listing for "+username+": "+e);
@@ -63,7 +66,7 @@ public class GetListingServlet extends HttpServlet {
 		else {
 			Session s = DbUtils.getSession();
 			try {
-				listing = MoodleRepository.getListingForPath(s, path);
+				listing = MoodleRepository.getListingForPath(s, path, showFiles, showLinks);
 			} catch (JSONException e) {
 				logger.log(Level.SEVERE, "getting listing for "+path, e);
 				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "getting listing for "+path+": "+e);

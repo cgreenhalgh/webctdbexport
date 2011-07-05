@@ -97,6 +97,7 @@ public class MoodleRepository {
 //			fileobj.put(DATE, format?);
 		fileobj.put(SIZE, 0);
 		fileobj.put(PATH, path);
+		fileobj.put(CHILDREN, new JSONArray());
 		return fileobj;
 	}
 	

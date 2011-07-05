@@ -5,7 +5,9 @@ package webctdbexport.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -143,8 +145,9 @@ public class MoodleRepository {
 		return FC_TYPE+fc.getId();
 	}
 	/** get_listing for a path, i.e. person, learning context, content entry, ... 
-	 * @throws JSONException */
-	public static JSONObject getListingForPath(Session s, String path) throws JSONException {
+	 * @throws JSONException 
+	 * @throws UnsupportedEncodingException */
+	public static JSONObject getListingForPath(Session s, String path) throws JSONException, UnsupportedEncodingException {
 		JSONObject listing = getListingObject();
 		JSONArray patharr = new JSONArray();
 		listing.put(PATH, patharr);
@@ -282,7 +285,7 @@ public class MoodleRepository {
 			children.put(o);
 		return children;
 	}
-	private static JSONArray getChildren(Session s, CmsContentEntry ce, String path) throws JSONException {
+	private static JSONArray getChildren(Session s, CmsContentEntry ce, String path) throws JSONException, UnsupportedEncodingException {
 		JSONArray list = new JSONArray();
 		String typename = DbUtils.getTypename(ce);
 		if (DbUtils.ORGANIZER_PAGE_TYPE.equals(typename)) {
@@ -319,15 +322,16 @@ public class MoodleRepository {
 		return list;
 	}
 	/** get file/folder JSONObject for this entry 
-	 * @throws JSONException */
+	 * @throws JSONException 
+	 * @throws UnsupportedEncodingException */
 	private static JSONObject getItem(Session s, CmsContentEntry ce,
-			String parentPath) throws JSONException {
+			String parentPath) throws JSONException, UnsupportedEncodingException {
 		String name = ce.getName();
 		String description = DbUtils.getDescription(ce);
 		return getItem(s, ce, name, description, parentPath);
 	}
 	private static JSONObject getItem(Session s, CmsContentEntry ce, String name, String description,
-			String parentPath) throws JSONException {
+			String parentPath) throws JSONException, UnsupportedEncodingException {
 		String typename = DbUtils.getTypename(ce);
 		CoUrl url = ce.getCoUrl();
 		if (url!=null && url.getLink()!=null) {
@@ -344,7 +348,7 @@ public class MoodleRepository {
 			catch (Exception e) {
 				logger.log(Level.WARNING, "Could not get length of FileContent "+fc.getId(), e);
 			}
-			return getFileObject(name, description, typename, 0, len, parentPath+filename+"/"+ce.getName());
+			return getFileObject(name, description, typename, 0, len, parentPath+filename+"/"+URLEncoder.encode(ce.getName(), "UTF-8"));
 		}
 		else {
 			if (DbUtils.PAGE_TYPE.equals(typename)) {

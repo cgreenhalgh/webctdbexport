@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -136,6 +137,30 @@ public class MoodleRepository {
 		
 		return userobj;
 	}
+	/** get_listing response for a whole DB, i.e. institutions.
+	 * @param showLinks 
+	 * @param showFiles 
+	 * @throws JSONException */
+	public static JSONObject getListingForRoot(Session s) throws JSONException {
+		JSONObject userobj = getListingObject();
+		JSONArray path = new JSONArray();
+		userobj.put(PATH, path);
+		
+		String root = "/";
+		path.put(getPathObject("WebCT", root));
+		
+		JSONArray list = new JSONArray();
+		userobj.put(LIST, list);
+
+		List institutions = DbUtils.getLearningContextsOfType(s, DbUtils.getLcType(s, DbUtils.LC_INSTITUTION));
+		for (Object lcio : institutions) {
+			LearningContext lc = (LearningContext)lcio;
+			logger.log(Level.INFO, "Institution: "+lc.getId()+" "+lc.getName());
+			list.put(getFolderObject(lc.getName(), DbUtils.getDescription(lc), lc.getLcType().getTypeCode(), root+getFilename(lc)+"/", 0));
+		}
+		
+		return userobj;
+	}
 	private static JSONObject getPathObject(String  name, String path) throws JSONException {
 		JSONObject pathobj = new JSONObject();
 		pathobj.put(NAME, name);
@@ -194,6 +219,21 @@ public class MoodleRepository {
 		if (ce!=null)
 			list = getChildren(s, ce, path, showFiles, showLinks);
 
+		if (pathel instanceof LearningContext) {
+			LearningContext lc = (LearningContext)pathel;
+			Set<LearningContext> children = lc.getLearningContexts();
+			List<LearningContext> lcs = new LinkedList<LearningContext>();
+			for (LearningContext child : children) {
+				lcs.add(child);
+			}
+			Collections.sort(lcs, new LearningContextComparator());
+
+			for (LearningContext child : lcs) {
+				String childTypeCode = child.getLcType().getTypeCode();
+				list.put(getFolderObject(child.getName(), DbUtils.getDescription(child), childTypeCode, path+getFilename(child)+"/", 0));
+			}
+		}
+		
 		listing.put(LIST, list);
 		
 		return listing;
@@ -248,6 +288,14 @@ public class MoodleRepository {
 		}
 		else if (pathElementObject instanceof LearningContext) {
 			LearningContext lc = (LearningContext)pathElementObject;
+			String lcTypeCode = lc.getLcType().getTypeCode();
+			// top-level
+			if (DbUtils.LC_INSTITUTION.equals(lcTypeCode))
+				return null;
+			// next level - year, school, etc.
+			if (DbUtils.LC_COURSE.equals(lcTypeCode))
+				return null;
+			//|| DbUtils.LC_
 			CmsContentEntry ce = lc.getCmsContentEntry();
 			if (ce==null) {
 				logger.log(Level.WARNING, "LearningContext "+lc.getId()+" had no CmsContentEntry");

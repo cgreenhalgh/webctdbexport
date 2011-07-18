@@ -42,6 +42,7 @@ import webctdbexport.db.CoTemplate;
 import webctdbexport.db.CoTemplateRootOrganizer;
 import webctdbexport.db.CoToc;
 import webctdbexport.db.CoUrl;
+import webctdbexport.db.LcType;
 import webctdbexport.db.LearningContext;
 import webctdbexport.db.Member;
 import webctdbexport.db.Person;
@@ -79,6 +80,24 @@ public class DbUtils {
 			logger.log(Level.WARNING, "Could not find RoleDefinition for SDES");
 		}
 		return rd;
+	}
+	/** the UoN - our working top-level */
+	public static final String LC_INSTITUTION = "Institution";
+	/** level under Institution, e.g. year, School */
+	public static final String LC_COURSE = "Course";
+	public static LcType getLcType(Session s, String typeCode) {
+		LcType lct = (LcType)s.createQuery("from LcType as lct where lct.typeCode=?").setString(0, typeCode).uniqueResult();
+		if (lct==null) {
+			logger.log(Level.WARNING, "Could not find LcType '"+typeCode+"'");
+		}
+		return lct;		
+	}
+	public static List getLearningContextsOfType(Session s, LcType lct) {
+		if (lct==null) {
+			logger.log(Level.WARNING, "getLearningContextsOfType with null LcType");
+			return new LinkedList<LearningContext>();
+		}
+		return s.createQuery("from LearningContext as lc where lc.lcType=?").setEntity(0, lct).list();
 	}
 	public static List<LearningContext> getLearningContextsForPersonAsRole(Session s, Person p, RoleDefinition rd) {
 		List ms = getMembersForPerson(s, p);

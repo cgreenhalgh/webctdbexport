@@ -159,9 +159,9 @@
 
 	<target name="testrepository">
 	
-		<java classpathref="hibernate" classname="webctdbexport.test.TestRepository" fork="false">
-			<jvmarg value="-Djava.security.manager"/>
-			<jvmarg value="-Djava.security.policy=etc/security.policy"/>
+		<java classpathref="hibernate" classname="webctdbexport.test.TestRepository" fork="true">
+			<!-- <jvmarg value="-Djava.security.manager"/>
+			<jvmarg value="-Djava.security.policy=etc/security.policy"/> -->
 			<!-- example user -->
 			<arg value="pszcmg"/>
 		</java>

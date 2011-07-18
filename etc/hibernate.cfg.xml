@@ -5,30 +5,14 @@
 <hibernate-configuration>
     <session-factory name="default">
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-		<!-- Disable the second-level cache  -->
         <property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
         <property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
-        <property name="hibernate.connection.password">XXX</property>
-        <property name="hibernate.connection.url">jdbc:oracle:thin:XXX:XXX:XXX</property>
+         <property name="hibernate.connection.password">XXX</property>
+        <property name="hibernate.connection.url">jdbc:oracle:thin:@XXX:XXX:XXX</property>
         <property name="hibernate.connection.username">XXX</property>
         <property name="hibernate.default_schema">WEBCT</property>
         <property name="hibernate.dialect">org.hibernate.dialect.Oracle8iDialect</property>
-		<!-- Echo all executed SQL to stdout -->
         <property name="hibernate.show_sql">true</property>
-		<!-- JDBC connection pool (use the built-in) -->
-		<!-- <property name="connection.pool_size">1</property> -->
-		<!-- C3P0 pool - getting problems with timeouts -->
-		<property name="c3p0.acquire_increment">1</property> 
-		<property name="c3p0.idle_test_period">100</property> <!-- seconds --> 
-		<property name="c3p0.max_size">5</property> 
-		<property name="c3p0.max_statements">0</property> 
-		<property name="c3p0.min_size">1</property> 
-		<property name="c3p0.timeout">100</property> <!-- seconds --> 
-		<property name="c3p0.idleConnectionTestPeriod">300</property> 
-
-		<!-- Enable Hibernate's automatic session context management -->
-		<property name="current_session_context_class">thread</property>
-
         <!--  removed itesm with $ in name for now - se hibernate.cfg.xml.full -->
         <mapping resource="webctdbexport/db/AssmtExtSubmissionMembers.hbm.xml" />
         <mapping resource="webctdbexport/db/ColMetaAttr.hbm.xml" />

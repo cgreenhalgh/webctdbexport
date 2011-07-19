@@ -77,7 +77,7 @@ public class DumpAll {
 					{
 						System.out.println("dump file "+item.getString(MoodleRepository.TITLE)+" source="+url);
 						// TODO SHA-1 stuff
-//						MoodleRepository.getFile(s, url, filedir);
+						MoodleRepository.getFile(conn, url, filedir);
 					}
 				}				
 				else if(item.has(MoodleRepository.PATH)) {
@@ -90,10 +90,10 @@ public class DumpAll {
 					} else {
 						System.out.println("dump folder "+title+" path="+path);
 						// TODO fix me
-//						JSONObject itemlisting = MoodleRepository.getListingForPath(conn, path, true, true);
-//						itemdir.mkdirs();
-//						DumpUtils.writeResponse(itemlisting, itemdir);
-//						DumpUtils.addItems(items, itemlisting, path);
+						JSONObject itemlisting = MoodleRepository.getListingForPath(conn, path, true, true);
+						itemdir.mkdirs();
+						DumpUtils.writeResponse(itemlisting, itemdir);
+						DumpUtils.addItems(items, itemlisting, path);
 					}
 				}			
 				else if (item.has(DumpUtils.DONE)) {

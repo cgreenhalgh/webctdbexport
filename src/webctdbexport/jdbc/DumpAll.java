@@ -4,10 +4,12 @@
 package webctdbexport.jdbc;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,6 +17,7 @@ import java.util.logging.Logger;
 
 import org.hibernate.Session;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import webctdbexport.db.LearningContext;
@@ -65,6 +68,18 @@ public class DumpAll {
 			List<JSONObject> items = new LinkedList<JSONObject>();
 			DumpUtils.addItems(items, listing, "/");
 
+			processItems(conn, items, outputdir, filedir);
+			
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error", e);
+		}
+		finally {
+			try { conn.close(); } catch (Throwable ignore) {}
+		}
+	}
+	
+	static void processItems(Connection conn, List<JSONObject> items, File outputdir, File filedir) throws JSONException, IOException, SQLException {
+
 			while(items.size()>0) {
 				JSONObject item = items.remove(0);
 				if (item.has(MoodleRepository.SOURCE)) {
@@ -79,7 +94,6 @@ public class DumpAll {
 //					else 
 					{
 						System.out.println("dump file "+item.getString(MoodleRepository.TITLE)+" source="+url);
-						// TODO SHA-1 stuff
 						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir);
 						if (fileInfo!=null) {
 							File itemdir = new File(outputdir+url);
@@ -114,14 +128,6 @@ public class DumpAll {
 					doneFile.createNewFile();
 				}
 			}
-
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error", e);
-		}
-		finally {
-			try { conn.close(); } catch (Throwable ignore) {}
-		}
-
 	}
 
 }

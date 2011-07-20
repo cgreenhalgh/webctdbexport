@@ -133,39 +133,42 @@ public class MoodleRepository {
 		return fileobj;
 	}
 	
-//	/** get_listing response for a user, i.e. modules and person 
-//	 * @param showLinks 
-//	 * @param showFiles 
-//	 * @throws JSONException */
-//	public static JSONObject getListingForUser(Session s, String username, boolean showFiles, boolean showLinks) throws JSONException {
-//		JSONObject userobj = getListingObject();
-//		JSONArray path = new JSONArray();
-//		userobj.put(PATH, path);
-//		
-//		String root = "/";
-//		path.put(getPathObject("WebCT", root));
-//		
-//		JSONArray list = new JSONArray();
-//		userobj.put(LIST, list);
-//
-//		// person for username?
-//		Person p = DbUtils.getPersonByWebctId(s, username);
-//		if (p==null) {
-//			logger.log(Level.WARNING, "Could not find Person "+username);
-//			return userobj;
-//		}
-//		if (showFiles) {
-//			list.put(getFolderObject(username, null, "Person folder", root+getFilename(p)+"/", 0));
-//		}
-//		// LCs
-//		List<LearningContext> lcs = DbUtils.getLearningContextsForPersonAsRole(s, p, DbUtils.getRoleDefinitionForSectionDesigner(s));
-//		Collections.sort(lcs, new LearningContextComparator());
-//		for (LearningContext lc : lcs) {
-//			list.put(getFolderObject(lc.getName(), DbUtils.getDescription(lc), lc.getLcType().getTypeCode(), root+getFilename(lc)+"/", 0));
-//		}
-//		
-//		return userobj;
-//	}
+	/** get_listing response for a user, i.e. modules and person 
+	 * @param showLinks 
+	 * @param showFiles 
+	 * @throws JSONException 
+	 * @throws SQLException */
+	public static JSONObject getListingForUser(Connection conn, String username, boolean showFiles, boolean showLinks) throws JSONException, SQLException {
+		JSONObject userobj = getListingObject();
+		JSONArray path = new JSONArray();
+		userobj.put(PATH, path);
+		
+		String root = "/";
+		path.put(getPathObject("WebCT", root));
+		
+		JSONArray list = new JSONArray();
+		userobj.put(LIST, list);
+
+		// person for username?
+		Person p = getPersonByWebctId(conn, username);
+		if (p==null) {
+			logger.log(Level.WARNING, "Could not find Person "+username);
+			return userobj;
+		}
+		if (showFiles) {
+			if (p.getHomefolderId()!=null)
+				list.put(getFolderObject(username, null, "Person folder", root+getFilename(p)+"/", 0));
+		}
+		// LCs
+		List<LearningContext> lcs = getLearningContextsForPersonAsRole(conn, p, getRoleDefinitionForSectionDesigner(conn));
+		Collections.sort(lcs, new LearningContextComparator());
+		for (LearningContext lc : lcs) {
+			// TODO fix path
+			list.put(getFolderObject(lc.getName(), getDescription(conn, lc), lc.getTypeCode(), root+getFilename(lc)+"/", 0));
+		}
+		
+		return userobj;
+	}
 	/** get_listing response for a whole DB, i.e. institutions.
 	 * @param showLinks 
 	 * @param showFiles 
@@ -235,9 +238,9 @@ public class MoodleRepository {
 		pathobj.put(PATH, path);
 		return pathobj;
 	}
-//	private static String getFilename(Person p) {
-//		return PERSON_TYPE+p.getId();
-//	}
+	private static String getFilename(Person p) {
+		return PERSON_TYPE+p.getId();
+	}
 	private static String getFilename(LearningContext lc) {
 		return LC_TYPE+lc.getId();
 	}
@@ -1124,6 +1127,23 @@ public class MoodleRepository {
 		}
 		return members;
 	}
+	private static List<Member> getMembers(Connection conn, Person p) throws SQLException {
+		List<Member> members = new LinkedList<Member>();
+		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.PERSON_ID, m.LEARNING_CONTEXT_ID, m.STATUS_FLAG, m.DELETE_STATUS FROM MEMBER m WHERE m.PERSON_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, p.getId());
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Member m = new Member(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getBigDecimal(3), rs.getInt(4)!=0, rs.getInt(5)!=0);
+				members.add(m);
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return members;
+	}
 	private static List<Role> getRoles(Connection conn, Member m) throws SQLException {
 		List<Role> roles = new LinkedList<Role>();
 		PreparedStatement stmt = conn.prepareStatement("SELECT r.ID, r.MEMBER_ID, r.ROLE_DEFINITION_ID, r.DELETE_STATUS, r.ROLE_STATUS FROM ROLE r WHERE r.MEMBER_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
@@ -1144,7 +1164,7 @@ public class MoodleRepository {
 	
 	/** person cache */
 	private static Map<BigDecimal,Person> personCache = new HashMap<BigDecimal,Person>();
-	private synchronized static Person getPerson(Connection conn, BigDecimal id) throws SQLException {
+	synchronized static Person getPerson(Connection conn, BigDecimal id) throws SQLException {
 		if (id==null)
 			return null;
 		// fetch on-demand
@@ -1172,6 +1192,57 @@ public class MoodleRepository {
 			return null;
 		return getPerson(conn, m.getPersonId());
 	}
+	private static Person getPersonByWebctId(Connection conn, String username) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.WEBCT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setString(1, username);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				return getPerson(conn, rs.getBigDecimal(1));
+			}		
+			//logger.log(Level.WARNING, "Could not CoUrl "+ce.getId());
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return null;
+	}
+	public static List<BigDecimal> getPersonIds(Connection conn) throws SQLException {
+		List<BigDecimal> pids = new LinkedList<BigDecimal>();
+		// active , not demo
+		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.ACTIVESTATUS = 1 AND p.DEMOUSER = 0", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				pids.add(rs.getBigDecimal(1));
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return pids;
+	}
+	private static List<LearningContext> getLearningContextsForPersonAsRole(
+			Connection conn, Person p, RoleDefinition rd) throws SQLException {
+		List<Member> members = getMembers(conn, p);
+		LinkedList<LearningContext> lcs = new LinkedList<LearningContext>();
+		
+		for (Member m : members) {
+			List<Role> rs = getRoles(conn, m);
+			boolean include = false;
+			for (Role r: rs) {
+				if (r.getRoleDefinitionId().equals(rd.getId()))
+					include = true;
+			}
+			if (include) {
+				LearningContext lc = getLearningContext(conn, m.getLearningContextId());
+				lcs.add(lc);
+			}
+		}
+		return lcs;
+	}
 	/** cache RoleDefinitions */
 	private static Map<BigDecimal, RoleDefinition> roleDefinitionCache = null;
 	private static synchronized RoleDefinition getRoleDefinition(Connection conn, BigDecimal id) throws SQLException {
@@ -1195,6 +1266,22 @@ public class MoodleRepository {
 	}
 	private static RoleDefinition getRoleDefinition(Connection conn, Role r) throws SQLException {
 		return getRoleDefinition(conn, r.getRoleDefinitionId());
+	}
+	private static RoleDefinition getRoleDefinitionForSectionDesigner(Connection conn) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("SELECT rd.ID FROM ROLE_DEFINITION rd WHERE rd.NAME = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setString(1, "SDES");
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				return getRoleDefinition(conn, rs.getBigDecimal(1));
+			}
+			logger.log(Level.WARNING,"Could not find RoleDefinition for section designer");
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return null;
 	}
 	private static List<AccessControlEntry> getAccessControlEntries(Connection conn, BigDecimal aclId) throws SQLException {
 		List<AccessControlEntry> members = new LinkedList<AccessControlEntry>();

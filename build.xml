@@ -168,4 +168,21 @@
  		
 	</target>
 
+	<target name="dumpapp">
+	
+		<mkdir dir="dump"/>
+		<mkdir dir="dump/files"/>
+		<mkdir dir="dump/folders"/>
+		
+		<java classpathref="hibernate" classname="webctdbexport.jdbc.DumpAll" fork="true">
+			<!-- <jvmarg value="-Djava.security.manager"/>
+			<jvmarg value="-Djava.security.policy=etc/security.policy"/> -->
+			<!-- example user -->
+			<arg value="etc/jdbc-local.properties"/>
+			<arg value="dump/folders"/>
+			<arg value="dump/files"/>
+		</java>
+ 		
+	</target>
+
 </project>

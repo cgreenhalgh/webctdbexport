@@ -80,7 +80,13 @@ public class DumpAll {
 					{
 						System.out.println("dump file "+item.getString(MoodleRepository.TITLE)+" source="+url);
 						// TODO SHA-1 stuff
-						MoodleRepository.getFile(conn, url, filedir);
+						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir);
+						if (fileInfo!=null) {
+							File itemdir = new File(outputdir+url);
+							itemdir.mkdir();
+							DumpUtils.writeFileInfo(fileInfo, itemdir, filedir);
+						//System.out.println("=> "+f);
+						}
 					}
 				}				
 				else if(item.has(MoodleRepository.PATH)) {

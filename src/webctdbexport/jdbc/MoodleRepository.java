@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -618,8 +620,43 @@ public class MoodleRepository {
 		String description = getDescription(conn, ce);
 		return getItem(conn, ce, name, description, parentPath);
 	}
-	private static JSONObject getItem(Connection conn, CmsContentEntry ce, String name, String description,
+	private static JSONObject getItem(Connection conn, CmsContentEntry firstCe, String name, String description,
 			String parentPath) throws JSONException, UnsupportedEncodingException, SQLException {
+		CmsContentEntry ce = followLinks(conn, firstCe);
+		return getItem(conn, ce, name, description, parentPath, firstCe);
+	}
+	private static CmsContentEntry followLinks(Connection conn, CmsContentEntry ce) throws SQLException {
+		// stop at link
+		CoUrl url = getCoUrl(conn, ce);
+		if (url!=null && url.getLink()!=null) {
+			return ce;
+		}
+		// stop at file
+		CmsFileContent fc = getCmsFileContent(conn, ce);
+		if (fc!=null) {
+			return ce;
+		}
+		String typename = getTypename(ce);
+		if (DbUtils.PAGE_TYPE.equals(typename)) {
+			// Page Type = link
+			List<CmsLink> links = getCmsLinksForLeftobjectId(conn, ce);
+			if (links.size()>0) {
+				if (links.size()>1) {
+					logger.log(Level.WARNING, "PAGE_TYPE with "+links.size()+" links! - only using first");					
+				}
+				CmsLink link = links.iterator().next();
+				CmsContentEntry child = getCmsContentEntryByRightobjectId(conn, link);
+				if (child!=null)
+					return followLinks(conn, child);
+			}
+			return ce;
+		} 
+		return ce;
+	}
+	private static JSONObject getItem(Connection conn, CmsContentEntry ce, String name, String description,
+			String parentPath, CmsContentEntry firstCe) throws JSONException, UnsupportedEncodingException, SQLException {
+		// CMS links already followed
+
 		String typename = getTypename(ce);
 		// TODO
 		CoUrl url = getCoUrl(conn, ce);
@@ -629,7 +666,7 @@ public class MoodleRepository {
 		
 		CmsFileContent fc = getCmsFileContent(conn, ce);
 		if (fc!=null) {
-			String filename = getFilename(fc);
+			String filename = getFilename(firstCe);
 			// fcNNN/actual-file-name??
 			long len = 0;
 			try {
@@ -640,22 +677,10 @@ public class MoodleRepository {
 			catch (Exception e) {
 				logger.log(Level.WARNING, "Could not get length of FileContent "+fc.getId(), e);
 			}
-			return getFileObject(name, description, typename, 0, len, parentPath+filename+"/"+URLEncoder.encode(ce.getName(), "UTF-8"));
+			return getFileObject(name, description, typename, 0, len, parentPath+filename);
 		}
 		else {
 			if (DbUtils.PAGE_TYPE.equals(typename)) {
-				// Page Type = link
-				List<CmsLink> links = getCmsLinksForLeftobjectId(conn, ce);
-				if (links.size()>0) {
-					if (links.size()>1) {
-						logger.log(Level.WARNING, "PAGE_TYPE with "+links.size()+" links! - only using first");					
-					}
-					CmsLink link = links.iterator().next();
-					CmsContentEntry child = getCmsContentEntryByRightobjectId(conn, link);
-					if (child!=null)
-						return getItem(conn, child, name, description, parentPath);
-					logger.log(Level.WARNING,"PAGE_TYPE with link without child");
-				}
 				return getFileObject(name, description, typename, 0, 0, parentPath+getFilename(ce)+".error");
 
 			} else {
@@ -684,36 +709,101 @@ public class MoodleRepository {
 			i++;
 		return filename.substring(0, i);
 	}
-	/** get_file for 'url' returned from getListingForPath 
-	 * @throws SQLException */
-	public static File getFile(Connection conn, String url, File tmpdir) throws IOException, SQLException {
-		CmsFileContent fc = getFileContent(conn, url);
-		if (fc==null)
-			return null;
-		
-		File file = new File(tmpdir, url);
-		file.getParentFile().mkdirs();
-		long len = 0;
-		logger.info("Download "+file);
-		dumpCmsFileContent(conn, fc, file);
-		return file;
-	}
-	public static CmsFileContent getFileContent(Connection conn, String url) throws IOException, SQLException {
+//	/** internal get_file for 'url' returned from getListingForPath 
+//	 * @throws SQLException */
+//	public static File getTmpFile(Connection conn, String url, File tmpdir) throws IOException, SQLException {
+//		CmsFileContent fc = getFileContent(conn, url);
+//		if (fc==null)
+//			return null;
+//		
+//		int ix = url.lastIndexOf("/");
+//		if (ix>0)
+//			url = url.substring(ix+1);
+//		File file = File.createTempFile("file", ".bin", tmpdir);
+//		//file.getParentFile().mkdirs();
+//		long len = 0;
+//		logger.info("Download "+file);
+//		dumpCmsFileContent(conn, fc, file);
+//		return file;
+//	}
+	/** get_file (sort-of) to get file information:
+	 * sha1hash, length, mimetype, path, filename, webcttype 
+	 * @throws IOException 
+	 * @throws SQLException 
+	 * @throws JSONException */
+	public static JSONObject getFileInfo(Connection conn, String url, File cachedir) throws IOException, SQLException, JSONException {
 		if (url.startsWith("http"))
 			// external URL...
 			return null;
-		int ix= url.lastIndexOf("/");
-		if (ix<0 || ix>=url.length()-1) {
-			throw new IOException("getFile for invalid file url "+url);
-		}
+		JSONObject info = new JSONObject();
+		// path should end with ceNNN
 		String pathElements[] = url.split("/");
-		String filename = pathElements[pathElements.length-2];
-		Object pathobj = getPathElementObject(conn, filename);
-		if (!(pathobj instanceof CmsFileContent)) 
-			throw new IOException("getFile for non-CmsFileContent "+url);
-		CmsFileContent fc = (CmsFileContent)pathobj;
-		return fc;
+		String cename = pathElements[pathElements.length-1];
+		Object pathobj = getPathElementObject(conn, cename);
+		if (!(pathobj instanceof CmsContentEntry)) 
+			throw new IOException("getFile for non-CmsContentEntry "+url);
+		CmsContentEntry ce = (CmsContentEntry)pathobj;
+		ce = followLinks(conn, ce);
+		info.put("filename", ce.getName());
+		info.put("webcttype", getTypename(ce));
+		
+		CmsFileContent fc = getCmsFileContent(conn, ce);
+		long length = getContentLength(conn, fc);
+		info.put("length", length);
+
+		File tmpdir = new File(cachedir, "tmp");
+		tmpdir.mkdir();
+		File tmpfile = File.createTempFile("download-", ".bin", tmpdir);
+		String digest = dumpAndDigestCmsFileContent(conn, fc, tmpfile);
+
+		if (digest!=null) {
+			info.put("sha1hash", digest);
+			File sha1dir = new File(new File(cachedir, digest.substring(0,2)), digest.substring(2,4));
+			sha1dir.mkdirs();
+			File sha1file = new File(sha1dir, digest);	
+			if (sha1file.exists()) {
+				logger.log(Level.INFO, "File already exists: "+sha1file);
+				tmpfile.delete();
+			}
+			else {
+				tmpfile.renameTo(sha1file);
+				logger.log(Level.INFO, "Downloaded new file "+sha1file+" ("+length+" bytes)");
+			}
+			info.put("path", "/"+digest.substring(0,2)+"/"+digest.substring(2,4)+"/"+digest);
+		}
+		
+		return info;
 	}
+	private static String convertToHex(byte[] data) { 
+		StringBuffer buf = new StringBuffer();
+		for (int i = 0; i < data.length; i++) {
+			buf.append(nibbleToHex((data[i]>>4)&0xf));
+			buf.append(nibbleToHex((data[i])&0xf));
+		}
+		return buf.toString();
+	}
+	private static char nibbleToHex(int n) {
+		if (n<10)
+			return (char)('0'+n);
+		return (char)('a'+n-10);
+	} 
+	 
+//	public static CmsFileContent getFileContent(Connection conn, String url) throws IOException, SQLException {
+//		if (url.startsWith("http"))
+//			// external URL...
+//			return null;
+//		int ix= url.lastIndexOf("/");
+//		if (ix<0 || ix>=url.length()-1) {
+//			throw new IOException("getFile for invalid file url "+url);
+//		}
+//		String pathElements[] = url.split("/");
+//		String filename = pathElements[pathElements.length-2];
+//		Object pathobj = getPathElementObject(conn, filename);
+//		if (!(pathobj instanceof CmsFileContent)) 
+//			throw new IOException("getFile for non-CmsFileContent "+url);
+//		CmsFileContent fc = (CmsFileContent)pathobj;
+//		return fc;
+//	}
 	private static List<LearningContext> getLearningContextsOfType(Connection conn,
 			String lcTypeCode) throws SQLException {
 		List<LearningContext> lcs = new LinkedList<LearningContext>();
@@ -913,9 +1003,9 @@ public class MoodleRepository {
 		}
 		return 0;
 	}
-	private static void dumpCmsFileContent(Connection conn, CmsFileContent fc, File f) throws SQLException {
+	private static String dumpAndDigestCmsFileContent(Connection conn, CmsFileContent fc, File f) throws SQLException {
 		if (fc==null)
-			return;
+			return null;
 		PreparedStatement stmt = conn.prepareStatement("SELECT fc.CONTENT FROM CMS_FILE_CONTENT fc WHERE fc.id = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
@@ -926,9 +1016,12 @@ public class MoodleRepository {
 				if (blob!=null) {
 					try {
 						if (f.exists() && f.isFile() && f.length()==blob.length()) {
-							logger.log(Level.INFO, "File already exists: "+f);
-							return;
+							logger.log(Level.WARNING, "File already existed - deleting: "+f);
+							f.delete();
 						}
+						MessageDigest md;
+						md = MessageDigest.getInstance("SHA-1");
+
 						logger.info("    blob "+blob.length()+" bytes -> "+f);
 						OutputStream os = new FileOutputStream(f);
 						InputStream is = blob.getBinaryStream();
@@ -939,6 +1032,7 @@ public class MoodleRepository {
 							if (n<0)
 								break;
 							os.write(buf, 0, n);
+							md.update(buf, 0, n);
 							cnt += n;
 						}
 						if (cnt<blob.length()) {
@@ -949,7 +1043,10 @@ public class MoodleRepository {
 							is.close();
 						}
 						catch(Exception e) {
-						}				
+						}			
+						byte sha1hash[] = md.digest();
+						return convertToHex(sha1hash);
+
 					} catch (Exception e) {
 						logger.log(Level.WARNING, "Could not write blob to "+f, e);
 					}
@@ -958,7 +1055,7 @@ public class MoodleRepository {
 							blob.free();
 						} catch (SQLException e) {}
 					}
-					return;
+					return null;
 				}
 			}		
 			logger.log(Level.WARNING, "Could not CmsFileContent content for "+fc.getId());
@@ -966,6 +1063,7 @@ public class MoodleRepository {
 		finally {
 			tidy(rs, stmt);
 		}
+		return null;
 	}
 	private static CmsContentEntry getCmsContentEntryByRightobjectId(
 			Connection conn, CmsLink link) throws SQLException {

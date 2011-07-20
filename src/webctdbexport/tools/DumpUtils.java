@@ -5,10 +5,12 @@ package webctdbexport.tools;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.List;
 import java.util.logging.Level;
@@ -99,7 +101,7 @@ public class DumpUtils {
 					// link
 					pw.println("<li><a href=\""+url+"\">"+title+"</a> (link, "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
 				else
-					pw.println("<li><a href=\""+relativePath+url+"\">"+title+"</a> (file"+(size>=0 ? ", "+size+" bytes" : "")+", "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
+					pw.println("<li><a href=\""+relativePath+url+"/file.html\">"+title+"</a> (file"+(size>=0 ? ", "+size+" bytes" : "")+", "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
 			}
 //			else if (item.has(MoodleRepository.URL)) {
 //				String url = item.getString(MoodleRepository.URL);
@@ -111,6 +113,7 @@ public class DumpUtils {
 			}
 		}
 		pw.println("</ul>");
+		pw.println("</body></html>");
 		pw.close();
 	}
 	public static void addItems(List<JSONObject> items, JSONObject listing, String path2) throws JSONException {
@@ -161,6 +164,36 @@ public class DumpUtils {
 			pw.println("</li>");
 		}
 		pw.println("</ul>");
+		pw.println("</body></html>");
+		pw.close();
+	}
+	public static void writeFileInfo(JSONObject fileInfo, File itemdir,
+			File filedir) throws JSONException, IOException {
+		File file = new File(itemdir, "file.json");
+		Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+		fileInfo.write(fw);
+		fw.close();
+		logger.log(Level.FINE, "Wrote "+file);
+				
+		file = new File(itemdir, "file.html");
+		PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
+		pw.println("<html><head>");
+		pw.println("<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+		String name = fileInfo.getString("filename");
+		pw.println("<title>"+name+"</title>");
+		pw.println("</head><body>");
+		pw.println("<h1>"+name+"</h1>");
+		pw.println("<p>Filename: "+fileInfo.getString("filename")+"</p>");
+		if (fileInfo.has("length"))
+			pw.println("<p>Length: "+fileInfo.getLong("length")+" bytes</p>");
+		if (fileInfo.has("mimetype"))
+			pw.println("<p>Mimetype: "+fileInfo.getString("mimetype")+"</p>");
+		if (fileInfo.has("sha1hash"))
+			pw.println("<p>sha1hash: "+fileInfo.getString("sha1hash")+"</p>");
+		if (fileInfo.has("path")) {
+			File p = new File(filedir, fileInfo.getString("path"));
+			pw.println("<p>path: <a href=\""+p.getCanonicalPath()+"\">"+fileInfo.getString("path")+"</a></p>");
+		}		
 		pw.close();
 	}
 }

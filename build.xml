@@ -168,7 +168,7 @@
  		
 	</target>
 
-	<target name="dumpapp">
+	<target name="dumpall">
 	
 		<mkdir dir="dump"/>
 		<mkdir dir="dump/files"/>

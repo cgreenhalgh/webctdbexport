@@ -58,7 +58,10 @@ public class DumpAll {
 			JSONObject listing = MoodleRepository.getListingForRoot(conn);
 
 			DumpUtils.writeResponse(listing, outputdir);
-
+			{
+				JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, "/");
+				DumpUtils.writePermissions(permissions, outputdir);
+			}			
 			List<JSONObject> items = new LinkedList<JSONObject>();
 			DumpUtils.addItems(items, listing, "/");
 
@@ -94,6 +97,8 @@ public class DumpAll {
 						itemdir.mkdirs();
 						DumpUtils.writeResponse(itemlisting, itemdir);
 						DumpUtils.addItems(items, itemlisting, path);
+						JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, path);
+						DumpUtils.writePermissions(permissions, itemdir);
 					}
 				}			
 				else if (item.has(DumpUtils.DONE)) {

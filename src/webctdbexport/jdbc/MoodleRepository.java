@@ -19,9 +19,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -33,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import webctdbexport.jdbc.model.AccessControlEntry;
+import webctdbexport.jdbc.model.AccessControlPermissionSet;
 import webctdbexport.jdbc.model.CmsContentEntry;
 import webctdbexport.jdbc.model.CmsFileContent;
 import webctdbexport.jdbc.model.CmsLink;
@@ -40,7 +44,11 @@ import webctdbexport.jdbc.model.CoOrganizerlink;
 import webctdbexport.jdbc.model.CoUrl;
 import webctdbexport.jdbc.model.LearningContext;
 import webctdbexport.jdbc.model.LearningContextComparator;
+import webctdbexport.jdbc.model.Member;
 import webctdbexport.jdbc.model.OrganizerlinkComparator;
+import webctdbexport.jdbc.model.Person;
+import webctdbexport.jdbc.model.Role;
+import webctdbexport.jdbc.model.RoleDefinition;
 import webctdbexport.utils.DbUtils;
 import webctdbexport.utils.JSONObjectTitleComparator;
 
@@ -296,6 +304,72 @@ public class MoodleRepository {
 		listing.put(LIST, list);
 		
 		return listing;
+	}
+	/** get permissions (e.g. learning context memberships) for a path, i.e. learning context, content entry, ... 
+	 * @throws JSONException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws SQLException */
+	public static JSONObject getPermissionsForPath(Connection conn, String path) throws JSONException, UnsupportedEncodingException, SQLException {
+		JSONObject permissions = new JSONObject();
+
+		String elements [] = path.split("/");
+		if (elements.length==0) {
+			logger.log(Level.WARNING, "path is empty ("+path+")");
+			return permissions;
+		}
+		
+		String filename = elements[elements.length-1];
+		Object pathel = getPathElementObject(conn, filename);
+
+		if (pathel instanceof LearningContext) {
+			LearningContext lc = (LearningContext)pathel;
+			List<Member> members = getMembers(conn, lc);
+			for (Member m : members) {
+				Person p = getPerson(conn, m);
+				if (p==null) {
+					logger.log(Level.WARNING,"Could not find Person "+m.getPersonId());
+					continue;
+				}
+				JSONArray roleArray = new JSONArray();
+				List<Role> roles = getRoles(conn, m);
+				for (Role r : roles) {
+					RoleDefinition rd = getRoleDefinition(conn, r);
+					if(rd!=null)
+						roleArray.put(rd.getName());
+					else
+						logger.log(Level.WARNING, "COuld not find RoleDefinition "+r.getRoleDefinitionId());
+				}
+				permissions.put(p.getWebctId(), roleArray);
+			}
+		}
+		
+//		CmsContentEntry ce = getPathElementContentEntry(conn, pathel);
+//		if(ce!=null && ce.getAclId()!=null) {
+//			List<AccessControlEntry> aces = getAccessControlEntries(conn, ce.getAclId());
+//			for (AccessControlEntry ace : aces) {
+//				if (getAclRead(conn, ace)) {
+//					// An ACE links to a DirectoryObject, from there... don't know!
+//					Person p = ??
+//					if (p==null) {
+//						logger.log(Level.WARNING,"Could not find Person "+ace.getGranteeId()+" in ACE");
+//						continue;
+//					}
+//					logger.log(Level.INFO, "ACL ok for "+p.getWebctId()+" on "+ce.getName());
+//					JSONArray arr = null;
+//					if (permissions.has(p.getWebctId())) {
+//						arr = permissions.getJSONArray(p.getWebctId());
+//					}
+//					else
+//					{
+//						arr = new JSONArray();
+//						permissions.put(p.getWebctId(), arr);
+//					}
+//					arr.put("READ");
+//				}
+//			}
+//		}
+
+		return permissions;
 	}
 	private static Object getPathElementObject(Connection conn, String filename) throws SQLException {
 		String type = getFilenameType(filename);
@@ -934,6 +1008,144 @@ public class MoodleRepository {
 			tidy(rs, stmt);
 		}
 		return null;
+	}
+	private static List<Member> getMembers(Connection conn, LearningContext lc) throws SQLException {
+		List<Member> members = new LinkedList<Member>();
+		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.PERSON_ID, m.LEARNING_CONTEXT_ID, m.STATUS_FLAG, m.DELETE_STATUS FROM MEMBER m WHERE m.LEARNING_CONTEXT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, lc.getId());
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Member m = new Member(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getBigDecimal(3), rs.getInt(4)!=0, rs.getInt(5)!=0);
+				members.add(m);
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return members;
+	}
+	private static List<Role> getRoles(Connection conn, Member m) throws SQLException {
+		List<Role> roles = new LinkedList<Role>();
+		PreparedStatement stmt = conn.prepareStatement("SELECT r.ID, r.MEMBER_ID, r.ROLE_DEFINITION_ID, r.DELETE_STATUS, r.ROLE_STATUS FROM ROLE r WHERE r.MEMBER_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, m.getId());
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Role r = new Role(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getBigDecimal(3), rs.getInt(4)!=0, rs.getInt(5)!=0);
+				roles.add(r);
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return roles;
+	}
+	
+	/** person cache */
+	private static Map<BigDecimal,Person> personCache = new HashMap<BigDecimal,Person>();
+	private synchronized static Person getPerson(Connection conn, BigDecimal id) throws SQLException {
+		if (id==null)
+			return null;
+		// fetch on-demand
+		if (personCache.containsKey(id))
+			return personCache.get(id);
+		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID, p.LEARNING_CONTEXT_ID, p.ACTIVESTATUS, p.DEMOUSER, p.REMOTE_USERID, p.WEBCT_ID, p.SOURCEDID_SOURCE, p.DELETESTATUS, p.HOMEFOLDER_ID FROM PERSON p WHERE p.ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, id);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				Person p = new Person(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getInt(3)!=0, rs.getInt(4)!=0, rs.getString(5), rs.getString(6), rs.getString(7), rs.getBigDecimal(8), rs.getBigDecimal(9));
+				personCache.put(p.getId(), p);
+				return p;
+			}		
+			//logger.log(Level.WARNING, "Could not CoUrl "+ce.getId());
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return null;
+	}
+	private static Person getPerson(Connection conn, Member m) throws SQLException {
+		if (m==null)
+			return null;
+		return getPerson(conn, m.getPersonId());
+	}
+	/** cache RoleDefinitions */
+	private static Map<BigDecimal, RoleDefinition> roleDefinitionCache = null;
+	private static synchronized RoleDefinition getRoleDefinition(Connection conn, BigDecimal id) throws SQLException {
+		if (roleDefinitionCache!=null)
+			return roleDefinitionCache.get(id);
+		roleDefinitionCache = 	new HashMap<BigDecimal, RoleDefinition>();
+		// pre-fetch all
+		PreparedStatement stmt = conn.prepareStatement("SELECT rd.ID, rd.NAME FROM ROLE_DEFINITION rd", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				RoleDefinition rd = new RoleDefinition(rs.getBigDecimal(1), rs.getString(2));
+				roleDefinitionCache.put(rd.getId(), rd);
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return roleDefinitionCache.get(id);
+	}
+	private static RoleDefinition getRoleDefinition(Connection conn, Role r) throws SQLException {
+		return getRoleDefinition(conn, r.getRoleDefinitionId());
+	}
+	private static List<AccessControlEntry> getAccessControlEntries(Connection conn, BigDecimal aclId) throws SQLException {
+		List<AccessControlEntry> members = new LinkedList<AccessControlEntry>();
+		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.ACL_ID, m.GRANTEE_ID, m.PERMISSION_SET_ID FROM ACCESS_CONTROL_ENTRY m WHERE m.ACL_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, aclId);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				AccessControlEntry m = new AccessControlEntry(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getBigDecimal(3), rs.getBigDecimal(4));
+				members.add(m);
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return members;
+	}
+	/** cache AccessControlPermissionSets */
+	private static Map<BigDecimal, AccessControlPermissionSet> accessControlPermissionSetCache = null;
+	private static synchronized AccessControlPermissionSet getAccessControlPermissionSet(Connection conn, BigDecimal id) throws SQLException {
+		if (accessControlPermissionSetCache!=null)
+			return accessControlPermissionSetCache.get(id);
+		accessControlPermissionSetCache = 	new HashMap<BigDecimal, AccessControlPermissionSet>();
+		// pre-fetch all
+		PreparedStatement stmt = conn.prepareStatement("SELECT rd.ID, rd.NAME, rd.ACL_READ FROM ACCESS_CONTROL_PERMISSION_SET rd", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				AccessControlPermissionSet rd = new AccessControlPermissionSet(rs.getBigDecimal(1), rs.getString(2), rs.getInt(3)!=0);
+				accessControlPermissionSetCache.put(rd.getId(), rd);
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return accessControlPermissionSetCache.get(id);
+	}
+	private static AccessControlPermissionSet getAccessControlPermissionSet(Connection conn, AccessControlEntry e) throws SQLException {
+		return getAccessControlPermissionSet(conn, e.getPermissionSetId());
+	}
+	private static boolean getAclRead(Connection conn, AccessControlEntry e) throws SQLException {
+		if(e==null)
+			return false;
+		AccessControlPermissionSet p = getAccessControlPermissionSet(conn, e.getPermissionSetId());
+		if (p==null)
+			return false;
+		return p.isAclRead();
 	}
 	private static void tidy(ResultSet rs, PreparedStatement stmt) {
 		if (rs!=null)

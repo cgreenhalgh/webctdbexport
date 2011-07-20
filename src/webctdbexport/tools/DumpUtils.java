@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.util.Iterator;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +74,7 @@ public class DumpUtils {
 		pw.println("<title>"+name+"</title>");
 		pw.println("</head><body>");
 		pw.println("<h1>"+name+"</h1>");
+		pw.println("<p><a href=\"permissions.html\">permissions</a></p>");
 		pw.println("<ul>");
 		JSONArray list = listing.getJSONArray(MoodleRepository.LIST);
 		for (int li=0; li<list.length(); li++) {
@@ -127,5 +130,37 @@ public class DumpUtils {
 		if (object.has(DONE))
 			return object.getString(DONE);
 		return null;
+	}
+	/** write a get_permissions-type response to dist, also HTML version */
+	public static void writePermissions(JSONObject permissions, File dir) throws JSONException, IOException {
+		File file = new File(dir, "permissions.json");
+		Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+		permissions.write(fw);
+		fw.close();
+		logger.log(Level.FINE, "Wrote "+file);
+				
+		file = new File(dir, "permissions.html");
+		PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")));
+		pw.println("<html><head>");
+		pw.println("<META http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">");
+		String name = "Permissions";
+		pw.println("<title>"+name+"</title>");
+		pw.println("</head><body>");
+		pw.println("<h1>"+name+"</h1>");
+		pw.println("<ul>");
+		Iterator keys = permissions.sortedKeys();
+		while(keys.hasNext()) {
+			String key = (String)keys.next();
+			JSONArray roles = permissions.getJSONArray(key);
+			pw.print("<li>"+key+": ");
+			for (int i=0; i<roles.length(); i++) {
+				if (i>0)
+					pw.print(", ");
+				pw.print(roles.getString(i));
+			}
+			pw.println("</li>");
+		}
+		pw.println("</ul>");
+		pw.close();
 	}
 }

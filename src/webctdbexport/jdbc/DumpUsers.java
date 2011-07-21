@@ -40,8 +40,8 @@ public class DumpUsers {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args.length!=3) {
-			System.err.println("Usage: <jdbc.properties> <outputdir> <filedir");
+		if (args.length<3) {
+			System.err.println("Usage: <jdbc.properties> <outputdir> <filedir> [usernames...]");
 			System.exit(-1);
 		}
 		File outputdir = new File(args[1]);
@@ -58,8 +58,21 @@ public class DumpUsers {
 		
 		try {
 			logger.log(Level.INFO, "output folders to "+outputdir);
-			List<BigDecimal> personIds = MoodleRepository.getPersonIds(conn);
-			logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
+			List<BigDecimal> personIds = null;
+			if (args.length<=3) {
+				logger.log(Level.INFO, "Dump all users...");
+				MoodleRepository.getPersonIds(conn);
+				logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
+			} else {
+				personIds = new LinkedList<BigDecimal>();
+				for (int ai=3; ai<args.length; ai++) {
+					Person p = MoodleRepository.getPersonByWebctId(conn, args[ai]);
+					if (p==null)
+						logger.log(Level.WARNING,"Could not find user "+args[ai]);
+					else
+						personIds.add(p.getId());
+				}
+			}
 			for (BigDecimal personId : personIds) {
 				Person p = MoodleRepository.getPerson(conn, personId);
 				if (p==null) {
@@ -83,13 +96,14 @@ public class DumpUsers {
 				}
 				String user2 = username.substring(0,2);
 				String user3 = username.substring(0,3);
-				File userdir = new File(new File(new File(outputdir, user2), user3), username);
+				File userdir = new File(new File(new File(new File(outputdir, "user"), user2), user3), username);
 				userdir.mkdirs();
 				
 				DumpUtils.writeResponse(listing, userdir);
-				//DumpUtils.addItems(items, listing, "/");
+				//DumpUtils.addPersonItems(items, listing, "/");
+				DumpUtils.addItems(items, listing, "/");
 
-				//DumpAll.processItems(conn, items, outputdir, filedir);
+				DumpAll.processItems(conn, items, outputdir, filedir);
 			}
 			logger.log(Level.INFO, "Done all users");
 		} catch (Exception e) {

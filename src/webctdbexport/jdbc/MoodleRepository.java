@@ -144,7 +144,9 @@ public class MoodleRepository {
 		userobj.put(PATH, path);
 		
 		String root = "/";
-		path.put(getPathObject("WebCT", root));
+		if (username.length()>=3) 
+			root = "/user/"+username.substring(0,2)+"/"+username.substring(0,3)+"/"+username+"/";
+		path.put(getPathObject("WebCT ("+username+")", root));
 		
 		JSONArray list = new JSONArray();
 		userobj.put(LIST, list);
@@ -157,14 +159,14 @@ public class MoodleRepository {
 		}
 		if (showFiles) {
 			if (p.getHomefolderId()!=null)
-				list.put(getFolderObject(username, null, "Person folder", root+getFilename(p)+"/", 0));
+				list.put(getFolderObject(username, null, "HomeFolder", root+getFilename(p)+"/", 0));
 		}
 		// LCs
 		List<LearningContext> lcs = getLearningContextsForPersonAsRole(conn, p, getRoleDefinitionForSectionDesigner(conn));
 		Collections.sort(lcs, new LearningContextComparator());
 		for (LearningContext lc : lcs) {
-			// TODO fix path
-			list.put(getFolderObject(lc.getName(), getDescription(conn, lc), lc.getTypeCode(), root+getFilename(lc)+"/", 0));
+			String fullPath = getLearningContextPath(conn, lc);
+			list.put(getFolderObject(lc.getName(), getDescription(conn, lc), lc.getTypeCode(), "/"+fullPath, 0));
 		}
 		
 		return userobj;
@@ -239,7 +241,10 @@ public class MoodleRepository {
 		return pathobj;
 	}
 	private static String getFilename(Person p) {
-		return PERSON_TYPE+p.getId();
+//		String username = p.getWebctId();
+//		if (username.length()<3)
+			return PERSON_TYPE+p.getId();
+//		return "user/"+username.substring(0,2)+"/"+username.substring(0,3)+"/"+username+"/"+PERSON_TYPE+p.getId();
 	}
 	private static String getFilename(LearningContext lc) {
 		return LC_TYPE+lc.getId();
@@ -268,11 +273,15 @@ public class MoodleRepository {
 			String filename = elements[ei];
 			if (filename.length()==0)
 				continue;
+			pathbuf.append(filename);
+			pathbuf.append("/");
+			if (ei<5 && "user".equals(elements[1])) {
+				// skip []/user/ps/psz/pszcmg/
+				continue;
+			}
 			//logger.log(Level.INFO, "Path element "+ei+": "+filename);
 			Object pathel = getPathElementObject(conn, filename);
 			String name = getPathElementName(pathel);
-			pathbuf.append(filename);
-			pathbuf.append("/");
 			JSONObject pathobj = new JSONObject();
 			pathobj.put(NAME, name!=null ? name : "null");
 			pathobj.put(PATH, pathbuf.toString());
@@ -379,16 +388,18 @@ public class MoodleRepository {
 	private static Object getPathElementObject(Connection conn, String filename) throws SQLException {
 		String type = getFilenameType(filename);
 		BigDecimal id = getFilenameId(filename);
+		if (id==null)
+			return null;
 		
-//		if (PERSON_TYPE.equals(type)) {
-//			Person p = (Person)s.createQuery("from Person as p where p.id=?").setBigDecimal(0, id).uniqueResult();
-//			if (p==null) {
-//				logger.log(Level.WARNING, "Could not find Person "+id);
-//				return null;
-//			}
-//			return p;
-//		}
-//		else 
+		if (PERSON_TYPE.equals(type)) {
+			Person p = getPerson(conn, id);
+			if (p==null) {
+				logger.log(Level.WARNING, "Could not find Person "+id);
+				return null;
+			}
+			return p;
+		}
+		else 
 			if (LC_TYPE.equals(type)) {
 				LearningContext lc = getLearningContext(conn, id);
 				if (lc==null) {
@@ -419,13 +430,13 @@ public class MoodleRepository {
 	private static CmsContentEntry getPathElementContentEntry(Connection conn, Object pathElementObject) throws SQLException {
 		if (pathElementObject==null)
 			return null;
-//		if (pathElementObject instanceof Person) {
-//			Person p = (Person)pathElementObject;
-//			BigDecimal folderId = p.getHomefolderId();
-//			CmsContentEntry ce = (CmsContentEntry)s.createQuery("from CmsContentEntry as ce where ce.id=?").setBigDecimal(0, folderId).uniqueResult();
-//			return ce;
-//		}
-//		else 
+		if (pathElementObject instanceof Person) {
+			Person p = (Person)pathElementObject;
+			BigDecimal folderId = p.getHomefolderId();
+			CmsContentEntry ce = getCmsContentEntry(conn, folderId);
+			return ce;
+		}
+		else 
 		if (pathElementObject instanceof LearningContext) {
 			LearningContext lc = (LearningContext)pathElementObject;
 			String lcTypeCode = lc.getTypeCode();
@@ -454,11 +465,11 @@ public class MoodleRepository {
 		}
 	}
 	private static String getPathElementName(Object pathElementObject) {
-//		if (pathElementObject instanceof Person) {
-//			Person p = (Person)pathElementObject;
-//			return p.getWebctId();
-//		}
-//		else 
+		if (pathElementObject instanceof Person) {
+			Person p = (Person)pathElementObject;
+			return p.getWebctId();
+		}
+		else 
 		if (pathElementObject instanceof LearningContext) {
 			LearningContext lc = (LearningContext)pathElementObject;
 			return lc.getName();
@@ -704,6 +715,8 @@ public class MoodleRepository {
 		int i=0;
 		while(i<filename.length() && !Character.isDigit(filename.charAt(i)))
 			i++;
+		if (i>=filename.length())
+			return null;
 		return new BigDecimal(filename.substring(i));
 	}
 	private static String getFilenameType(String filename) {
@@ -810,13 +823,13 @@ public class MoodleRepository {
 	private static List<LearningContext> getLearningContextsOfType(Connection conn,
 			String lcTypeCode) throws SQLException {
 		List<LearningContext> lcs = new LinkedList<LearningContext>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT lc.id, lc.name, lc.TYPE_CODE FROM LEARNING_CONTEXT lc WHERE lc.TYPE_CODE = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		PreparedStatement stmt = conn.prepareStatement("SELECT lc.id, lc.name, lc.TYPE_CODE, lc.PARENT_ID FROM LEARNING_CONTEXT lc WHERE lc.TYPE_CODE = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setString(1, lcTypeCode);
 			rs = stmt.executeQuery();
 			while(rs.next()) {
-				LearningContext lc = new LearningContext(rs.getBigDecimal(1), rs.getString(2), rs.getString(3));
+				LearningContext lc = new LearningContext(rs.getBigDecimal(1), rs.getString(2), rs.getString(3), rs.getBigDecimal(4));
 				lcs.add(lc);
 			//System.out.println("Found "+typeCode+" "+id+": "+name);
 			}				
@@ -828,13 +841,13 @@ public class MoodleRepository {
 	}
 	private static LearningContext getLearningContext(Connection conn,
 			BigDecimal id) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT lc.id, lc.name, lc.TYPE_CODE FROM LEARNING_CONTEXT lc WHERE lc.id = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		PreparedStatement stmt = conn.prepareStatement("SELECT lc.id, lc.name, lc.TYPE_CODE, lc.PARENT_ID FROM LEARNING_CONTEXT lc WHERE lc.id = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				LearningContext lc = new LearningContext(rs.getBigDecimal(1), rs.getString(2), rs.getString(3));
+				LearningContext lc = new LearningContext(rs.getBigDecimal(1), rs.getString(2), rs.getString(3), rs.getBigDecimal(4));
 				return lc;
 			}		
 		}
@@ -843,18 +856,30 @@ public class MoodleRepository {
 		}
 		return null;
 	}
+	private static String getLearningContextPath(Connection conn,
+			LearningContext lc) throws SQLException {
+		String path = "";
+		// build path backwards to Institution
+		while(lc!=null) {
+			path = getFilename(lc)+"/"+path;
+			if (DbUtils.LC_INSTITUTION.equals(lc.getTypeCode())) 
+				break;
+			lc = getLearningContext(conn, lc.getParentId());
+		}		
+		return /*"/"+*/path;
+	}
 	/** children 
 	 * @throws SQLException */
 	private static List<LearningContext> getLearningContexts(Connection conn,
 			LearningContext lc) throws SQLException {
 		List<LearningContext> lcs = new LinkedList<LearningContext>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT lc.id, lc.name, lc.TYPE_CODE FROM LEARNING_CONTEXT lc WHERE lc.PARENT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		PreparedStatement stmt = conn.prepareStatement("SELECT lc.id, lc.name, lc.TYPE_CODE, lc.PARENT_ID FROM LEARNING_CONTEXT lc WHERE lc.PARENT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, lc.getId());
 			rs = stmt.executeQuery();
 			while(rs.next()) {
-				LearningContext child = new LearningContext(rs.getBigDecimal(1), rs.getString(2), rs.getString(3));
+				LearningContext child = new LearningContext(rs.getBigDecimal(1), rs.getString(2), rs.getString(3), rs.getBigDecimal(4));
 				lcs.add(child);
 			//System.out.println("Found "+typeCode+" "+id+": "+name);
 			}				
@@ -1192,7 +1217,7 @@ public class MoodleRepository {
 			return null;
 		return getPerson(conn, m.getPersonId());
 	}
-	private static Person getPersonByWebctId(Connection conn, String username) throws SQLException {
+	public static Person getPersonByWebctId(Connection conn, String username) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.WEBCT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {

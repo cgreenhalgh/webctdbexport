@@ -13,14 +13,16 @@ public class LearningContext {
 	private BigDecimal id;
 	private String name;
 	private String typeCode;
+	private BigDecimal parentId;
 	/** cons */
 	public LearningContext() {		
 	}
-	public LearningContext(BigDecimal id, String name, String typeCode) {
+	public LearningContext(BigDecimal id, String name, String typeCode, BigDecimal parentId) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.typeCode = typeCode;
+		this.parentId = parentId;
 	}
 	/**
 	 * @return the id
@@ -57,6 +59,18 @@ public class LearningContext {
 	 */
 	public void setTypeCode(String typeCode) {
 		this.typeCode = typeCode;
+	}
+	/**
+	 * @return the parentId
+	 */
+	public BigDecimal getParentId() {
+		return parentId;
+	}
+	/**
+	 * @param parentId the parentId to set
+	 */
+	public void setParentId(BigDecimal parentId) {
+		this.parentId = parentId;
 	}
 	
 }

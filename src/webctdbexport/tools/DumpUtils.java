@@ -126,8 +126,22 @@ public class DumpUtils {
 		if (path2!=null) {
 			JSONObject done = new JSONObject();
 			done.put(DONE, path2);
-			items.add(list.length(), done);
+			items.add(items.size(), done);
 		}
+	}
+	public static void addPersonItems(List<JSONObject> items, JSONObject listing, String path2) throws JSONException {
+		JSONArray list = listing.getJSONArray(MoodleRepository.LIST);
+		String personPath = null;
+		if (list!=null) {
+			for (int li=0; li<list.length(); li++) {
+				JSONObject item = list.getJSONObject(li);
+				if (item.has(MoodleRepository.PATH) && item.getString(MoodleRepository.PATH).startsWith("/user")) {
+					items.add(li, item);
+					personPath = item.getString(MoodleRepository.PATH);
+				}
+			}
+		}
+		// no! "done" marker for person
 	}
 	public static String getDone(JSONObject object) throws JSONException {
 		if (object.has(DONE))

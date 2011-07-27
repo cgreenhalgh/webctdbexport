@@ -19,11 +19,12 @@ public class CmsContentEntry {
 	private long lastmodifyTs;
 	private long filesize;
 	private BigDecimal fileContentId;
+	private BigDecimal parentId;
 	public CmsContentEntry() {		
 	}
 	public CmsContentEntry(BigDecimal id, String name, String ceTypeName,
 			String ceSubtypeName, BigDecimal aclId, long lastmodifyTs,
-			long filesize, BigDecimal fileContentId) {
+			long filesize, BigDecimal fileContentId, BigDecimal parentId) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,6 +34,7 @@ public class CmsContentEntry {
 		this.lastmodifyTs = lastmodifyTs;
 		this.filesize = filesize;
 		this.fileContentId = fileContentId;
+		this.parentId = parentId;
 	}
 	/**
 	 * @return the id
@@ -129,5 +131,11 @@ public class CmsContentEntry {
 	 */
 	public void setFileContentId(BigDecimal fileContentId) {
 		this.fileContentId = fileContentId;
+	}
+	public BigDecimal getParentId() {
+		return parentId;
+	}
+	public void setParentId(BigDecimal parentId) {
+		this.parentId = parentId;
 	}
 }

@@ -762,6 +762,7 @@ public class MoodleRepository {
 		ce = followLinks(conn, ce);
 		info.put("filename", ce.getName());
 		info.put("webcttype", getTypename(ce));
+		info.put("webctpath", getFullPath(conn, ce));
 		
 		CmsFileContent fc = getCmsFileContent(conn, ce);
 		long length = getContentLength(conn, fc);
@@ -790,6 +791,15 @@ public class MoodleRepository {
 		
 		return info;
 	}
+	private static String getFullPath(Connection conn, CmsContentEntry ce) throws SQLException {
+		String path = "";
+		// build path backwards to Institution
+		while(ce!=null) {
+			path = "/"+ce.getName()+path;
+			ce = getCmsContentEntryByParentId(conn, ce);
+		}		
+		return path;
+}
 	private static String convertToHex(byte[] data) { 
 		StringBuffer buf = new StringBuffer();
 		for (int i = 0; i < data.length; i++) {
@@ -892,9 +902,9 @@ public class MoodleRepository {
 	private static String getTypename(CmsContentEntry ce) {
 		return ""+ce.getCeTypeName()+"/"+ce.getCeSubtypeName();
 	}
-	private static final String CE_FIELDS = "ce.ID, ce.NAME, ce.CE_TYPE_NAME, ce.CE_SUBTYPE_NAME, ce.ACL_ID, ce.LASTMODIFY_TS, ce.FILESIZE, ce.FILE_CONTENT_ID";
+	private static final String CE_FIELDS = "ce.ID, ce.NAME, ce.CE_TYPE_NAME, ce.CE_SUBTYPE_NAME, ce.ACL_ID, ce.LASTMODIFY_TS, ce.FILESIZE, ce.FILE_CONTENT_ID, ce.PARENT_ID";
 	private static CmsContentEntry getCmsContentEntry(ResultSet rs) throws SQLException {
-		return new CmsContentEntry(rs.getBigDecimal(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBigDecimal(5), rs.getLong(6), rs.getLong(7), rs.getBigDecimal(8));
+		return new CmsContentEntry(rs.getBigDecimal(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBigDecimal(5), rs.getLong(6), rs.getLong(7), rs.getBigDecimal(8), rs.getBigDecimal(9));
 	}
 	private static CmsContentEntry getCmsContentEntry(Connection conn, LearningContext lc) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT lc.HOMEFOLDER_ID FROM LEARNING_CONTEXT lc WHERE lc.id = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
@@ -945,6 +955,10 @@ public class MoodleRepository {
 			tidy(rs, stmt);
 		}
 		return ces;
+	}
+	private static CmsContentEntry getCmsContentEntryByParentId(Connection conn, 
+			CmsContentEntry ce) throws SQLException {
+		return getCmsContentEntry(conn, ce.getParentId());
 	}
 	private static List<CmsContentEntry> getCmsContentEntriesForParentIdAndCeTypeName(Connection conn, 
 			CmsContentEntry ce, String ceType) throws SQLException {
@@ -1054,7 +1068,7 @@ public class MoodleRepository {
 						OutputStream os = new FileOutputStream(f);
 						InputStream is = blob.getBinaryStream();
 						int cnt = 0;
-						byte buf[] = new byte[100000];
+						byte buf[] = new byte[1280000];
 						while(true) {
 							int n = is.read(buf);
 							if (n<0)

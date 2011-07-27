@@ -61,7 +61,7 @@ public class DumpUsers {
 			List<BigDecimal> personIds = null;
 			if (args.length<=3) {
 				logger.log(Level.INFO, "Dump all users...");
-				MoodleRepository.getPersonIds(conn);
+				personIds = MoodleRepository.getPersonIds(conn);
 				logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
 			} else {
 				personIds = new LinkedList<BigDecimal>();

@@ -33,6 +33,7 @@ import webctdbexport.utils.DbUtils;
  */
 public class DumpAll {
 	private static final String DONE_FILE = "done.ts";
+	private static final long MAX_FILE_SIZE = 0; //1000000;
 	static Logger logger = Logger.getLogger(DumpAll.class.getName());
 
 	/**
@@ -88,10 +89,10 @@ public class DumpAll {
 					if (item.has(MoodleRepository.SIZE)) {
 						size = item.getLong(MoodleRepository.SIZE);
 					}
-//					if (size>MAX_FILE_SIZE) {
-//						System.out.println("Skip large file "+item.getString(MoodleRepository.TITLE)+" source="+url+", "+size+" bytes");
-//					} 
-//					else 
+					if (MAX_FILE_SIZE>0 && size>MAX_FILE_SIZE) {
+						System.out.println("Skip large file "+item.getString(MoodleRepository.TITLE)+" source="+url+", "+size+" bytes");
+					} 
+					else 
 					{
 						System.out.println("dump file "+item.getString(MoodleRepository.TITLE)+" source="+url);
 						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir);

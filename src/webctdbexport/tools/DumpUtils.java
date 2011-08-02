@@ -208,6 +208,14 @@ public class DumpUtils {
 			File p = new File(filedir, fileInfo.getString("path"));
 			pw.println("<p>path: <a href=\""+p.getCanonicalPath()+"\">"+fileInfo.getString("path")+"</a></p>");
 		}		
+		if (fileInfo.has("encoding"))
+			pw.println("<p>Encoding: "+fileInfo.getString("encoding")+"</p>");
+		if (fileInfo.has("linkto"))
+			pw.println("<p>Link to: "+fileInfo.getString("linkto")+"</p>");
+		if (fileInfo.has("lastmodifiedts"))
+			pw.println("<p>Last modified timestamp: "+fileInfo.getLong("lastmodifiedts")+"</p>");
+		if (fileInfo.has("cachets"))
+			pw.println("<p>Cache timestamp: "+fileInfo.getLong("cachets")+"</p>");
 		pw.close();
 	}
 }

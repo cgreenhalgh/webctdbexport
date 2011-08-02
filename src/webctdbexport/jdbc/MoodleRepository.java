@@ -42,6 +42,7 @@ import webctdbexport.jdbc.model.AccessControlPermissionSet;
 import webctdbexport.jdbc.model.CmsContentEntry;
 import webctdbexport.jdbc.model.CmsFileContent;
 import webctdbexport.jdbc.model.CmsLink;
+import webctdbexport.jdbc.model.CmsMimetype;
 import webctdbexport.jdbc.model.CoOrganizerlink;
 import webctdbexport.jdbc.model.CoUrl;
 import webctdbexport.jdbc.model.LearningContext;
@@ -576,7 +577,7 @@ public class MoodleRepository {
 			List<CmsContentEntry> children = getCmsContentEntriesForParentId(conn, ce);
 			for (CmsContentEntry child : children) {
 				String childTypename = getTypename(child);
-				if (DbUtils.FOLDER_TYPE.equals(childTypename) || getCmsFileContent(conn, child)!=null) {
+				if (DbUtils.FOLDER_TYPE.equals(childTypename) || DbUtils.TEMPLATE_PUBLIC_AREA.equals(childTypename) || getCmsFileContent(conn, child)!=null) {
 					if (include(conn, child, showFiles, showLinks))
 						list.put(getItem(conn, child, path));
 				}
@@ -758,15 +759,27 @@ public class MoodleRepository {
 		Object pathobj = getPathElementObject(conn, cename);
 		if (!(pathobj instanceof CmsContentEntry)) 
 			throw new IOException("getFile for non-CmsContentEntry "+url);
-		CmsContentEntry ce = (CmsContentEntry)pathobj;
-		ce = followLinks(conn, ce);
+		CmsContentEntry initialce = (CmsContentEntry)pathobj;
+		CmsContentEntry ce = followLinks(conn, initialce);
 		info.put("filename", ce.getName());
 		info.put("webcttype", getTypename(ce));
 		info.put("webctpath", getFullPath(conn, ce));
+		info.put("cachets", System.currentTimeMillis());
+		if (initialce!=ce) 
+			info.put("linkto", getCachePath(conn, ce));
 		
 		CmsFileContent fc = getCmsFileContent(conn, ce);
 		long length = getContentLength(conn, fc);
 		info.put("length", length);
+		CmsMimetype mimetype = getMimetype(conn, fc);
+		if (mimetype!=null) {
+			info.put("mimetype", mimetype.getMimetype());
+		}
+		String characterSet = fc.getCharacterSet();
+		if (characterSet!=null && (mimetype==null || !mimetype.isBinary()))
+			info.put("encoding", characterSet);
+		info.put("lastmodifiedts", fc.getLastModifyTs());
+		
 
 		File tmpdir = new File(cachedir, "tmp");
 		tmpdir.mkdir();
@@ -791,6 +804,32 @@ public class MoodleRepository {
 		
 		return info;
 	}
+	private static String getCachePath(Connection conn, CmsContentEntry ce) throws SQLException {
+		String path = "";
+		// build path backwards to Institution
+		while(ce!=null) {
+			// skip a Repository
+			String typename = getTypename(ce);
+			//path = "["+typename+"]"+path;
+			if (DbUtils.REPOSITORY_FOLDER_TYPE.equals(typename))// || DbUtils.TEMPLATE_PUBLIC_AREA.equals(typename))
+				;
+			else if (DbUtils.LC_HOME_FOLDER_TYPE.equals(typename)) {
+				// jump across to LearningContext?
+				LearningContext lc = getLearningContext(conn, ce);
+				if (lc!=null)
+					return "/"+getLearningContextPath(conn, lc)+path;		
+				return null;
+			}
+			else {
+				if (path.length()>0)
+					path = "/"+path;
+				path = getFilename(ce)+path;
+			}
+			ce = getCmsContentEntryByParentId(conn, ce);
+		}		
+		logger.log(Level.WARNING, "Did not find LearningContext for CmsContentEntry "+path);
+		return null;
+	}
 	private static String getFullPath(Connection conn, CmsContentEntry ce) throws SQLException {
 		String path = "";
 		// build path backwards to Institution
@@ -799,7 +838,7 @@ public class MoodleRepository {
 			ce = getCmsContentEntryByParentId(conn, ce);
 		}		
 		return path;
-}
+	}
 	private static String convertToHex(byte[] data) { 
 		StringBuffer buf = new StringBuffer();
 		for (int i = 0; i < data.length; i++) {
@@ -915,7 +954,23 @@ public class MoodleRepository {
 			if (rs.next()) {
 				return getCmsContentEntry(conn, rs.getBigDecimal(1));
 			}		
-			logger.log(Level.WARNING, "Could not file LearningContext "+lc.getId());
+			logger.log(Level.WARNING, "Could not find LearningContext "+lc.getId());
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return null;
+	}
+	private static LearningContext getLearningContext(Connection conn, CmsContentEntry ce) throws SQLException {
+		PreparedStatement stmt = conn.prepareStatement("SELECT lc.ID FROM LEARNING_CONTEXT lc WHERE lc.HOMEFOLDER_ID  = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, ce.getId());
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				return getLearningContext(conn, rs.getBigDecimal(1));
+			}		
+			logger.log(Level.WARNING, "Could not find LearningContext for HomefolderId "+ce.getId());
 		}
 		finally {
 			tidy(rs, stmt);
@@ -924,6 +979,8 @@ public class MoodleRepository {
 	}
 	private static CmsContentEntry getCmsContentEntry(Connection conn,
 			BigDecimal id) throws SQLException {
+		if (id==null)
+			return null;
 		PreparedStatement stmt = conn.prepareStatement("SELECT "+CE_FIELDS+" FROM CMS_CONTENT_ENTRY ce WHERE ce.id = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
@@ -932,7 +989,7 @@ public class MoodleRepository {
 			if (rs.next()) {
 				return getCmsContentEntry(rs);
 			}		
-			logger.log(Level.WARNING, "Could not file CmsContentEntry "+id);
+			logger.log(Level.WARNING, "Could not find CmsContentEntry "+id);
 		}
 		finally {
 			tidy(rs, stmt);
@@ -1370,6 +1427,31 @@ public class MoodleRepository {
 		if (p==null)
 			return false;
 		return p.isAclRead();
+	}
+	/** person cache */
+	private static Map<BigDecimal,CmsMimetype> mimetypeCache = new HashMap<BigDecimal,CmsMimetype>();
+	synchronized static CmsMimetype getMimetype(Connection conn, CmsFileContent fc) throws SQLException {
+		if (fc==null || fc.getMimetypeId()==null)
+			return null;
+		// fetch on-demand
+		if (mimetypeCache.containsKey(fc.getMimetypeId()))
+			return mimetypeCache.get(fc.getMimetypeId());
+		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID, p.MIMETYPE, p.BINARY FROM CMS_MIMETYPE p WHERE p.ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, fc.getMimetypeId());
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				CmsMimetype mt = new CmsMimetype(rs.getBigDecimal(1), rs.getString(2), rs.getBoolean(3));
+				mimetypeCache.put(mt.getId(), mt);
+				return mt;
+			}		
+			//logger.log(Level.WARNING, "Could not CoUrl "+ce.getId());
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return null;
 	}
 	private static void tidy(ResultSet rs, PreparedStatement stmt) {
 		if (rs!=null)

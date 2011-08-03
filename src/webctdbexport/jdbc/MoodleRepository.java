@@ -4,10 +4,13 @@
 package webctdbexport.jdbc;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -36,6 +39,7 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import webctdbexport.jdbc.model.AccessControlEntry;
 import webctdbexport.jdbc.model.AccessControlPermissionSet;
@@ -745,10 +749,11 @@ public class MoodleRepository {
 //	}
 	/** get_file (sort-of) to get file information:
 	 * sha1hash, length, mimetype, path, filename, webcttype 
+	 * @param outputdir 
 	 * @throws IOException 
 	 * @throws SQLException 
 	 * @throws JSONException */
-	public static JSONObject getFileInfo(Connection conn, String url, File cachedir) throws IOException, SQLException, JSONException {
+	public static JSONObject getFileInfo(Connection conn, String url, File cachedir, File outputdir) throws IOException, SQLException, JSONException {
 		if (url.startsWith("http"))
 			// external URL...
 			return null;
@@ -765,10 +770,27 @@ public class MoodleRepository {
 		info.put("webcttype", getTypename(ce));
 		info.put("webctpath", getFullPath(conn, ce));
 		info.put("cachets", System.currentTimeMillis());
-		if (initialce!=ce) 
-			info.put("linkto", getCachePath(conn, ce));
-		
+		if (initialce!=ce) {
+			String cachePath = getCachePath(conn, ce);
+			info.put("linkto", cachePath);
+			try {
+				File linktofile = new File(outputdir.getPath()+cachePath+"/file.json");
+				if (linktofile.exists()) {
+					Reader r= new InputStreamReader(new FileInputStream(linktofile), "UTF-8");
+					JSONObject linkinfo = new JSONObject(new JSONTokener(r));
+					r.close();
+					linkinfo.put("cachets", System.currentTimeMillis());
+					logger.log(Level.INFO, "Reuse "+linktofile+" for "+info.getString("webctpath"));
+					return linkinfo;
+				}
+				logger.log(Level.INFO, "Linkto file does not exist (yet): "+linktofile);
+			}
+			catch (Exception e) {
+				logger.log(Level.WARNING, "Problem trying to re-use linkto file "+cachePath, e);
+			}
+		}		
 		CmsFileContent fc = getCmsFileContent(conn, ce);
+		info.put("filecontentid", ce.getId().longValue());
 		long length = getContentLength(conn, fc);
 		info.put("length", length);
 		CmsMimetype mimetype = getMimetype(conn, fc);

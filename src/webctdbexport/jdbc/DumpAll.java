@@ -95,7 +95,7 @@ public class DumpAll {
 					else 
 					{
 						System.out.println("dump file "+item.getString(MoodleRepository.TITLE)+" source="+url);
-						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir);
+						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir, outputdir);
 						if (fileInfo!=null) {
 							File itemdir = new File(outputdir+url);
 							itemdir.mkdir();

@@ -216,6 +216,8 @@ public class DumpUtils {
 			pw.println("<p>Last modified timestamp: "+fileInfo.getLong("lastmodifiedts")+"</p>");
 		if (fileInfo.has("cachets"))
 			pw.println("<p>Cache timestamp: "+fileInfo.getLong("cachets")+"</p>");
+		if (fileInfo.has("filecontentid"))
+			pw.println("<p>CmsFileContent ID: "+fileInfo.getLong("filecontentid")+"</p>");
 		pw.close();
 	}
 }

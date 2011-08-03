@@ -57,6 +57,7 @@ public class DumpUsers {
 		Connection conn = JdbcUtils.getConnection(args[0]);
 		
 		try {
+			boolean dumpAll = true;
 			logger.log(Level.INFO, "output folders to "+outputdir);
 			List<BigDecimal> personIds = null;
 			if (args.length<=3) {
@@ -64,6 +65,7 @@ public class DumpUsers {
 				personIds = MoodleRepository.getPersonIds(conn);
 				logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
 			} else {
+				dumpAll = false;
 				personIds = new LinkedList<BigDecimal>();
 				for (int ai=3; ai<args.length; ai++) {
 					Person p = MoodleRepository.getPersonByWebctId(conn, args[ai]);
@@ -101,7 +103,8 @@ public class DumpUsers {
 				
 				DumpUtils.writeResponse(listing, userdir);
 				//DumpUtils.addPersonItems(items, listing, "/");
-				DumpUtils.addItems(items, listing, "/");
+				// not mark as done?!
+				DumpUtils.addItems(items, listing, null/*"/"*/);
 
 				DumpAll.processItems(conn, items, outputdir, filedir);
 			}

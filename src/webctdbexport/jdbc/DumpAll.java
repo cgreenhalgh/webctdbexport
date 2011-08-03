@@ -61,11 +61,10 @@ public class DumpAll {
 			// institutions...
 			JSONObject listing = MoodleRepository.getListingForRoot(conn);
 
-			DumpUtils.writeResponse(listing, outputdir);
-			{
-				JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, "/");
+			JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, "/");
+			DumpUtils.writeResponse(listing, outputdir, permissions!=null);
+			if (permissions!=null)
 				DumpUtils.writePermissions(permissions, outputdir);
-			}			
 			List<JSONObject> items = new LinkedList<JSONObject>();
 			DumpUtils.addItems(items, listing, "/");
 
@@ -116,10 +115,11 @@ public class DumpAll {
 						// TODO fix me
 						JSONObject itemlisting = MoodleRepository.getListingForPath(conn, path, true, true);
 						itemdir.mkdirs();
-						DumpUtils.writeResponse(itemlisting, itemdir);
-						DumpUtils.addItems(items, itemlisting, path);
 						JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, path);
-						DumpUtils.writePermissions(permissions, itemdir);
+						DumpUtils.writeResponse(itemlisting, itemdir, permissions!=null);
+						DumpUtils.addItems(items, itemlisting, path);
+						if (permissions!=null)
+							DumpUtils.writePermissions(permissions, itemdir);
 					}
 				}			
 				else if (item.has(DumpUtils.DONE)) {

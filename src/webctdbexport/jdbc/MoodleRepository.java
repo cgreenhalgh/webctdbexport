@@ -89,6 +89,7 @@ public class MoodleRepository {
 	private static final String CHILDREN = "children";
 	public static final String DESCRIPTION = "description";
 	public static final String WEBCT_TYPE = "webcttype";
+	private static final String SECTION = "Section";
 	private static JSONObject getListingObject() throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("dynload", true);
@@ -167,11 +168,17 @@ public class MoodleRepository {
 				list.put(getFolderObject(username, null, "HomeFolder", root+getFilename(p)+"/", 0));
 		}
 		// LCs
-		List<LearningContext> lcs = getLearningContextsForPersonAsRole(conn, p, getRoleDefinitionForSectionDesigner(conn));
+		List<LearningContext> lcs = getLearningContextsForPersonAsRole(conn, p, getRoleDefinitionForSectionDesigner(conn), SECTION);
 		Collections.sort(lcs, new LearningContextComparator());
 		for (LearningContext lc : lcs) {
 			String fullPath = getLearningContextPath(conn, lc);
-			list.put(getFolderObject(lc.getName(), getDescription(conn, lc), lc.getTypeCode(), "/"+fullPath, 0));
+			String parentName = "";
+			if (lc.getParentId()!=null) {
+				LearningContext lcp = getLearningContext(conn, lc.getParentId());
+				if(lcp!=null)
+					parentName = lcp.getName()+" - ";
+			}
+			list.put(getFolderObject(parentName+lc.getName(), getDescription(conn, lc), lc.getTypeCode(), "/"+fullPath, 0));
 		}
 		
 		return userobj;
@@ -302,11 +309,15 @@ public class MoodleRepository {
 		String filename = elements[elements.length-1];
 		Object pathel = getPathElementObject(conn, filename);
 		CmsContentEntry ce = getPathElementContentEntry(conn, pathel);
-		if (ce!=null)
+		if (ce!=null) {
+			listing.put(MoodleRepository.WEBCT_TYPE, getTypename(ce));
 			list = getChildren(conn, ce, path, showFiles, showLinks);
-
+		}
+		
 		if (pathel instanceof LearningContext) {
 			LearningContext lc = (LearningContext)pathel;
+			if (lc.getTypeCode()!=null)
+				listing.put(MoodleRepository.WEBCT_TYPE, lc.getTypeCode());
 			List<LearningContext> lcs = getLearningContexts(conn, lc);
 //			List<LearningContext> lcs = new LinkedList<LearningContext>();
 //			for (LearningContext child : children) {
@@ -343,6 +354,8 @@ public class MoodleRepository {
 		if (pathel instanceof LearningContext) {
 			LearningContext lc = (LearningContext)pathel;
 			List<Member> members = getMembers(conn, lc);
+			if (members.size()==0)
+				return null; // no members => no permissions
 			for (Member m : members) {
 				Person p = getPerson(conn, m);
 				if (p==null) {
@@ -361,6 +374,14 @@ public class MoodleRepository {
 				permissions.put(p.getWebctId(), roleArray);
 			}
 		}
+		else if (pathel instanceof Person) {
+			Person p = (Person)pathel;
+			JSONArray roleArray = new JSONArray();
+			roleArray.put(SDES);
+			permissions.put(p.getWebctId(), roleArray);
+		}
+		else
+			return null; // no permissions
 		
 //		CmsContentEntry ce = getPathElementContentEntry(conn, pathel);
 //		if(ce!=null && ce.getAclId()!=null) {
@@ -1343,11 +1364,15 @@ public class MoodleRepository {
 		return pids;
 	}
 	private static List<LearningContext> getLearningContextsForPersonAsRole(
-			Connection conn, Person p, RoleDefinition rd) throws SQLException {
+			Connection conn, Person p, RoleDefinition rd, String lcTypeCode) throws SQLException {
 		List<Member> members = getMembers(conn, p);
 		LinkedList<LearningContext> lcs = new LinkedList<LearningContext>();
 		
 		for (Member m : members) {
+			LearningContext lc = getLearningContext(conn, m.getLearningContextId());
+			if (lcTypeCode!=null && !lcTypeCode.equals(lc.getTypeCode()))
+				// exclude on type code
+				continue;
 			List<Role> rs = getRoles(conn, m);
 			boolean include = false;
 			for (Role r: rs) {
@@ -1355,7 +1380,6 @@ public class MoodleRepository {
 					include = true;
 			}
 			if (include) {
-				LearningContext lc = getLearningContext(conn, m.getLearningContextId());
 				lcs.add(lc);
 			}
 		}
@@ -1385,11 +1409,13 @@ public class MoodleRepository {
 	private static RoleDefinition getRoleDefinition(Connection conn, Role r) throws SQLException {
 		return getRoleDefinition(conn, r.getRoleDefinitionId());
 	}
+	/** section designer role */
+	public static final String SDES = "SDES";
 	private static RoleDefinition getRoleDefinitionForSectionDesigner(Connection conn) throws SQLException {
 		PreparedStatement stmt = conn.prepareStatement("SELECT rd.ID FROM ROLE_DEFINITION rd WHERE rd.NAME = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
-			stmt.setString(1, "SDES");
+			stmt.setString(1, SDES);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				return getRoleDefinition(conn, rs.getBigDecimal(1));

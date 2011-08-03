@@ -32,8 +32,9 @@ import webctdbexport.utils.MoodleRepository;
 public class DumpUtils {
 	public static final String DONE = "done";
 	static Logger logger = Logger.getLogger(DumpUtils.class.getName());
-	/** write a get_listing-type response to dist, also HTML version */
-	public static void writeResponse(JSONObject listing, File dir) throws JSONException, IOException {
+	/** write a get_listing-type response to dist, also HTML version 
+	 * @param writePermissions */
+	public static void writeResponse(JSONObject listing, File dir, boolean writePermissions) throws JSONException, IOException {
 		File file = new File(dir, "get_listing.json");
 		Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
 		listing.write(fw);
@@ -76,7 +77,10 @@ public class DumpUtils {
 		pw.println("<title>"+name+"</title>");
 		pw.println("</head><body>");
 		pw.println("<h1>"+name+"</h1>");
-		pw.println("<p><a href=\"permissions.html\">permissions</a></p>");
+		if (listing.has(MoodleRepository.WEBCT_TYPE))
+			pw.println("<p>("+listing.getString(MoodleRepository.WEBCT_TYPE)+")</p>");
+		if (writePermissions)
+			pw.println("<p><a href=\"permissions.html\">permissions</a></p>");
 		pw.println("<ul>");
 		JSONArray list = listing.getJSONArray(MoodleRepository.LIST);
 		for (int li=0; li<list.length(); li++) {

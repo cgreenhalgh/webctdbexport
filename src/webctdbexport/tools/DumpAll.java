@@ -52,7 +52,7 @@ public class DumpAll {
 			// institutions...
 			JSONObject listing = MoodleRepository.getListingForRoot(s);
 
-			DumpUtils.writeResponse(listing, outputdir);
+			DumpUtils.writeResponse(listing, outputdir, false);
 
 			List<JSONObject> items = new LinkedList<JSONObject>();
 			DumpUtils.addItems(items, listing, "/");
@@ -87,7 +87,7 @@ public class DumpAll {
 						System.out.println("dump folder "+title+" path="+path);
 						JSONObject itemlisting = MoodleRepository.getListingForPath(s, path, true, true);
 						itemdir.mkdirs();
-						DumpUtils.writeResponse(itemlisting, itemdir);
+						DumpUtils.writeResponse(itemlisting, itemdir, false);
 						DumpUtils.addItems(items, itemlisting, path);
 					}
 				}			

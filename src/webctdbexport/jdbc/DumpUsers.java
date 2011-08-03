@@ -101,7 +101,7 @@ public class DumpUsers {
 				File userdir = new File(new File(new File(new File(outputdir, "user"), user2), user3), username);
 				userdir.mkdirs();
 				
-				DumpUtils.writeResponse(listing, userdir);
+				DumpUtils.writeResponse(listing, userdir, false);
 				//DumpUtils.addPersonItems(items, listing, "/");
 				// not mark as done?!
 				DumpUtils.addItems(items, listing, null/*"/"*/);

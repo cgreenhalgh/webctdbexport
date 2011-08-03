@@ -190,6 +190,7 @@
 		<mkdir dir="dump"/>
 		<mkdir dir="dump/files"/>
 		<mkdir dir="dump/folders"/>
+		<touch file="dump/extrapermissions.txt"/>
 		
 		<java classpathref="hibernate" classname="webctdbexport.jdbc.DumpUsers" fork="true">
 			<!-- <jvmarg value="-Djava.security.manager"/>
@@ -198,6 +199,7 @@
 			<arg value="etc/jdbc-local.properties"/>
 			<arg value="dump/folders"/>
 			<arg value="dump/files"/>
+			<arg value="dump/extrapermissions.txt"/>
 		</java>
  		
 	</target>
@@ -207,6 +209,7 @@
 		<mkdir dir="dump"/>
 		<mkdir dir="dump/files"/>
 		<mkdir dir="dump/folders"/>
+		<touch file="dump/extrapermissions.txt"/>
 		
 		<java classpathref="hibernate" classname="webctdbexport.jdbc.DumpUsers" fork="true">
 			<!-- <jvmarg value="-Djava.security.manager"/>
@@ -215,8 +218,23 @@
 			<arg value="etc/jdbc-local.properties"/>
 			<arg value="dump/folders"/>
 			<arg value="dump/files"/>
+			<arg value="dump/extrapermissions.txt"/>
 			<!-- dump specified user(s)... -->
 			<arg value="pszcmg"/>
+		</java>
+ 		
+	</target>
+
+	<target name="findsection">
+	
+		<java classpathref="hibernate" classname="webctdbexport.jdbc.FindLearningContext" fork="true">
+			<!-- <jvmarg value="-Djava.security.manager"/>
+			<jvmarg value="-Djava.security.policy=etc/security.policy"/> -->
+			<arg value="etc/jdbc-local.properties"/>
+			<!-- search for section name like this -->
+			<!-- <arg value="%Test%"/> -->
+			<!-- optional course name pattern -->
+			<!-- <arg value="Computer%"/> -->
 		</java>
  		
 	</target>

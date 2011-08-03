@@ -58,7 +58,7 @@ public class TestRepository {
 			System.out.println("Write to "+dir);
 			JSONObject listing = MoodleRepository.getListingForUser(s, username, true, true);
 
-			DumpUtils.writeResponse(listing, dir);
+			DumpUtils.writeResponse(listing, dir, false);
 
 			List<JSONObject> items = new LinkedList<JSONObject>();
 			{
@@ -94,7 +94,7 @@ public class TestRepository {
 					JSONObject itemlisting = MoodleRepository.getListingForPath(s, path, true, true);
 					File itemdir = new File(dir+path);
 					itemdir.mkdirs();
-					DumpUtils.writeResponse(itemlisting, itemdir);
+					DumpUtils.writeResponse(itemlisting, itemdir, false);
 					if (itemlisting.has(MoodleRepository.LIST)) {
 						JSONArray list = itemlisting.getJSONArray(MoodleRepository.LIST);
 						if (list!=null) {

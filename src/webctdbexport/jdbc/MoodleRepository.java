@@ -26,10 +26,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -142,9 +144,10 @@ public class MoodleRepository {
 	/** get_listing response for a user, i.e. modules and person 
 	 * @param showLinks 
 	 * @param showFiles 
+	 * @param extralcs 
 	 * @throws JSONException 
 	 * @throws SQLException */
-	public static JSONObject getListingForUser(Connection conn, String username, boolean showFiles, boolean showLinks) throws JSONException, SQLException {
+	public static JSONObject getListingForUser(Connection conn, String username, boolean showFiles, boolean showLinks, Set<String> extralcs) throws JSONException, SQLException {
 		JSONObject userobj = getListingObject();
 		JSONArray path = new JSONArray();
 		userobj.put(PATH, path);
@@ -168,8 +171,31 @@ public class MoodleRepository {
 				list.put(getFolderObject(username, null, "HomeFolder", root+getFilename(p)+"/", 0));
 		}
 		// LCs
+		// clone extras first
 		List<LearningContext> lcs = getLearningContextsForPersonAsRole(conn, p, getRoleDefinitionForSectionDesigner(conn), SECTION);
+		if (extralcs!=null) {
+			// extras?
+			Iterator<String> elci = extralcs.iterator();
+			while (elci.hasNext()) {
+				String extralc = elci.next();				
+				Object pathel = getPathElementObject(conn, extralc);
+				if (pathel instanceof LearningContext) {
+					LearningContext lc = (LearningContext)pathel;
+					boolean found = false;
+					for (int i=0; !found && i<lcs.size(); i++) {
+						if (lc.getId().equals(lcs.get(i).getId()))
+							found = true;
+					}
+					if (!found)
+						lcs.add(lc);
+				}
+				else {
+					logger.log(Level.SEVERE,"Could not find extra permission context "+extralc+" (for "+username+")");
+				}
+			}			
+		}
 		Collections.sort(lcs, new LearningContextComparator());
+		
 		for (LearningContext lc : lcs) {
 			String fullPath = getLearningContextPath(conn, lc);
 			String parentName = "";
@@ -1501,7 +1527,7 @@ public class MoodleRepository {
 		}
 		return null;
 	}
-	private static void tidy(ResultSet rs, PreparedStatement stmt) {
+	static void tidy(ResultSet rs, PreparedStatement stmt) {
 		if (rs!=null)
 			try { rs.close(); } catch (Throwable ignore) {}
 		if (stmt!=null)

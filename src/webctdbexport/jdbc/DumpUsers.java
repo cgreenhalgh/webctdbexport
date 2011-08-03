@@ -3,15 +3,21 @@
  */
 package webctdbexport.jdbc;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,8 +46,9 @@ public class DumpUsers {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if (args.length<3) {
-			System.err.println("Usage: <jdbc.properties> <outputdir> <filedir> [usernames...]");
+		if (args.length<4) {
+			System.err.println("Usage: <jdbc.properties> <outputdir> <filedir> <extrapermissionsfile> [usernames...]");
+			System.err.println("Extra permissions file format: <username> lc<learningcontextid> ...");
 			System.exit(-1);
 		}
 		File outputdir = new File(args[1]);
@@ -54,8 +61,13 @@ public class DumpUsers {
 			logger.log(Level.SEVERE, "File directory does not exist or is not writable: "+filedir);
 			System.exit(-1);
 		}
+		File extrapermissionsfile = new File(args[3]);
+		if (!extrapermissionsfile.exists() || !extrapermissionsfile.canRead() || !extrapermissionsfile.isFile()) {
+			logger.log(Level.SEVERE, "Cannot read extra permissions file: "+extrapermissionsfile);
+			System.exit(-1);
+		}
+		Map<String,Set<String>> extrapermissions = readExtrapermissions(extrapermissionsfile);
 		Connection conn = JdbcUtils.getConnection(args[0]);
-		
 		try {
 			boolean dumpAll = true;
 			logger.log(Level.INFO, "output folders to "+outputdir);
@@ -89,7 +101,7 @@ public class DumpUsers {
 				logger.log(Level.INFO, "Dump Person "+username);
 
 				// learning contexts...
-				JSONObject listing = MoodleRepository.getListingForUser(conn, username, true, true);				
+				JSONObject listing = MoodleRepository.getListingForUser(conn, username, true, true, extrapermissions.get(username));				
 				List<JSONObject> items = new LinkedList<JSONObject>();
 				if (listing.getJSONArray("list").length()==0)
 				{
@@ -115,6 +127,46 @@ public class DumpUsers {
 		finally {
 			try { conn.close(); } catch (Throwable ignore) {}
 		}
+	}
+
+	private static Map<String, Set<String>> readExtrapermissions(
+			File extrapermissionsfile) {
+		logger.log(Level.INFO, "Read extra permissions from "+extrapermissionsfile);
+		Map<String,Set<String>> extrapermissions = new HashMap<String,Set<String>>();
+		try {
+			// warning: default encoding
+			BufferedReader br = new BufferedReader(new FileReader(extrapermissionsfile));
+			int count = 0;
+			while (true) {
+				String line = br.readLine();
+				count++;
+				if (line==null)
+					break;
+				if (line.startsWith("#") || line.startsWith("//"))
+					continue;
+				String values[] = line.trim().split("[ \\t,]");
+				if (values.length<2) 
+					throw new IOException("Extra persmission line "+count+" too short: "+line);
+				String username = values[0];
+				for (int i=1; i<values.length; i++) {
+					String lc = values[i];
+					if (!lc.startsWith("lc"))
+						throw new IOException("Extra permission line "+count+", LC "+lc+" is not valid (does not start with 'lc'): "+line);
+					Set<String> lcs = extrapermissions.get(username);
+					if (lcs==null) {
+						lcs = new TreeSet<String>();
+						extrapermissions.put(username, lcs);
+					}
+					lcs.add(lc);
+				}
+			}
+			br.close();
+		}
+		catch (Exception e) {
+			logger.log(Level.SEVERE, "Error reading extra permissions file "+extrapermissionsfile, e);
+			System.exit(-1);
+		}
+		return extrapermissions;
 	}
 	
 }

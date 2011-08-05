@@ -123,6 +123,17 @@ public class MoodleRepository {
 //		if (lastModified!=0)
 //			fileobj.put(DATE, format?);
 		fileobj.put(SIZE, size);
+//		if (!url.startsWith("http")) {
+//			logger.log(Level.WARNING, "Warning: link that is not http: "+url);
+//			if (!url.startsWith("/")) {
+//				int ix = url.indexOf(':');
+//				if (ix<0)
+//					url = "/"+url;
+//			}
+//			if (url.startsWith("/"))
+//				// relative?!
+//				url = "http://webct.nottingham.ac.uk"+url;
+//		}
 		fileobj.put(SOURCE, url);
 		return fileobj;
 	}
@@ -809,8 +820,11 @@ public class MoodleRepository {
 		String pathElements[] = url.split("/");
 		String cename = pathElements[pathElements.length-1];
 		Object pathobj = getPathElementObject(conn, cename);
-		if (!(pathobj instanceof CmsContentEntry)) 
-			throw new IOException("getFile for non-CmsContentEntry "+url);
+		if (!(pathobj instanceof CmsContentEntry)) {
+			// some other kind of thing that isn't a real content file?!
+			logger.log(Level.WARNING, "getFile for non-CmsContentEntry "+url);
+			return null;
+		}
 		CmsContentEntry initialce = (CmsContentEntry)pathobj;
 		CmsContentEntry ce = followLinks(conn, initialce);
 		info.put("filename", ce.getName());

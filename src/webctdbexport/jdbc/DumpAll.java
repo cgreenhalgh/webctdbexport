@@ -88,7 +88,9 @@ public class DumpAll {
 					if (item.has(MoodleRepository.SIZE)) {
 						size = item.getLong(MoodleRepository.SIZE);
 					}
-					if (MAX_FILE_SIZE>0 && size>MAX_FILE_SIZE) {
+					if (item.has(MoodleRepository.WEBCT_TYPE) && DbUtils.URL_TYPE.equals(item.getString(MoodleRepository.WEBCT_TYPE)))
+						System.out.println("Skip link: "+url);
+					else if (MAX_FILE_SIZE>0 && size>MAX_FILE_SIZE) {
 						System.out.println("Skip large file "+item.getString(MoodleRepository.TITLE)+" source="+url+", "+size+" bytes");
 					} 
 					else 

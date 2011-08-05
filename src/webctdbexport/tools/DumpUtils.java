@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import webctdbexport.test.TestRepository;
+import webctdbexport.utils.DbUtils;
 import webctdbexport.utils.MoodleRepository;
 
 /**
@@ -101,7 +102,7 @@ public class DumpUtils {
 					size = item.getLong(MoodleRepository.SIZE);
 				}
 				String url = item.getString(MoodleRepository.SOURCE);
-				if (url.startsWith("http"))
+				if ((webcttype!=null && DbUtils.URL_TYPE.equals(webcttype)) || url.startsWith("http"))
 					// link
 					pw.println("<li><a href=\""+url+"\">"+title+"</a> (link, "+webcttype+")"+(description!=null ? "<br>"+description : "")+"</li>");
 				else

@@ -1,0 +1,19 @@
+# comment
+# brewing
+pszcmg lc118910803001 
+# this gave an error: 
+#dump file !!! import problem source=/importexport/alertObject.jsp?type=0
+#     [java] Aug 4, 2011 5:17:18 PM webctdbexport.jdbc.MoodleRepository getPathElementObject
+#     [java] WARNING: Unknown path element type alertObject.jsp?type=0
+#     [java] Aug 4, 2011 5:17:18 PM webctdbexport.jdbc.DumpAll main
+#     [java] SEVERE: Error
+#     [java] java.io.IOException: getFile for non-CmsContentEntry /importexport/alertObject.jsp?type=0
+#     [java] 	at webctdbexport.jdbc.MoodleRepository.getFileInfo(MoodleRepository.java:813)
+#     [java] 	at webctdbexport.jdbc.DumpAll.processItems(DumpAll.java:97)
+#     [java] 	at webctdbexport.jdbc.DumpAll.main(DumpAll.java:71)
+# also has TOCs; also has odd redirect pages
+pszcmg lc16951903002
+# MM4HCI
+#pszcmg lc19349520001
+# Pathway - has TOC_LINK with non-zero INDENTLEVEL; also perhaps very many members
+#pszcmg lc20698088001

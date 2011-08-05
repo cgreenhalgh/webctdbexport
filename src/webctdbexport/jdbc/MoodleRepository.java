@@ -48,8 +48,10 @@ import webctdbexport.jdbc.model.AccessControlPermissionSet;
 import webctdbexport.jdbc.model.CmsContentEntry;
 import webctdbexport.jdbc.model.CmsFileContent;
 import webctdbexport.jdbc.model.CmsLink;
+import webctdbexport.jdbc.model.CmsLinkComparator;
 import webctdbexport.jdbc.model.CmsMimetype;
 import webctdbexport.jdbc.model.CoOrganizerlink;
+import webctdbexport.jdbc.model.CoTocLink;
 import webctdbexport.jdbc.model.CoUrl;
 import webctdbexport.jdbc.model.LearningContext;
 import webctdbexport.jdbc.model.LearningContextComparator;
@@ -633,6 +635,75 @@ public class MoodleRepository {
 				if (include(conn, child, showFiles, showLinks))
 					list.put(getItem(conn, child, linkName, linkDesc, path));
 			}
+		}
+		else if (DbUtils.TOC_TYPE.equals(typename)) {
+			// children include ACTIONMENU_TYPE/Default, e.g. 
+			// CE 17133156002 [delivery context id = 16951920002]
+			// Same ID => CO_TOC, FORMAT(e.g. 3), HIDDENMANU_FLAG(e.g.0), TOC_DISPLAY(e.g.1), FIRST_PAGE_DISPLAY(e.g.0)
+			// CoActionmenu(s)->Toc; 
+			// ?? CoTocLink => [CmsLink,] INDENT_LEVEL(short) [CoActiomenu(s), TocBookmark(s), notesItem(s)]
+			// ?? CoActionmenu => ENABLED_FLAG, [id?->CmsContentEntry] TOC_LINK_ID, TOC_ID, REFERENCE_ID [CE] [CoSingleinstancetool(s)]
+			// TOC 17133156002 (above) has one CO_ACTIONMENU (with no TOC_LINK_ID)
+			// get CsmLink(s) for leftobjectId 17133156002...
+			// 3 links, LINK_TYPE_ID 30002, NAME,  RIGHTOBJECT_ID, DISPLAY_ORDER
+			//				221590676001	NULL,  221590533001  , 0
+			//				17133169002		Plagiarism, 17133167002, 20
+			//				87298588001		NULL,  87298586001, 10
+			// each has CO_TOC_LINK of same ID; INDENTLEVEL = 0
+			// each has CO_ACTIONMENU with TOC_LINK_ID; ENABLED_FLAG = 1
+			// rightobjects are:
+			// 221590533001 => PAGE_TYPE/Default Module Information sheet, no file content
+			// 17133167002 => PAGE_TYPE/Default Plagiarism, with file content
+			// 87298586001 => PAGE_TYPE/Default Module contents, no file content
+			
+			// TODO
+			// CE 17133167002 is a "application/octet-stream" which is HTML frameset including frame
+			// with src "/webct/RelativeResourceManager/Template/Assignments/Plagiarism.pdf"...!
+			
+			// item with webcttype "HEADING_TYPE/Default"
+			
+			List<CmsLink> links = getCmsLinksForLeftobjectId(conn, ce);
+			for (CmsLink link : links) {
+				// cache CoTokLink for INDENT_LEVEL (which is small number, e.g. -1, 0, 1, 2)
+				CoTocLink tocLink = getCoTocLink(conn, link);
+				link.setCoTocLink(tocLink);
+			}
+			Collections.sort(links, new CmsLinkComparator());
+			
+			Vector<Integer> levels = new Vector<Integer>();
+			levels.add(0);
+			for(CmsLink link : links) {
+				CmsContentEntry child = getCmsContentEntryByRightobjectId(conn, link);
+				// default name/desc from linked item
+				String linkName = child.getName();
+				String linkDesc = getDescription(conn, child);//DbUtils.getText(child.getDescription());
+				// already cached
+				CoTocLink tocLink = link.getCoTocLink();
+				if (tocLink!=null) {
+					// should be! - override?!
+					int dlevel = tocLink.getIndentlevel();
+					while(dlevel<0) {
+						if (levels.size()>1)
+							levels.remove(levels.size()-1);
+						else
+							logger.log(Level.WARNING, "Level tried to become 0/negative (TOC "+ce.getId());
+						dlevel++;
+					}
+					while(dlevel>0) {
+						levels.add(0);
+						dlevel--;
+					}
+					// update count
+					levels.add(levels.remove(levels.size()-1)+1);
+					StringBuffer nbuf = new StringBuffer();
+					for (int i=0; i<levels.size(); i++) 
+						nbuf.append(levels.get(i).toString()+".");
+					linkName = nbuf.toString()+" "+linkName;
+				}
+				if (include(conn, child, showFiles, showLinks))
+					list.put(getItem(conn, child, linkName, linkDesc, path));
+			}
+
 		}
 		else if (DbUtils.TEMPLATE_TYPE.equals(typename)) {
 			// filter for files only
@@ -1256,13 +1327,13 @@ public class MoodleRepository {
 	private static List<CmsLink> getCmsLinksForLeftobjectId(Connection conn,
 			CmsContentEntry ce) throws SQLException {
 		List<CmsLink> links = new LinkedList<CmsLink>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT link.ID, link.LINK_TYPE_ID, link.LEFTOBJECT_ID, link.RIGHTOBJECT_ID, link.NAME FROM CMS_LINK link WHERE link.LEFTOBJECT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		PreparedStatement stmt = conn.prepareStatement("SELECT link.ID, link.LINK_TYPE_ID, link.LEFTOBJECT_ID, link.RIGHTOBJECT_ID, link.NAME, link.DISPLAY_ORDER FROM CMS_LINK link WHERE link.LEFTOBJECT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, ce.getId());
 			rs = stmt.executeQuery();
 			while(rs.next()) {
-				links.add(new CmsLink(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getBigDecimal(3), rs.getBigDecimal(4), rs.getString(5)));
+				links.add(new CmsLink(rs.getBigDecimal(1), rs.getBigDecimal(2), rs.getBigDecimal(3), rs.getBigDecimal(4), rs.getString(5), rs.getDouble(6)));
 			}
 		}
 		finally {
@@ -1283,6 +1354,24 @@ public class MoodleRepository {
 				return new CoOrganizerlink(rs.getBigDecimal(1), rs.getFloat(2), rs.getInt(3)!=0, rs.getString(4), rs.getString(5));
 			}		
 			//logger.log(Level.WARNING, "Could not CoUrl "+ce.getId());
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return null;
+	}
+	private static CoTocLink getCoTocLink(Connection conn, CmsLink link) throws SQLException {
+		if (link==null)
+			return null;
+		PreparedStatement stmt = conn.prepareStatement("SELECT col.ID, col.INDENTLEVEL FROM CO_TOC_LINK col WHERE col.ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, link.getId());
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new CoTocLink(rs.getBigDecimal(1), rs.getInt(2));
+			}		
+			//logger.log(Level.WARNING, "Could not CoTocLink "+ce.getId());
 		}
 		finally {
 			tidy(rs, stmt);

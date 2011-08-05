@@ -8,17 +8,21 @@ public class CmsLink {
 	private BigDecimal leftobjectId;
 	private BigDecimal rightobjectId;
 	private String name;
+	private double displayOrder;
 	// from CoOrganizerlink
 	private CoOrganizerlink coOrganizerlink;
+	// from CoTocLink
+	private CoTocLink coTocLink;
 	public CmsLink() {}
 	public CmsLink(BigDecimal id, BigDecimal linkTypeId,
-			BigDecimal leftobjectId, BigDecimal rightobjectId, String name) {
+			BigDecimal leftobjectId, BigDecimal rightobjectId, String name, double displayOrder) {
 		super();
 		this.id = id;
 		this.linkTypeId = linkTypeId;
 		this.leftobjectId = leftobjectId;
 		this.rightobjectId = rightobjectId;
 		this.name = name;
+		this.displayOrder = displayOrder;
 	}
 	/**
 	 * @return the id
@@ -81,6 +85,18 @@ public class CmsLink {
 		this.name = name;
 	}
 	/**
+	 * @return the displayOrder
+	 */
+	public double getDisplayOrder() {
+		return displayOrder;
+	}
+	/**
+	 * @param displayOrder the displayOrder to set
+	 */
+	public void setDisplayOrder(double displayOrder) {
+		this.displayOrder = displayOrder;
+	}
+	/**
 	 * @return the coOrganizerlink
 	 */
 	public CoOrganizerlink getCoOrganizerlink() {
@@ -91,6 +107,18 @@ public class CmsLink {
 	 */
 	public void setCoOrganizerlink(CoOrganizerlink coOrganizerlink) {
 		this.coOrganizerlink = coOrganizerlink;
+	}
+	/**
+	 * @return the coTocLink
+	 */
+	public CoTocLink getCoTocLink() {
+		return coTocLink;
+	}
+	/**
+	 * @param coTocLink the coTocLink to set
+	 */
+	public void setCoTocLink(CoTocLink coTocLink) {
+		this.coTocLink = coTocLink;
 	}
 	
 }

@@ -117,8 +117,16 @@ public class DumpAll {
 						// TODO fix me
 						JSONObject itemlisting = MoodleRepository.getListingForPath(conn, path, true, true);
 						itemdir.mkdirs();
-						JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, path);
-						DumpUtils.writeResponse(itemlisting, itemdir, permissions!=null);
+						boolean hasPermissions = false;
+						JSONObject permissions = null;
+						if (new File(itemdir, "permissions.json").exists())
+							// don't remake permissions
+							hasPermissions = true;
+						else {
+							permissions = MoodleRepository.getPermissionsForPath(conn, path);
+							hasPermissions = permissions!=null;
+						}
+						DumpUtils.writeResponse(itemlisting, itemdir, hasPermissions);
 						DumpUtils.addItems(items, itemlisting, path);
 						if (permissions!=null)
 							DumpUtils.writePermissions(permissions, itemdir);

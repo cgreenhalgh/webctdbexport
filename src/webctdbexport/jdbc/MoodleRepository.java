@@ -3,6 +3,7 @@
  */
 package webctdbexport.jdbc;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,6 +14,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -35,6 +37,8 @@ import java.util.TreeSet;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import org.hibernate.Query;
 //import org.hibernate.Session;
@@ -113,6 +117,18 @@ public class MoodleRepository {
 		fileobj.put(SIZE, size);
 //		fileobj.put(URL, url);
 		fileobj.put(SOURCE, url);
+		return fileobj;
+	}
+	private static JSONObject getLabelObject(String title, String description, String webctType) throws JSONException {
+		JSONObject fileobj = new JSONObject();
+		fileobj.put(TITLE, title);
+		if (description!=null)
+			fileobj.put(DESCRIPTION, description);
+		if (webctType!=null)
+			fileobj.put(WEBCT_TYPE, webctType);
+//		if (lastModified!=0)
+//			fileobj.put(DATE, format?);
+		fileobj.put(SIZE, 0);
 		return fileobj;
 	}
 	private static JSONObject getLinkObject(String title, String description, String webctType, long lastModified, long size, String url) throws JSONException {
@@ -593,6 +609,11 @@ public class MoodleRepository {
 								CmsContentEntry orgce = (CmsContentEntry)ceo;
 								list.put(getItem(conn, orgce, "Home Page", orgce.getName(), path));							
 							}
+							ces = getCmsContentEntriesForParentIdAndCeTypeName(conn, filesce, "TOC_TYPE");
+							for (Object ceo : ces) {
+								CmsContentEntry orgce = (CmsContentEntry)ceo;
+								list.put(getItem(conn, orgce, "Table of Contents", orgce.getName(), path));							
+							}
 						}
 						if (showLinks) {
 							List ces = getCmsContentEntriesForParentIdAndCeTypeName(conn, filesce, "WebLinkContainer");
@@ -621,7 +642,9 @@ public class MoodleRepository {
 			for(CmsLink link : links) {
 				CmsContentEntry child = getCmsContentEntryByRightobjectId(conn, link);
 				// default name/desc from linked item
-				String linkName = child.getName();
+				String linkName = link.getName();
+				if (linkName==null)
+					linkName = child.getName();
 				String linkDesc = getDescription(conn, child);//DbUtils.getText(child.getDescription());
 				// already cached
 				CoOrganizerlink orgLink = link.getCoOrganizerlink();
@@ -656,10 +679,6 @@ public class MoodleRepository {
 			// 17133167002 => PAGE_TYPE/Default Plagiarism, with file content
 			// 87298586001 => PAGE_TYPE/Default Module contents, no file content
 			
-			// TODO
-			// CE 17133167002 is a "application/octet-stream" which is HTML frameset including frame
-			// with src "/webct/RelativeResourceManager/Template/Assignments/Plagiarism.pdf"...!
-			
 			// item with webcttype "HEADING_TYPE/Default"
 			
 			List<CmsLink> links = getCmsLinksForLeftobjectId(conn, ce);
@@ -675,7 +694,9 @@ public class MoodleRepository {
 			for(CmsLink link : links) {
 				CmsContentEntry child = getCmsContentEntryByRightobjectId(conn, link);
 				// default name/desc from linked item
-				String linkName = child.getName();
+				String linkName = link.getName();
+				if (linkName==null)
+					linkName = child.getName();
 				String linkDesc = getDescription(conn, child);//DbUtils.getText(child.getDescription());
 				// already cached
 				CoTocLink tocLink = link.getCoTocLink();
@@ -685,8 +706,10 @@ public class MoodleRepository {
 					while(dlevel<0) {
 						if (levels.size()>1)
 							levels.remove(levels.size()-1);
-						else
-							logger.log(Level.WARNING, "Level tried to become 0/negative (TOC "+ce.getId());
+						else {
+							logger.log(Level.WARNING, "Level tried to become 0/negative (TOC "+ce.getId()+", Link "+tocLink.getId()+", indendlevel "+tocLink.getIndentlevel());
+							break;
+						}
 						dlevel++;
 					}
 					while(dlevel>0) {
@@ -828,7 +851,10 @@ public class MoodleRepository {
 			return getFileObject(name, description, typename, 0, len, parentPath+filename);
 		}
 		else {
-			if (DbUtils.PAGE_TYPE.equals(typename)) {
+			if (DbUtils.HEADING_TYPE.equals(typename)) {
+				return getLabelObject(name, description, typename);
+			}
+			else if (DbUtils.PAGE_TYPE.equals(typename)) {
 				return getFileObject(name, description, typename, 0, 0, parentPath+getFilename(ce)+".error");
 
 			} else {
@@ -896,6 +922,7 @@ public class MoodleRepository {
 			logger.log(Level.WARNING, "getFile for non-CmsContentEntry "+url);
 			return null;
 		}
+		
 		CmsContentEntry initialce = (CmsContentEntry)pathobj;
 		CmsContentEntry ce = followLinks(conn, initialce);
 		info.put("filename", ce.getName());
@@ -930,7 +957,7 @@ public class MoodleRepository {
 			info.put("mimetype", mimetype.getMimetype());
 		}
 		String characterSet = fc.getCharacterSet();
-		if (characterSet!=null && (mimetype==null || !mimetype.isBinary()))
+		if (characterSet!=null) // && (mimetype==null || !mimetype.isBinary()))
 			info.put("encoding", characterSet);
 		info.put("lastmodifiedts", fc.getLastModifyTs());
 		
@@ -938,7 +965,104 @@ public class MoodleRepository {
 		File tmpdir = new File(cachedir, "tmp");
 		tmpdir.mkdir();
 		File tmpfile = File.createTempFile("download-", ".bin", tmpdir);
+
 		String digest = dumpAndDigestCmsFileContent(conn, fc, tmpfile);
+
+		// TODO
+		// HTML files authored within WebCT appear as PAGE_TYPE/Default, with file content,
+		// mimetype application/octet-stream, Encoding (on a small sample) "UTF8"
+		if (DbUtils.PAGE_TYPE.equals(getTypename(ce)) && mimetype!=null && 
+				"application/octet-stream".equals(mimetype.getMimetype())) {
+			try {
+				FileInputStream fis = new FileInputStream(tmpfile);
+				InputStreamReader isr = null;
+				if ("UTF8".equals(characterSet))
+					isr = new InputStreamReader(fis, "UTF-8");
+				else {
+					logger.log(Level.WARNING, "Non-standard/unknown/unset character set in PAGE_TYPE "+ce.getId()+": "+characterSet);
+					isr = new InputStreamReader(fis);
+				}
+				BufferedReader br = new BufferedReader(isr);
+				boolean html = false;
+				boolean hasRelativeRefs = false;
+				boolean hasContent = false;
+				boolean inTag = false;
+				List<String> refs = new LinkedList<String>();
+				Pattern p = Pattern.compile("\\s(([sS][rR][cC])|([hH][rR][eE][fF]))\\s*[=]\\s*((['][^'\\n]*['])|([\"][^\"\\n]*[\"]))");
+				while(true) {
+					String line = br.readLine();
+					if (line==null)
+						break;
+					String linelc = line.toLowerCase();
+					if (linelc.contains("<html") || linelc.contains("<xhtml"))
+						html = true;
+					Matcher m = p.matcher(line);
+					while(m.find()) {
+						String href = m.group(4);
+						// remove quotes
+						href = href.substring(1, href.length()-1);
+						refs.add(href);
+						int cix = href.indexOf(":");
+						int six = href.indexOf("/");
+						if (cix<0 || six<cix) {
+							// WebCT examples are (e.g. "/webct/RelativeResourceManager/Template/LectureNotes/") 
+							hasRelativeRefs = true;
+						}
+					}
+					for (int i=0; i<line.length(); ) {
+						if (inTag) {
+							i = line.indexOf('>', i);
+							if (i<0)
+								break;
+							i++;
+							inTag = false;
+						}
+						else {
+							int j = line.indexOf('<', i);
+							if (j<0) {
+								if (line.substring(i).trim().length()>0)
+									hasContent = true;
+								break;
+							}
+							i = j+1;
+							inTag = true;
+						}
+					}
+//					if (linelc.contains("html"))
+//						logger.log(Level.INFO, "HTML: "+line);
+//					if (linelc.contains("src") || linelc.contains("href"))
+//						logger.log(Level.INFO, "REF: "+line);
+				}
+				br.close();
+				if (!html)
+					logger.log(Level.WARNING, "PAGE_TYPE with content seems not to be HTML "+ce.getId());
+				if (hasRelativeRefs)
+					info.put("hasrelativerefs", true);
+				if (!hasContent) 
+					info.put("hasnocontent", true);
+				if (refs.size()>0) {
+					JSONArray jrefs = new JSONArray();
+					for (int i=0; i<refs.size(); i++) 
+						jrefs.put(refs.get(i));
+					info.put("hrefs", jrefs);
+				}
+				
+				// WebCT examples are (e.g. "/webct/RelativeResourceManager/Template/LectureNotes/") 
+				// "Template" is the subcontext of homefolder with type Template/default, with name "Blank"
+				// which is returned as the "Files" folder for the Section
+				
+				// TODO if starts with /webct/RelativeResourceManager/Template/ trace ces back to 				
+				// Template/Default type; then search recursively from there (that should be files)
+				
+			} catch (Exception e) {
+				logger.log(Level.WARNING, "Error checking WebCT HTML file "+ce.getId(), e);
+			}
+		}
+		
+		// CE 17133167002 has filecontent which is a "application/octet-stream" 
+		// which is HTML frameset including frame with 
+		// src "/webct/RelativeResourceManager/Template/Assignments/Plagiarism.pdf"...!		
+		// This should become a link to that file! (assuming it exists in this section's files)		
 
 		if (digest!=null) {
 			info.put("sha1hash", digest);

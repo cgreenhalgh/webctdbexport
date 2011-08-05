@@ -215,6 +215,14 @@ public class DumpUtils {
 		}		
 		if (fileInfo.has("encoding"))
 			pw.println("<p>Encoding: "+fileInfo.getString("encoding")+"</p>");
+		if (fileInfo.has("webcttype"))
+			pw.println("<p>webcttype: "+fileInfo.getString("webcttype")+"</p>");
+		if (fileInfo.has("hasrelativerefs"))
+			pw.println("<p>hasrelativerefs: "+fileInfo.getBoolean("hasrelativerefs")+"</p>");
+		if (fileInfo.has("hasnocontent"))
+			pw.println("<p>hasnocontent: "+fileInfo.getBoolean("hasnocontent")+"</p>");
+		if (fileInfo.has("hrefs"))
+			pw.println("<p>hrefs: "+fileInfo.getJSONArray("hrefs")+"</p>");
 		if (fileInfo.has("linkto"))
 			pw.println("<p>Link to: "+fileInfo.getString("linkto")+"</p>");
 		if (fileInfo.has("lastmodifiedts"))

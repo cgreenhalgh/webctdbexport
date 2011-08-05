@@ -140,6 +140,7 @@ public class DbUtils {
 	public static final String URL_TYPE = "URL_TYPE/Default";
 	public static final String TEMPLATE_PUBLIC_AREA = "TEMPLATE_PUBLIC_AREA/Default";
 	public static final String TOC_TYPE = "TOC_TYPE/Default";
+	public static final String HEADING_TYPE = "HEADING_TYPE/Default";
 	public static String getTypename(CmsContentEntry ce) {
 		CmsCeSubtype subtype = ce.getCmsCeSubtype();
 		String typename=(subtype!=null ? subtype.getCmsCeType().getName()+"/"+subtype.getId().getName() : "unknown/null");

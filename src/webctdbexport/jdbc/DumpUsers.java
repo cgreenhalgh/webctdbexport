@@ -72,14 +72,14 @@ public class DumpUsers {
 			boolean dumpAll = true;
 			logger.log(Level.INFO, "output folders to "+outputdir);
 			List<BigDecimal> personIds = null;
-			if (args.length<=3) {
+			if (args.length<=4) {
 				logger.log(Level.INFO, "Dump all users...");
 				personIds = MoodleRepository.getPersonIds(conn);
 				logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
 			} else {
 				dumpAll = false;
 				personIds = new LinkedList<BigDecimal>();
-				for (int ai=3; ai<args.length; ai++) {
+				for (int ai=4; ai<args.length; ai++) {
 					Person p = MoodleRepository.getPersonByWebctId(conn, args[ai]);
 					if (p==null)
 						logger.log(Level.WARNING,"Could not find user "+args[ai]);

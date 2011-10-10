@@ -204,6 +204,25 @@
  		
 	</target>
 
+	<target name="dumpinc">
+	
+		<mkdir dir="dump"/>
+		<mkdir dir="dump/files"/>
+		<mkdir dir="dump/folders"/>
+		<mkdir dir="dump/folders2"/>
+		
+		<java classpathref="hibernate" classname="webctdbexport.jdbc.DumpIncremental" fork="true">
+			<!-- <jvmarg value="-Djava.security.manager"/>
+			<jvmarg value="-Djava.security.policy=etc/security.policy"/> -->
+			<!-- example user -->
+			<arg value="etc/jdbc-local.properties"/>
+			<arg value="dump/folders2"/>
+			<arg value="dump/files"/>
+			<arg value="dump/folders"/>
+		</java>
+ 		
+	</target>
+
 	<target name="dumppszcmg">
 	
 		<mkdir dir="dump"/>
@@ -219,6 +238,27 @@
 			<arg value="dump/folders"/>
 			<arg value="dump/files"/>
 			<arg value="dump/extrapermissions.txt"/>
+			<!-- dump specified user(s)... -->
+			<arg value="pszcmg"/>
+		</java>
+ 		
+	</target>
+
+	<target name="dumpincpszcmg">
+	
+		<mkdir dir="dump"/>
+		<mkdir dir="dump/files"/>
+		<mkdir dir="dump/folders"/>
+		<mkdir dir="dump/folders2"/>
+		
+		<java classpathref="hibernate" classname="webctdbexport.jdbc.DumpIncremental" fork="true">
+			<!-- <jvmarg value="-Djava.security.manager"/>
+			<jvmarg value="-Djava.security.policy=etc/security.policy"/> -->
+			<!-- example user -->
+			<arg value="etc/jdbc-local.properties"/>
+			<arg value="dump/folders2"/>
+			<arg value="dump/files"/>
+			<arg value="dump/folders"/>
 			<!-- dump specified user(s)... -->
 			<arg value="pszcmg"/>
 		</java>

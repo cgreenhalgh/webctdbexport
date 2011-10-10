@@ -905,10 +905,11 @@ public class MoodleRepository {
 	/** get_file (sort-of) to get file information:
 	 * sha1hash, length, mimetype, path, filename, webcttype 
 	 * @param outputdir 
+	 * @param oldoutputdir 
 	 * @throws IOException 
 	 * @throws SQLException 
 	 * @throws JSONException */
-	public static JSONObject getFileInfo(Connection conn, String url, File cachedir, File outputdir) throws IOException, SQLException, JSONException {
+	public static JSONObject getFileInfo(Connection conn, String url, File cachedir, File outputdir, File oldoutputdir) throws IOException, SQLException, JSONException {
 		if (url.startsWith("http"))
 			// external URL...
 			return null;
@@ -960,7 +961,29 @@ public class MoodleRepository {
 		if (characterSet!=null) // && (mimetype==null || !mimetype.isBinary()))
 			info.put("encoding", characterSet);
 		info.put("lastmodifiedts", fc.getLastModifyTs());
-		
+		if (oldoutputdir!=null) {
+			try {
+				File oldfile = new File(oldoutputdir.getPath()+url+"/file.json");
+				if (oldfile.exists()) {
+					Reader r= new InputStreamReader(new FileInputStream(oldfile), "UTF-8");
+					JSONObject oldinfo = new JSONObject(new JSONTokener(r));
+					r.close();
+					if (oldinfo.getLong("lastmodifiedts") == fc.getLastModifyTs() && oldinfo.getLong("length")==length) {
+						logger.log(Level.INFO, "Reuse "+oldfile+" for "+info.getString("webctpath"));
+						return oldinfo;
+					}
+					else {
+						logger.log(Level.INFO, "File has changed: "+oldfile);				
+					}
+				}
+				else  {
+					logger.log(Level.INFO, "Old file does not exist: "+oldfile);
+				}
+			}
+			catch (Exception e) {
+				logger.log(Level.WARNING, "Problem trying to re-use old file "+url, e);
+			}
+		}
 
 		File tmpdir = new File(cachedir, "tmp");
 		tmpdir.mkdir();

@@ -69,56 +69,10 @@ public class DumpUsers {
 		Map<String,Set<String>> extrapermissions = readExtrapermissions(extrapermissionsfile);
 		Connection conn = JdbcUtils.getConnection(args[0]);
 		try {
-			boolean dumpAll = true;
 			logger.log(Level.INFO, "output folders to "+outputdir);
-			List<BigDecimal> personIds = null;
-			if (args.length<=4) {
-				logger.log(Level.INFO, "Dump all users...");
-				personIds = MoodleRepository.getPersonIds(conn);
-				logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
-			} else {
-				dumpAll = false;
-				personIds = new LinkedList<BigDecimal>();
-				for (int ai=4; ai<args.length; ai++) {
-					Person p = MoodleRepository.getPersonByWebctId(conn, args[ai]);
-					if (p==null)
-						logger.log(Level.WARNING,"Could not find user "+args[ai]);
-					else
-						personIds.add(p.getId());
-				}
-			}
+			List<BigDecimal> personIds = getPersonIds(args, 4, conn);
 			for (BigDecimal personId : personIds) {
-				Person p = MoodleRepository.getPerson(conn, personId);
-				if (p==null) {
-					logger.log(Level.WARNING,"Could not find Person "+personId);
-					continue;
-				}
-				String username = p.getWebctId();
-				if (username==null || username.length()<3) {
-					logger.log(Level.WARNING,"Ignoring user "+username+" (short username)");
-					continue;
-				}
-				logger.log(Level.INFO, "Dump Person "+username);
-
-				// learning contexts...
-				JSONObject listing = MoodleRepository.getListingForUser(conn, username, true, true, extrapermissions.get(username));				
-				List<JSONObject> items = new LinkedList<JSONObject>();
-				if (listing.getJSONArray("list").length()==0)
-				{
-					logger.log(Level.INFO,"Skip user "+username+" (no folder, etc.)");
-					continue;
-				}
-				String user2 = username.substring(0,2);
-				String user3 = username.substring(0,3);
-				File userdir = new File(new File(new File(new File(outputdir, "user"), user2), user3), username);
-				userdir.mkdirs();
-				
-				DumpUtils.writeResponse(listing, userdir, false);
-				//DumpUtils.addPersonItems(items, listing, "/");
-				// not mark as done?!
-				DumpUtils.addItems(items, listing, null/*"/"*/);
-
-				DumpAll.processItems(conn, items, outputdir, filedir);
+				dumpUser(conn, personId, outputdir, filedir, extrapermissions, null);
 			}
 			logger.log(Level.INFO, "Done all users");
 		} catch (Exception e) {
@@ -129,6 +83,61 @@ public class DumpUsers {
 		}
 	}
 
+	static void dumpUser(Connection conn, BigDecimal personId,
+			File outputdir, File filedir,
+			Map<String, Set<String>> extrapermissions, File oldoutputdir) throws SQLException, JSONException, IOException {
+		Person p = MoodleRepository.getPerson(conn, personId);
+		if (p==null) {
+			logger.log(Level.WARNING,"Could not find Person "+personId);
+			return;
+		}
+		String username = p.getWebctId();
+		if (username==null || username.length()<3) {
+			logger.log(Level.WARNING,"Ignoring user "+username+" (short username)");
+			return;
+		}
+		logger.log(Level.INFO, "Dump Person "+username);
+
+		// learning contexts...
+		Set<String> extralcs = extrapermissions!=null ? extrapermissions.get(username) : null;
+		JSONObject listing = MoodleRepository.getListingForUser(conn, username, true, true, extralcs);				
+		List<JSONObject> items = new LinkedList<JSONObject>();
+		if (listing.getJSONArray("list").length()==0)
+		{
+			logger.log(Level.INFO,"Skip user "+username+" (no folder, etc.)");
+			return;
+		}
+		String user2 = username.substring(0,2);
+		String user3 = username.substring(0,3);
+		File userdir = new File(new File(new File(new File(outputdir, "user"), user2), user3), username);
+		userdir.mkdirs();
+		
+		DumpUtils.writeResponse(listing, userdir, false);
+		//DumpUtils.addPersonItems(items, listing, "/");
+		// not mark as done?!
+		DumpUtils.addItems(items, listing, null/*"/"*/);
+
+		DumpAll.processItems(conn, items, outputdir, filedir, oldoutputdir);
+	}
+
+	static List<BigDecimal> getPersonIds(String[] args, int skipArgs, Connection conn) throws SQLException {
+		List<BigDecimal> personIds = null;
+		if (args.length<=skipArgs) {
+			logger.log(Level.INFO, "Dump all users...");
+			personIds = MoodleRepository.getPersonIds(conn);
+			logger.log(Level.INFO, "Found "+personIds.size()+" active nondemo users");
+		} else {
+			personIds = new LinkedList<BigDecimal>();
+			for (int ai=skipArgs; ai<args.length; ai++) {
+				Person p = MoodleRepository.getPersonByWebctId(conn, args[ai]);
+				if (p==null)
+					logger.log(Level.WARNING,"Could not find user "+args[ai]);
+				else
+					personIds.add(p.getId());
+			}
+		}
+		return personIds;
+	}
 	private static Map<String, Set<String>> readExtrapermissions(
 			File extrapermissionsfile) {
 		logger.log(Level.INFO, "Read extra permissions from "+extrapermissionsfile);

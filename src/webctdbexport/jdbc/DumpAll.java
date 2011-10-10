@@ -5,6 +5,7 @@ package webctdbexport.jdbc;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -57,19 +58,7 @@ public class DumpAll {
 		Connection conn = JdbcUtils.getConnection(args[0]);
 		
 		try {
-			logger.log(Level.INFO, "output folders to "+outputdir);
-			// institutions...
-			JSONObject listing = MoodleRepository.getListingForRoot(conn);
-
-			JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, "/");
-			DumpUtils.writeResponse(listing, outputdir, permissions!=null);
-			if (permissions!=null)
-				DumpUtils.writePermissions(permissions, outputdir);
-			List<JSONObject> items = new LinkedList<JSONObject>();
-			DumpUtils.addItems(items, listing, "/");
-
-			processItems(conn, items, outputdir, filedir);
-			
+			dumpAll(conn, outputdir, filedir, null);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Error", e);
 		}
@@ -77,8 +66,34 @@ public class DumpAll {
 			try { conn.close(); } catch (Throwable ignore) {}
 		}
 	}
-	
-	static void processItems(Connection conn, List<JSONObject> items, File outputdir, File filedir) throws JSONException, IOException, SQLException {
+	static void dumpAll(Connection conn, File outputdir, File filedir, File oldoutputdir) throws JSONException, SQLException, IOException {
+		logger.log(Level.INFO, "output folders to "+outputdir);
+		// institutions...
+		JSONObject listing = MoodleRepository.getListingForRoot(conn);
+
+		JSONObject permissions = MoodleRepository.getPermissionsForPath(conn, "/");
+		DumpUtils.writeResponse(listing, outputdir, permissions!=null);
+		if (permissions!=null)
+			DumpUtils.writePermissions(permissions, outputdir);
+		List<JSONObject> items = new LinkedList<JSONObject>();
+		DumpUtils.addItems(items, listing, "/");
+
+		processItems(conn, items, outputdir, filedir, oldoutputdir);		
+		
+		logger.log(Level.INFO,"DumpAll complete");
+	}
+	/** 
+	 * 
+	 * @param conn
+	 * @param items
+	 * @param outputdir
+	 * @param filedir
+	 * @param oldoutputdir If not null, then existing outputdir to base this on
+	 * @throws JSONException
+	 * @throws IOException
+	 * @throws SQLException
+	 */
+	static void processItems(Connection conn, List<JSONObject> items, File outputdir, File filedir, File oldoutputdir) throws JSONException, IOException, SQLException {
 
 			while(items.size()>0) {
 				JSONObject item = items.remove(0);
@@ -96,7 +111,7 @@ public class DumpAll {
 					else 
 					{
 						System.out.println("dump file "+item.getString(MoodleRepository.TITLE)+" source="+url);
-						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir, outputdir);
+						JSONObject fileInfo = MoodleRepository.getFileInfo(conn, url, filedir, outputdir, oldoutputdir);
 						if (fileInfo!=null) {
 							File itemdir = new File(outputdir+url);
 							itemdir.mkdir();

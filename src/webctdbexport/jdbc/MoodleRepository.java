@@ -940,7 +940,12 @@ public class MoodleRepository {
 					JSONObject linkinfo = new JSONObject(new JSONTokener(r));
 					r.close();
 					linkinfo.put("cachets", System.currentTimeMillis());
-					logger.log(Level.INFO, "Reuse "+linktofile+" for "+info.getString("webctpath"));
+					logger.log(Level.INFO, "Reuse (linkto) "+linktofile+" for "+info.getString("webctpath"));
+					Iterator keyi = info.keys();
+					while (keyi.hasNext()) {
+						String key = (String)keyi.next();
+						linkinfo.put(key, info.get(key));
+					}
 					return linkinfo;
 				}
 				logger.log(Level.INFO, "Linkto file does not exist (yet): "+linktofile);
@@ -969,7 +974,13 @@ public class MoodleRepository {
 					JSONObject oldinfo = new JSONObject(new JSONTokener(r));
 					r.close();
 					if (oldinfo.getLong("lastmodifiedts") == fc.getLastModifyTs() && oldinfo.getLong("length")==length) {
-						logger.log(Level.INFO, "Reuse "+oldfile+" for "+info.getString("webctpath"));
+						logger.log(Level.INFO, "Reuse (old) "+oldfile+" for "+info.getString("webctpath"));
+//						oldinfo.put("cachets", System.currentTimeMillis());
+						Iterator keyi = info.keys();
+						while (keyi.hasNext()) {
+							String key = (String)keyi.next();
+							oldinfo.put(key, info.get(key));
+						}
 						return oldinfo;
 					}
 					else {

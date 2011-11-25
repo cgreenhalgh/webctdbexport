@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +32,7 @@ public class JdbcUtils {
 		String url = props.getProperty("url", "jdbc:oracle:thin:@HOST:PORT:SID");
 		String username = props.getProperty("username", "USERNAME");
 		String password = props.getProperty("password", "PASSWORD");
-		String schema = props.getProperty("schema", "WEBCT");
+		String schema = props.getProperty("schema", null);
 		try {
 			logger.log(Level.INFO, "Load JDBC driver class "+driverClassName);
 			Class.forName(driverClassName);
@@ -40,17 +42,21 @@ public class JdbcUtils {
 		}
 		Connection conn = null;
 		try {
+			logger.log(Level.INFO, "Open DB connection "+url);
 			conn = DriverManager.getConnection(url, username, password);
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "Error getting database connection to "+url+" as "+username+" with "+password, e);
 			System.exit(-1);
 		}
-		try {
-			conn.setCatalog(schema);
-		} catch (SQLException e) {
-			logger.log(Level.WARNING, "Could not set catalog to "+schema, e);
+		if (schema!=null) {
+			try {
+				logger.log(Level.INFO, "Set schema to "+schema);
+				Statement stmt = conn.createStatement();
+				stmt.execute("ALTER SESSION SET CURRENT_SCHEMA="+schema);
+			} catch (SQLException e) {
+				logger.log(Level.WARNING, "Could not set schema to "+schema, e);
+			}
 		}
-
 		return conn;
 	}
 }

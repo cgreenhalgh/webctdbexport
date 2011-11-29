@@ -196,8 +196,10 @@ public class MoodleRepository {
 			return userobj;
 		}
 		if (showFiles) {
-			if (p.getHomefolderId()!=null)
+			if (p.getHomefolderId()!=null) {
+				logger.log(Level.INFO, "Found home folder ("+p.getHomefolderId()+") for "+username+" ("+p.getId()+")");
 				list.put(getFolderObject(username, null, "HomeFolder", root+getFilename(p)+"/", 0));
+			}
 		}
 		// LCs
 		// clone extras first
@@ -1538,7 +1540,8 @@ public class MoodleRepository {
 	}
 	private static List<Member> getMembers(Connection conn, LearningContext lc) throws SQLException {
 		List<Member> members = new LinkedList<Member>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.PERSON_ID, m.LEARNING_CONTEXT_ID, m.STATUS_FLAG, m.DELETE_STATUS FROM MEMBER m WHERE m.LEARNING_CONTEXT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// Looks like MEMBER.DELETE_STATUS = 1 when membership is deleted
+		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.PERSON_ID, m.LEARNING_CONTEXT_ID, m.STATUS_FLAG, m.DELETE_STATUS FROM MEMBER m WHERE m.DELETE_STATUS = 0 AND m.LEARNING_CONTEXT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, lc.getId());
@@ -1555,7 +1558,8 @@ public class MoodleRepository {
 	}
 	private static List<Member> getMembers(Connection conn, Person p) throws SQLException {
 		List<Member> members = new LinkedList<Member>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.PERSON_ID, m.LEARNING_CONTEXT_ID, m.STATUS_FLAG, m.DELETE_STATUS FROM MEMBER m WHERE m.PERSON_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// Looks like MEMBER.DELETE_STATUS = 1 when membership is deleted
+		PreparedStatement stmt = conn.prepareStatement("SELECT m.ID, m.PERSON_ID, m.LEARNING_CONTEXT_ID, m.STATUS_FLAG, m.DELETE_STATUS FROM MEMBER m WHERE m.DELETE_STATUS = 0 AND m.PERSON_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, p.getId());
@@ -1572,7 +1576,8 @@ public class MoodleRepository {
 	}
 	private static List<Role> getRoles(Connection conn, Member m) throws SQLException {
 		List<Role> roles = new LinkedList<Role>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT r.ID, r.MEMBER_ID, r.ROLE_DEFINITION_ID, r.DELETE_STATUS, r.ROLE_STATUS FROM ROLE r WHERE r.MEMBER_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// Looks like ROLE.DELETE_STATUS = 1 when role is deleted
+		PreparedStatement stmt = conn.prepareStatement("SELECT r.ID, r.MEMBER_ID, r.ROLE_DEFINITION_ID, r.DELETE_STATUS, r.ROLE_STATUS FROM ROLE r WHERE r.DELETE_STATUS = 0 AND r.MEMBER_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, m.getId());
@@ -1619,7 +1624,8 @@ public class MoodleRepository {
 		return getPerson(conn, m.getPersonId());
 	}
 	public static Person getPersonByWebctId(Connection conn, String username) throws SQLException {
-		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.WEBCT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// filter out DELETESTATUS not null ?!
+		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.WEBCT_ID = ? AND p.DELETESTATUS IS NULL", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setString(1, username);
@@ -1637,7 +1643,8 @@ public class MoodleRepository {
 	public static List<BigDecimal> getPersonIds(Connection conn) throws SQLException {
 		List<BigDecimal> pids = new LinkedList<BigDecimal>();
 		// active , not demo
-		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.ACTIVESTATUS = 1 AND p.DEMOUSER = 0", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// filter out DELETESTATUS not null ?!
+		PreparedStatement stmt = conn.prepareStatement("SELECT p.ID FROM PERSON p WHERE p.ACTIVESTATUS = 1 AND p.DEMOUSER = 0 AND p.DELETESTATUS IS NULL", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			rs = stmt.executeQuery();

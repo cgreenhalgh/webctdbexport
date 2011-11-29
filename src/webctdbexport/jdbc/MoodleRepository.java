@@ -49,6 +49,7 @@ import org.json.JSONTokener;
 
 import webctdbexport.jdbc.model.AccessControlEntry;
 import webctdbexport.jdbc.model.AccessControlPermissionSet;
+import webctdbexport.jdbc.model.CmsCeType;
 import webctdbexport.jdbc.model.CmsContentEntry;
 import webctdbexport.jdbc.model.CmsFileContent;
 import webctdbexport.jdbc.model.CmsLink;
@@ -732,15 +733,16 @@ public class MoodleRepository {
 		}
 		else if (DbUtils.TEMPLATE_TYPE.equals(typename)) {
 			// filter for files only
-			List<CmsContentEntry> children = getCmsContentEntriesForParentId(conn, ce);
+			List<CmsContentEntry> children = getCmsContentEntriesForParentIdAndReachable(conn, ce);
 			for (CmsContentEntry child : children) {
-				String childTypename = getTypename(child);
-				if (DbUtils.FOLDER_TYPE.equals(childTypename) || DbUtils.TEMPLATE_PUBLIC_AREA.equals(childTypename) || getCmsFileContent(conn, child)!=null) {
-					if (include(conn, child, showFiles, showLinks))
-						list.put(getItem(conn, child, path));
-				}
-				else
-					logger.fine("Skipping item type "+childTypename+" under "+DbUtils.TEMPLATE_TYPE);
+				// check done in ...AndReachable, hopefully!
+				//String childTypename = getTypename(child);
+				//if (DbUtils.FOLDER_TYPE.equals(childTypename) || DbUtils.TEMPLATE_PUBLIC_AREA.equals(childTypename) || getCmsFileContent(conn, child)!=null) {
+				if (include(conn, child, showFiles, showLinks))
+					list.put(getItem(conn, child, path));
+				//}
+				//else
+				//	logger.fine("Skipping item type "+childTypename+" under "+DbUtils.TEMPLATE_TYPE);
 			}
 			list = sortChildren(list);
 			
@@ -1313,7 +1315,8 @@ public class MoodleRepository {
 	private static List<CmsContentEntry> getCmsContentEntriesForParentId(Connection conn, 
 			CmsContentEntry ce) throws SQLException {
 		List<CmsContentEntry> ces = new LinkedList<CmsContentEntry>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT "+CE_FIELDS+" FROM CMS_CONTENT_ENTRY ce WHERE ce.PARENT_ID = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// skip DELETED_FLAG != 0
+		PreparedStatement stmt = conn.prepareStatement("SELECT "+CE_FIELDS+" FROM CMS_CONTENT_ENTRY ce WHERE ce.PARENT_ID = ? AND DELETED_FLAG = 0", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, ce.getId());
@@ -1327,6 +1330,57 @@ public class MoodleRepository {
 		}
 		return ces;
 	}
+	private static List<CmsContentEntry> getCmsContentEntriesForParentIdAndReachable(Connection conn, 
+			CmsContentEntry ce) throws SQLException {
+		List<CmsContentEntry> ces = new LinkedList<CmsContentEntry>();
+		// skip DELETED_FLAG != 0
+		PreparedStatement stmt = conn.prepareStatement("SELECT "+CE_FIELDS+" FROM CMS_CONTENT_ENTRY ce WHERE ce.PARENT_ID = ? AND DELETED_FLAG = 0", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setBigDecimal(1, ce.getId());
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				boolean include = false;
+				CmsContentEntry child = getCmsContentEntry(rs);
+				if (child.getCeTypeName()!=null) {
+					CmsCeType ct = getCmsCeTypeByName(conn, child.getCeTypeName());
+					if (ct!=null && ct.isPathReachableFlag())
+						include = true;
+				}				
+				if (include) {
+					ces.add(getCmsContentEntry(rs));
+				}
+				else
+					logger.log(Level.WARNING,"skip unreachable item (type "+child.getCeTypeName()+")");
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		return ces;
+	}
+	private static Map<String,CmsCeType> cmsCeTypeCache = new HashMap<String,CmsCeType>();
+
+	private synchronized static CmsCeType getCmsCeTypeByName(Connection conn, String ceTypeName) throws SQLException {
+		if (cmsCeTypeCache.containsKey(ceTypeName))
+			return cmsCeTypeCache.get(ceTypeName);
+		PreparedStatement stmt = conn.prepareStatement("SELECT ct.NAME, ct.PATH_REACHABLE_FLAG FROM CMS_CE_TYPE ct WHERE ct.NAME = ? AND DELETED_FLAG = 0", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		ResultSet rs = null;
+		try {
+			stmt.setString(1, ceTypeName);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				CmsCeType ct = new CmsCeType(rs.getString(1), !"0".equals(rs.getString(2)));
+				cmsCeTypeCache.put(ceTypeName, ct);
+				return ct;
+			}
+		}
+		finally {
+			tidy(rs, stmt);
+		}
+		logger.log(Level.WARNING,"Could not find CMS_CE_TYPE "+ceTypeName);
+		return null;
+	}
 	private static CmsContentEntry getCmsContentEntryByParentId(Connection conn, 
 			CmsContentEntry ce) throws SQLException {
 		return getCmsContentEntry(conn, ce.getParentId());
@@ -1334,7 +1388,8 @@ public class MoodleRepository {
 	private static List<CmsContentEntry> getCmsContentEntriesForParentIdAndCeTypeName(Connection conn, 
 			CmsContentEntry ce, String ceType) throws SQLException {
 		List<CmsContentEntry> ces = new LinkedList<CmsContentEntry>();
-		PreparedStatement stmt = conn.prepareStatement("SELECT "+CE_FIELDS+" FROM CMS_CONTENT_ENTRY ce WHERE ce.PARENT_ID = ? AND ce.CE_TYPE_NAME = ?", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		// skip DELETED_FLAG != 0
+		PreparedStatement stmt = conn.prepareStatement("SELECT "+CE_FIELDS+" FROM CMS_CONTENT_ENTRY ce WHERE ce.PARENT_ID = ? AND ce.CE_TYPE_NAME = ? AND DELETED_FLAG = 0", ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
 		ResultSet rs = null;
 		try {
 			stmt.setBigDecimal(1, ce.getId());
